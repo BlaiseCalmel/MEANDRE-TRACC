@@ -23,7 +23,7 @@
 library(dotenv)
 library(digest)
 
-load_dot_env(".env")
+load_dot_env("../.env")
 APP_NAME = Sys.getenv("APP_NAME")
 URL = Sys.getenv("URL")
 today = Sys.Date()
