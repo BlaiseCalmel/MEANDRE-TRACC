@@ -21,60 +21,52 @@
 
 
 library(dotenv)
+library(digest)
 
 load_dot_env(".env")
 APP_NAME = Sys.getenv("APP_NAME")
 URL = Sys.getenv("URL")
-FROM = Sys.getenv("FROM")
-TO = Sys.getenv("TO")
-TO = unlist(strsplit(TO, ", "))
-SMTP_HOST = Sys.getenv("SMTP_HOST")
-SMTP_PORT = Sys.getenv("SMTP_PORT")
-SMTP_USERNAME = Sys.getenv("SMTP_USERNAME")
-SMTP_PASSWORD = Sys.getenv("SMTP_PASSWORD")
-SUBJECT = Sys.getenv("SUBJECT")
+today = Sys.Date()
 
-
-fact = 2
 Paths = list.files("/var/log/apache2/", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
+# Paths = list.files("log", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
+
+outdir = "hash_access"
+if (!dir.exists(outdir)) {
+    dir.create(outdir)
+}
+
 Id = stringr::str_extract(basename(Paths), "[[:digit:]]+")
 Id[is.na(Id)] = 0
 Id = as.numeric(Id)
-
 Paths = Paths[order(Id)]
 nPaths = length(Paths)
-today = Sys.Date()
-
-graph = ""
 
 for (i in 1:nPaths) {
     path = Paths[i]
     date = today - i + 1
 
-    if (grepl("[.]gz$", basename(path))) {
+    isgz = grepl("[.]gz$", basename(path))
+    if (isgz) {
         path = gzfile(path, "r")
     }
-    
     Lines = readLines(path)
+    if (isgz) {
+        close(path)
+    }
+    
     Lines = Lines[grepl(URL, Lines)]
     IP = gsub("[ ].*", "", Lines)
     IP = IP[!duplicated(IP)]
-    nIP = length(IP)
-    nIP_fact = round(nIP / fact)
-    
-    text = paste0(format(date, "%d/%m/%Y"), " ",
-                  strrep("-", nIP_fact), " ", nIP, "\r\n")
-    graph = paste0(graph, text)
+    IPhash = sapply(IP, digest, algo="sha256",
+                    USE.NAMES=FALSE)
+
+    if (length(IPhash) > 0) {
+        filepath = file.path(outdir,
+                             paste0(APP_NAME, "_access_",
+                                    date, ".txt"))
+        writeLines(IPhash, filepath)
+    }
 }
 
-email = emayili::envelope(from=FROM,
-                          to=TO,
-                          subject=SUBJECT,
-                          text=graph)
-
-smtp = emayili::server(host=SMTP_HOST,
-                       port=SMTP_PORT,
-                       username=SMTP_USERNAME,
-                       password=SMTP_PASSWORD)
-
-smtp(email, verbose=TRUE)
+warnings()

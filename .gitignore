@@ -9,3 +9,6 @@ tmp
 results
 figures
 *.Rdata
+analyse_access/access.csv
+analyse_access/hash_access/
+analyse_access/figures/
