@@ -34,6 +34,26 @@ if (is_production) {
 }
 
 
+
+let geoJSONdata_france, geoJSONdata_river, geoJSONdata_entiteHydro;
+
+const geoJSONfiles = [
+    "/data/france.geo.json",
+    "/data/river.geo.json",
+    "/data/entiteHydro.geo.json"
+];
+
+function loadGeoJSON(fileURL) {
+    return d3.json(fileURL)
+	.then(data => data)
+	.catch(error => {
+	    console.error("Error loading geojson file :", error);
+	    throw error;
+	});
+}
+const promises = geoJSONfiles.map(fileURL => loadGeoJSON(fileURL));
+
+
 let URL_QA = ["/",
 	      "/plus-d-eau-ou-moins-d-eau/nord-et-sud",
 	      "/plus-d-eau-ou-moins-d-eau/et-entre-les-deux",
@@ -112,7 +132,7 @@ function updateContent(start=false, actualise=true) {
     }
 
     if (actualise) {
-	const promises = geoJSONfiles.map(fileURL => loadGeoJSON(fileURL));
+	// const promises = geoJSONfiles.map(fileURL => loadGeoJSON(fileURL));
 	Promise.all(promises)
 	    .then(geoJSONdata => {
 		geoJSONdata_france = geoJSONdata[0];
@@ -838,25 +858,6 @@ function draw_colorbar(data_back) {
 
 
 
-
-let geoJSONdata_france, geoJSONdata_river, geoJSONdata_entiteHydro;
-
-const geoJSONfiles = [
-    "/data/france.geo.json",
-    "/data/river.geo.json",
-    "/data/entiteHydro.geo.json"
-];
-
-function loadGeoJSON(fileURL) {
-    return d3.json(fileURL)
-	.then(data => data)
-	.catch(error => {
-	    console.error("Error loading geojson file :", error);
-	    throw error;
-	});
-}
-
-
 let selected_code = null;
 
 const fill_entiteHydro = "transparent";
@@ -879,7 +880,8 @@ let k_simplify = k_simplify_ref;
 
 const riverLength_max = 0.4;
 const riverLength_min = 0;
-let riverLength = riverLength_max;
+// let riverLength = riverLength_max;
+let riverLength;
 
 const strokeWith_france = 2;
 const strokeWith_river_max = 1.5;
@@ -890,11 +892,13 @@ let height = window.innerHeight;
 
 let projectionMap;
 
-let currentZoomLevel = 1; // Initialize with default zoom level
+let currentZoomLevel = 1;
 
 
 function update_map(id_svg, svgElement, data_back) {
 
+    riverLength = riverLength_max;
+    
     d3.select(id_svg).selectAll("*").remove();
 
     if (drawer_mode === 'drawer-narratif') {
@@ -904,9 +908,16 @@ function update_map(id_svg, svgElement, data_back) {
     }
 
     function redrawMap() {
+
 	const pathGenerator = d3.geoPath(projectionMap);
 	const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
-	const selectedGeoJSON_river = geotoolbox.filter(geoJSONdata_river, (d) => d.norm >= riverLength);
+	// const selectedGeoJSON_river = geotoolbox.filter(geoJSONdata_river, (d) => d.norm >= riverLength);
+	const selectedGeoJSON_river = {
+	    type: "FeatureCollection",
+	    features: geoJSONdata_river.features.filter((d) => {
+		return d.properties.norm >= riverLength;
+	    })
+	};
 	const simplifiedselectedGeoJSON_river = geotoolbox.simplify(selectedGeoJSON_river, { k: k_simplify, merge: false });
 
 	svgElement.selectAll("path.france")
