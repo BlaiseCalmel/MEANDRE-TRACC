@@ -139,7 +139,14 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_france = geoJSONdata[0];
 		geoJSONdata_river = geoJSONdata[1];
 		geoJSONdata_entiteHydro = geoJSONdata[2];
-		svgFrance = update_map("#svg-france", svgFrance, data_point=null);
+		if (drawer_mode === 'drawer-narratif') {
+		    svgFrance_vert = update_map("#svg-france-vert", svgFrance, data_point=null);
+		    svgFrance_jaune = update_map("#svg-france-jaune", svgFrance, data_point=null);
+		    svgFrance_orange = update_map("#svg-france-orange", svgFrance, data_point=null);
+		    svgFrance_violet = update_map("#svg-france-violet", svgFrance, data_point=null);
+		} else {
+		    svgFrance = update_map("#svg-france", svgFrance, data_point=null);
+		}
 	    });
     }
 
