@@ -43,16 +43,6 @@ const geoJSONfiles = [
     "/data/entiteHydro.geo.json"
 ];
 
-function loadGeoJSON(fileURL) {
-    return d3.json(fileURL)
-	.then(data => data)
-	.catch(error => {
-	    console.error("Error loading geojson file :", error);
-	    throw error;
-	});
-}
-const promises = geoJSONfiles.map(fileURL => loadGeoJSON(fileURL));
-
 
 let URL_QA = ["/",
 	      "/plus-d-eau-ou-moins-d-eau/nord-et-sud",
@@ -109,6 +99,17 @@ function change_url(url, start=false, actualise=true) {
     updateContent(start=start, actualise=actualise);
 }
 
+
+function loadGeoJSON(fileURL) {
+    return d3.json(fileURL)
+	.then(data => data)
+	.catch(error => {
+	    console.error("Error loading geojson file :", error);
+	    throw error;
+	});
+}
+
+
 function updateContent(start=false, actualise=true) {
     var url = window.location.pathname;
 
@@ -132,7 +133,7 @@ function updateContent(start=false, actualise=true) {
     }
 
     if (actualise) {
-	// const promises = geoJSONfiles.map(fileURL => loadGeoJSON(fileURL));
+	const promises = geoJSONfiles.map(fileURL => loadGeoJSON(fileURL));
 	Promise.all(promises)
 	    .then(geoJSONdata => {
 		geoJSONdata_france = geoJSONdata[0];
@@ -160,6 +161,7 @@ function updateContent(start=false, actualise=true) {
 	$("#container-map-gallery").load("/html" + url + ".html");
     }
 }
+
 
 function check_url() {
     var url = window.location.pathname;
@@ -190,6 +192,7 @@ function check_url() {
 	change_drawer("drawer-chain");
     }
 }
+
 
 function check_url_after_data() {
     var url = window.location.pathname;
