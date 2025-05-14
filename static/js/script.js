@@ -1518,7 +1518,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 
     
     var horizon = get_horizon();
-    var relatif = data_point.to_normalise ? "relatif " : "";
+    var relatif = data_point.to_normalise ? "relatifs " : "";
     var subtitle = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1976-2005";
     const width_max_subtitle = 60;
     let subtitle_wrap = wrapTextByCharacterLimit(subtitle, width_max_subtitle);
@@ -2063,7 +2063,7 @@ async function exportData() {
     var horizon = get_horizon();
 
     var title = data_point.name_fr;
-    var relatif = data_point.to_normalise ? "relatif " : "";
+    var relatif = data_point.to_normalise ? "relatifs " : "";
     var subtitle = "Changements " + relatif + horizon.text +
         "\n             par rapport à la période de référence 1976-2005";
 
