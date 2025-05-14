@@ -46,9 +46,9 @@ library(ggplot2)
 
 # dTolerance = 500
 
-computer_data_path = "/home/louis/Documents/bouleau/INRAE/data/"
+computer_data_path = "/home/lheraut/Documents/INRAE/data"
 map_dir = "map"
-data_dir = "data"
+data_dir = "../data"
 
 # france
 output = file.path(data_dir, "france.geo.json")
@@ -87,6 +87,50 @@ json_data = list(
             )
         )
     )
+)
+
+json_string = toJSON(json_data,
+                     pretty=TRUE,
+                     auto_unbox=TRUE)
+writeLines(json_string, output)
+
+
+
+
+# bassin
+output = file.path(data_dir, "basinHydro.geo.json")
+basin = st_read(file.path(computer_data_path, map_dir, "bassinHydro"))
+basin = st_transform(basin, 2154)
+basin = st_simplify(basin,
+                     preserveTopology=TRUE,
+                     dTolerance=500)
+basin = st_transform(basin, 4326)
+bbox = st_bbox(basin)
+
+Type = as.character(st_geometry_type(basin))
+Ok = grepl("MULTI", Type)
+Type[Ok] = "MultiPolygon"
+Type[!Ok] = "Polygon"
+
+json_data = list(
+    type="FeatureCollection",
+    
+    features = lapply(
+        1:nrow(basin),
+        function (i) {
+            list(
+                type="Feature",
+                
+                properties=list(
+                    name=basin$LbBH[i]
+                ),
+                
+                geometry=list(
+                    type=Type[i],
+                    coordinates=unclass(basin$geometry[[i]])
+                )
+            )
+        })
 )
 
 json_string = toJSON(json_data,
@@ -148,10 +192,8 @@ writeLines(json_string, output)
 
 
 
-
-
 # entite hydro
-output = file.path(data_dir, "entiteHydro.geo.json")
+output = file.path(data_dir, "entityHydro.geo.json")
 entiteHydro = read_sf(file.path(computer_data_path, map_dir,
                                 'entiteHydro/BV_4207_stations.shp'))
 entiteHydro = st_simplify(entiteHydro, preserveTopology=TRUE,

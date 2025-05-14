@@ -35,12 +35,13 @@ if (is_production) {
 
 
 
-let geoJSONdata_france, geoJSONdata_river, geoJSONdata_entiteHydro;
+let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river;//, geoJSONdata_entiteHydro;
 
 const geoJSONfiles = [
     "/data/france.geo.json",
-    "/data/river.geo.json",
-    "/data/entiteHydro.geo.json"
+    "/data/basinHydro.geo.json",
+    "/data/river.geo.json"
+    // "/data/entityHydro.geo.json"
 ];
 
 
@@ -137,8 +138,9 @@ function updateContent(start=false, actualise=true) {
 	Promise.all(promises)
 	    .then(geoJSONdata => {
 		geoJSONdata_france = geoJSONdata[0];
-		geoJSONdata_river = geoJSONdata[1];
-		geoJSONdata_entiteHydro = geoJSONdata[2];
+		geoJSONdata_basinHydro = geoJSONdata[1];
+		geoJSONdata_river = geoJSONdata[2];
+		// geoJSONdata_entiteHydro = geoJSONdata[2];
 		if (drawer_mode === 'drawer-narratif') {
 		    svgFrance_vert = update_map("#svg-france-vert", svgFrance, data_point=null);
 		    svgFrance_jaune = update_map("#svg-france-jaune", svgFrance, data_point=null);
@@ -876,6 +878,8 @@ const stroke_entiteHydro = "#000000";
 const fill_france = "transparent";
 const stroke_france = "#89898A";
 /* "#3D3E3E"; */
+const fill_basinHydro = "transparent";
+const stroke_basinHydro = "#ACACAD";
 const stroke_river = "#B0D9D6";
 
 const minZoom = 1;
@@ -894,6 +898,7 @@ const riverLength_min = 0;
 let riverLength;
 
 const strokeWith_france = 2;
+const strokeWith_basinHydro = 1;
 const strokeWith_river_max = 1.5;
 const strokeWith_river_min = 0.4;
 
@@ -903,6 +908,133 @@ let height = window.innerHeight;
 let projectionMap;
 
 let currentZoomLevel = 1;
+
+
+// function update_map(id_svg, svgElement, data_back) {
+
+//     riverLength = riverLength_max;
+    
+//     d3.select(id_svg).selectAll("*").remove();
+
+//     if (drawer_mode === 'drawer-narratif') {
+// 	var fact = 2;
+//     } else {
+// 	var fact = 1;
+//     }
+
+//     function redrawMap() {
+
+// 	const pathGenerator = d3.geoPath(projectionMap);
+// 	const selectedGeoJSON_river = {
+// 	    type: "FeatureCollection",
+// 	    features: geoJSONdata_river.features.filter((d) => {
+// 		return d.properties.norm >= riverLength;
+// 	    })
+// 	};
+// 	const simplifiedselectedGeoJSON_river = geotoolbox.simplify(selectedGeoJSON_river, { k: k_simplify, merge: false });
+// 	const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
+// 	const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
+// 	// const selectedGeoJSON_river = geotoolbox.filter(geoJSONdata_river, (d) => d.norm >= riverLength);
+
+// 	svgElement.selectAll("path.river")
+// 	    .data(simplifiedselectedGeoJSON_river.features)
+// 	    .join("path")
+// 	    .attr("class", "river")
+//     	    .attr("fill", "transparent")
+// 	    .attr("stroke", stroke_river)
+// 	    .attr("stroke-width", function(d) {
+// 		return strokeWith_river_max - (1 - d.properties.norm) * (strokeWith_river_max - strokeWith_river_min);
+// 	    })
+// 	    .attr("stroke-linejoin", "miter")
+// 	    .attr("stroke-linecap", "round")
+// 	    .attr("stroke-miterlimit", 1)
+// 	    .attr("z-index", 1)
+// 	    .attr("d", pathGenerator)
+// 	    .transition()
+// 	    .duration(1000);
+	
+// 	svgElement.selectAll("path.basinHydro")
+// 	    .data(simplifiedGeoJSON_basinHydro.features)
+// 	    .join("path")
+// 	    .attr("class", "basinHydro")
+//     	    .attr("fill", fill_basinHydro)
+// 	    .attr("stroke", stroke_basinHydro)
+// 	    .attr("stroke-width", strokeWith_basinHydro)
+// 	    .attr("stroke-linejoin", "miter")
+// 	    .attr("stroke-miterlimit", 1)
+// 	    .attr("d", pathGenerator)
+// 	    .transition()
+// 	    .duration(1000);
+	
+// 	svgElement.selectAll("path.france")
+// 	    .data(simplifiedGeoJSON_france.features)
+// 	    .join("path")
+// 	    .attr("class", "france")
+//     	    .attr("fill", fill_france)
+// 	    .attr("stroke", stroke_france)
+// 	    .attr("stroke-width", strokeWith_france)
+// 	    .attr("stroke-linejoin", "miter")
+// 	    .attr("stroke-miterlimit", 1)
+// 	    .attr("d", pathGenerator)
+// 	    .transition()
+// 	    .duration(1000);
+
+// 	if (data_back) {
+// 	    svgElement = redrawPoint(svgElement, data_back);
+// 	    highlight_selected_point();
+// 	}
+//     }
+//     const redrawMap_debounce = debounce(redrawMap, 100);
+//     // const redrawMap_debounce = debounce(() => redrawMap(svgElement), 100);
+
+//     function handleResize() {
+// 	if (window.innerWidth < window.innerHeight) {
+// 	    var width = window.innerWidth / fact;
+// 	    var height = window.innerWidth / fact;
+// 	} else {
+// 	    var width = (window.innerHeight - 50 ) / fact;
+// 	    var height = (window.innerHeight - 50) / fact;
+// 	}
+
+// 	zoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
+// 	svgElement.attr("width", width).attr("height", height);
+// 	projectionMap.scale([height*scale]).translate([width / 2, height / 2]);	    
+
+// 	redrawMap();
+// 	highlight_selected_point();
+//     }
+//     window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
+
+    
+//     const zoom = d3.zoom()
+// 	  .scaleExtent([minZoom, maxZoom])
+// 	  .on("zoom", function (event) {
+// 	      riverLength = riverLength_max - (event.transform.k - minZoom)/(maxZoom-minZoom)*(riverLength_max-riverLength_min);
+// 	      k_simplify = k_simplify_ref + (event.transform.k - minZoom)/(maxZoom-minZoom)*(1-k_simplify_ref);
+// 	      svgElement.attr("transform", event.transform);
+// 	      svgElement.style("width", width * event.transform.k + "px");
+// 	      svgElement.style("height", height * event.transform.k + "px");
+// 	      redrawMap_debounce();
+// 	      highlight_selected_point();
+// 	  });
+
+//     projectionMap = d3.geoMercator()
+// 	  .center(geoJSONdata_france.features[0].properties.centroid);
+
+//      svgElement = d3.select(id_svg)
+// 	.attr("width", "100%")
+// 	.attr("height", "100%")
+// 	.append("g");
+
+//     svgElement.call(zoom)
+
+//     redrawMap();
+//     handleResize();
+
+//     return svgElement
+// }
+
+
 
 
 function update_map(id_svg, svgElement, data_back) {
@@ -920,8 +1052,6 @@ function update_map(id_svg, svgElement, data_back) {
     function redrawMap() {
 
 	const pathGenerator = d3.geoPath(projectionMap);
-	const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
-	// const selectedGeoJSON_river = geotoolbox.filter(geoJSONdata_river, (d) => d.norm >= riverLength);
 	const selectedGeoJSON_river = {
 	    type: "FeatureCollection",
 	    features: geoJSONdata_river.features.filter((d) => {
@@ -929,21 +1059,11 @@ function update_map(id_svg, svgElement, data_back) {
 	    })
 	};
 	const simplifiedselectedGeoJSON_river = geotoolbox.simplify(selectedGeoJSON_river, { k: k_simplify, merge: false });
+	const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
+	const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
+	// const selectedGeoJSON_river = geotoolbox.filter(geoJSONdata_river, (d) => d.norm >= riverLength);
 
-	svgElement.selectAll("path.france")
-	    .data(simplifiedGeoJSON_france.features)
-	    .join("path")
-	    .attr("class", "france")
-    	    .attr("fill", fill_france)
-	    .attr("stroke", stroke_france)
-	    .attr("stroke-width", strokeWith_france)
-	    .attr("stroke-linejoin", "miter")
-	    .attr("stroke-miterlimit", 1)
-	    .attr("d", pathGenerator)
-	    .transition()
-	    .duration(1000);
-
-	svgElement.selectAll("path.river")
+	layer_river.selectAll("path.river")
 	    .data(simplifiedselectedGeoJSON_river.features)
 	    .join("path")
 	    .attr("class", "river")
@@ -954,6 +1074,33 @@ function update_map(id_svg, svgElement, data_back) {
 	    })
 	    .attr("stroke-linejoin", "miter")
 	    .attr("stroke-linecap", "round")
+	    .attr("stroke-miterlimit", 1)
+	    .attr("z-index", 1)
+	    .attr("d", pathGenerator)
+	    .transition()
+	    .duration(1000);
+	
+	layer_basin.selectAll("path.basinHydro")
+	    .data(simplifiedGeoJSON_basinHydro.features)
+	    .join("path")
+	    .attr("class", "basinHydro")
+    	    .attr("fill", fill_basinHydro)
+	    .attr("stroke", stroke_basinHydro)
+	    .attr("stroke-width", strokeWith_basinHydro)
+	    .attr("stroke-linejoin", "miter")
+	    .attr("stroke-miterlimit", 1)
+	    .attr("d", pathGenerator)
+	    .transition()
+	    .duration(1000);
+	
+	layer_france.selectAll("path.france")
+	    .data(simplifiedGeoJSON_france.features)
+	    .join("path")
+	    .attr("class", "france")
+    	    .attr("fill", fill_france)
+	    .attr("stroke", stroke_france)
+	    .attr("stroke-width", strokeWith_france)
+	    .attr("stroke-linejoin", "miter")
 	    .attr("stroke-miterlimit", 1)
 	    .attr("d", pathGenerator)
 	    .transition()
@@ -1001,18 +1148,32 @@ function update_map(id_svg, svgElement, data_back) {
     projectionMap = d3.geoMercator()
 	  .center(geoJSONdata_france.features[0].properties.centroid);
 
-     svgElement = d3.select(id_svg)
-	.attr("width", "100%")
-	.attr("height", "100%")
-	.append("g");
+    const root = d3.select(id_svg)
+	  .attr("width", "100%")
+	  .attr("height", "100%");
 
-    svgElement.call(zoom)
+    root.selectAll("*").remove();
+
+    svgElement = root.append("g");
+
+    const zoomLayer = root.append("g").attr("id", "zoom-layer");
+    const layer_river = svgElement.append("g").attr("class", "layer-river");
+    const layer_basin = svgElement.append("g").attr("class", "layer-basinHydro");
+    const layer_france = svgElement.append("g").attr("class", "layer-france");
+
+    // svgElement.call(zoom)
+    root.call(zoom); // zoom is attached to <svg>, transform affects zoomLayer
 
     redrawMap();
     handleResize();
 
     return svgElement
 }
+
+
+
+
+
 
 
 function isMapZoomed() {
