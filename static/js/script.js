@@ -881,6 +881,7 @@ const stroke_france = "#89898A";
 const fill_basinHydro = "transparent";
 const stroke_basinHydro = "#ACACAD";
 const stroke_river = "#B0D9D6";
+const stroke_river_selected = "#7BBFBA";
 
 const minZoom = 1;
 const maxZoom = 4;
@@ -1075,8 +1076,18 @@ function update_map(id_svg, svgElement, data_back) {
 	    .attr("stroke-linejoin", "miter")
 	    .attr("stroke-linecap", "round")
 	    .attr("stroke-miterlimit", 1)
-	    .attr("z-index", 1)
 	    .attr("d", pathGenerator)
+	    .on("mouseover", function(event, d) {
+		d3.select(this).attr("stroke", stroke_river_selected);
+		document.getElementById("panel-hover").style.display = "block";
+		document.getElementById("panel-hover_code").innerHTML =
+		    "<span style='font-weight: 900; color:" + stroke_river_selected + "'>" +
+		    d.properties.TopoOH + "</span>";
+	    })
+	    .on("mouseout", function(event, d) {
+		d3.select(this).attr("stroke", stroke_river);
+		document.getElementById("panel-hover").style.display = "none";
+	    })
 	    .transition()
 	    .duration(1000);
 	
@@ -1084,12 +1095,25 @@ function update_map(id_svg, svgElement, data_back) {
 	    .data(simplifiedGeoJSON_basinHydro.features)
 	    .join("path")
 	    .attr("class", "basinHydro")
+	    // .style("pointer-events", "none")
+	    .style("pointer-events", "visibleStroke")
     	    .attr("fill", fill_basinHydro)
 	    .attr("stroke", stroke_basinHydro)
 	    .attr("stroke-width", strokeWith_basinHydro)
 	    .attr("stroke-linejoin", "miter")
 	    .attr("stroke-miterlimit", 1)
 	    .attr("d", pathGenerator)
+	    // .on("mouseover", function(event, d) {
+		// d3.select(this).attr("stroke", stroke_basinHydro_selected);
+		// document.getElementById("panel-hover").style.display = "block";
+		// document.getElementById("panel-hover_code").innerHTML =
+		    // "<span style='font-weight: 900; color:" + stroke_basinHydro_selected + "'>" +
+		    // d.properties.name + "</span>";
+	    // })
+	    // .on("mouseout", function(event, d) {
+		// d3.select(this).attr("stroke", stroke_basinHydro);
+		// document.getElementById("panel-hover").style.display = "none";
+	    // })
 	    .transition()
 	    .duration(1000);
 	
@@ -1097,6 +1121,7 @@ function update_map(id_svg, svgElement, data_back) {
 	    .data(simplifiedGeoJSON_france.features)
 	    .join("path")
 	    .attr("class", "france")
+	    .style("pointer-events", "none")
     	    .attr("fill", fill_france)
 	    .attr("stroke", stroke_france)
 	    .attr("stroke-width", strokeWith_france)
@@ -1347,7 +1372,6 @@ function redrawPoint(svgElement, data_back) {
 		document.getElementById("panel-hover").style.display = "none";
 	    })
 	    .on("click", function(d, point) {
-		console.log("aaa");
 		show_serie(data_back, point.code);
 	    });
     }
