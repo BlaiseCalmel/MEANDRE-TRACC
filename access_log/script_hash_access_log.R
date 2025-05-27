@@ -42,8 +42,8 @@ SERVER_NAME = Sys.getenv("SERVER_NAME")
 HASH_SALT = Sys.getenv("HASH_SALT")
 today = Sys.Date()
 
-# Paths_log = list.files("/var/log/apache2/", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
-Paths_log = list.files("log", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
+Paths_log = list.files("/var/log/apache2/", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
+# Paths_log = list.files("log", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
 
 outdir = "hash_access_log"
 if (!dir.exists(outdir)) {
