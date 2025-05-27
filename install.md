@@ -126,7 +126,7 @@ sudo apt install python3-flask python3-sqlalchemy python3-flask-cors python3-psy
 ### 5. Install R
 ``` sh
 sudo apt install -y r-base
-sudo Rscript -e 'install.packages(c("argparse", "jsonlite", "remotes")); remotes::install_github("super-lou/dataSHEEP")'
+sudo Rscript -e 'install.packages(c("argparse", "jsonlite", "remotes", "lubridate", "dplyr", "digest", "dotenv", "stringr")); remotes::install_github("super-lou/dataSHEEP")'
 ```
 
 

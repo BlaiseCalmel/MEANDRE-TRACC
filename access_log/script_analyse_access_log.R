@@ -48,7 +48,7 @@ if (!dir.exists(figdir)) {
     dir.create(figdir)
 }
 
-dataSHEEP::assign_colors_and_fonts()
+dataSHEEP::assign_colors()
 
 ### 
 access_daily <- access %>%
