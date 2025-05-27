@@ -26,19 +26,20 @@ library(lubridate)
 
 
 ## GET ACCESS DATA ___________________________________________________
-Paths = list.files("hash_access", full.names=TRUE)
+outdir = "hash_access_log"
+Paths_hash = list.files(outdir, full.names=TRUE)
 access = dplyr::tibble()
 
-for (path in Paths) {
-    IPhash = readLines(path)
+for (path_hash in Paths_hash) {
+    IPhash = readLines(path_hash)
     date = as.Date(gsub("(.*[_])|([.].*)", "",
-                        basename(path)))
+                        basename(path_hash)))
     access = dplyr::bind_rows(access,
                               dplyr::tibble(date=date,
                                             IPhash=IPhash))
 }
 
-ASHE::write_tibble(access, "access.csv")
+ASHE::write_tibble(access, "access_log.csv")
 
 
 ## PLOT ______________________________________________________________
@@ -68,7 +69,7 @@ plot = ggplot(access_daily, aes(x=date, y=unique_IP)) +
 
 ggsave(plot=plot,
        path=figdir,
-       filename="access_daily.pdf",
+       filename="access_log_daily.pdf",
        width=20, height=10, units='cm',
        dpi=300, device=cairo_pdf)
 
@@ -93,7 +94,7 @@ plot = ggplot(access_monthly, aes(x = month, y = unique_IP)) +
 
 ggsave(plot=plot,
        path=figdir,
-       filename="access_monthly.pdf",
+       filename="access_log_monthly.pdf",
        width=20, height=10, units='cm',
        dpi=300, device=cairo_pdf)
 
@@ -121,7 +122,7 @@ plot = ggplot(access_cumulative, aes(x=date, y=cum_unique_IP)) +
 
 ggsave(plot=plot,
        path=figdir,
-       filename="access_cumulative.pdf",
+       filename="access_log_cumulative.pdf",
        width=20, height=10, units='cm',
        dpi=300, device=cairo_pdf)
 
