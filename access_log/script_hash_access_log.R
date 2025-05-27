@@ -63,14 +63,16 @@ unlink(Paths_hash_to_delete)
 
 ## HASHING ___________________________________________________________
 Id = stringr::str_extract(basename(Paths_log), "[[:digit:]]+")
-Id[is.na(Id)] = 0
+isNA = is.na(Id)
+Paths_log = Paths_log[!isNA]
+Id = Id[!isNA]
 Id = as.numeric(Id)
 Paths_log = Paths_log[order(Id)]
 nPaths_log = length(Paths_log)
 
 for (i in 1:nPaths_log) {
     path_log = Paths_log[i]
-    date = today - i + 1
+    date = today - i
 
     isgz = grepl("[.]gz$", basename(path_log))
     if (isgz) {
