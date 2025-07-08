@@ -118,6 +118,7 @@ function updateContent(start=false, actualise=true) {
         svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
         svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
         svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
+        svgFrance_region = update_map("#svg-france-region", svgFrance, data_point=null);
         // svgFrance_violet = update_map("#svg-france-violet", svgFrance_violet, data_point=null);
 		// } else {
 		//     svgFrance = update_map("#svg-france", svgFrance, data_point=null);
@@ -127,20 +128,20 @@ function updateContent(start=false, actualise=true) {
 
     if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-map-gallery").load("/html" + "/et-c-est-certain" + ".html", function() {
+	    $("#container-upper-lower").load("/html" + "/et-c-est-certain" + ".html", function() {
 		check_url();
 	    });
 	    update_data_point_debounce();
 	    
 	} else if (actualise && url !== "/") {
-	    $("#container-map-gallery").load("/html" + url + ".html", function() {
+	    $("#container-upper-lower").load("/html" + url + ".html", function() {
 		check_url();
 	    });
 	    update_data_point_debounce();
 	}
 	
     } else {
-	$("#container-map-gallery").load("/html" + url + ".html");
+	$("#container-upper-lower").load("/html" + url + ".html");
     }
 }
 
@@ -240,7 +241,7 @@ let data_point_VCN10;
 // let data_point_violet;
 let data_serie;
 
-// let svgFrance;
+let svgFrance_region;
 let svgFrance_QA;
 let svgFrance_QJXA;
 let svgFrance_VCN10;

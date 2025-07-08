@@ -22,171 +22,96 @@
      If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div id="container-map">
+<div id="container-upper">
     <div id="panel-hover">
-	<div class="bunch row column-small-gap center cross-center">
-	    <div id="panel-hover_code"></div>
-	    <!-- <div id="panel-hover_value"></div> -->
-	</div>
+		<div class="bunch row column-small-gap center cross-center">
+			<div id="panel-hover_code"></div>
+			<!-- <div id="panel-hover_value"></div> -->
+		</div>
     </div>
 
-    <div id="action-bar" class="bunch row">
-	<!-- <button id="screenshot" class="material-icons-outlined" -->
-	<!-- onclick="exportSVG()">photo_camera</button> -->
-	<button id="export" class="material-icons-outlined"
-		onclick="exportData()">file_download</button>
-    </div>
+	<div class="sub-container-upper-map">
+		<!-- TO DO ADD REAL MAP WITH REGIONS -->
+		<span class="map-color vert border material-icons-outlined">gesture</span>
+		<div id="map-region-loading" class="container-loading">
+		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		</div>
+		<svg id="svg-france-region"></svg>
+	</div>
 
-    <!-- <div id="map-loading" class="container-loading">
-	<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-    </div>
-    <svg id="svg-france"></svg> -->
+	
+	<div class="sub-container-upper-info">
+		<div class="bunch column column-small-gap row-small-gap">
+			<div id="grid-chain" class="gallery-item">
+				<span class="gallery-item small-text">Région(s) sélectionnée(s)</span>
+			</div>
+			<div id="grid-chain" class="gallery-item">
+				<span class="gallery-item small-text">Niveau de réchauffement</span>
+			</div>
+		</div>
 
-    <div id="svg-france-narratif" class="bunch">
-	
-	<div class="sub-container-map">
-	    <span class="map-color vert border material-icons-outlined">gesture</span>
-	    <div id="map-QA-loading" class="container-loading">
-		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-	    </div>
-	    <svg id="svg-france-QA"></svg>
 	</div>
 	
-	<div class="sub-container-map">
-	    <span class="map-color jaune border material-icons-outlined">gesture</span>
-	    <div id="map-QJXA-loading" class="container-loading">
-		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-	    </div>
-	    <svg id="svg-france-QJXA"></svg>
+	<div class="sub-container-upper-narratives">
+		<div class="bunch column column-small-gap row-small-gap">
+			<div id="grid-chain" class="gallery-item">
+				<div id="grid-chain_drawer-narratif" class="bunch column">
+					<span class="grid-chain_drawer">Chaînes de modélisation<br>pour chaque narratif</span>
+					<span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
+					<span class="jaune grid-chain_text">JAUNE Changements futurs relativement peu marqués</span>
+					<span class="orange grid-chain_text">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</span>
+					<span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span>
+				</div>
+			</div>
+		</div>
+
 	</div>
-	
-	<div class="sub-container-map">
-	    <span class="map-color orange border material-icons-outlined">gesture</span>
-	    <div id="map-VCN10-loading" class="container-loading">
-		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-	    </div>
-	    <svg id="svg-france-VCN10"></svg>
-	</div>
-	
-	<!-- <div class="sub-container-map">
-	    <span class="map-color violet border material-icons-outlined">gesture</span>
-	    <div id="map-violet-loading" class="container-loading">
-		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-	    </div>
-	    <svg id="svg-france-violet"></svg>
-	</div> -->
-    </div>
+
 </div>
 
 
-<div class="container-gallery">
-    <div class="gallery">
-
-	<div class="bunch column column-small-gap row-small-gap">
-	    <h1 class="gallery-item">
-		AAAAAAAAAAAAAAa
-	    </h1>
-	    <div class="bunch row column-small-gap row-small-gap nowrap">
-		<!-- <div class="bunch column column-small-gap row-small-gap">
-		    <div class="gallery-arrow material-icons-outlined"
-			 onclick="change_url('/des-etiages-plus-severe/moins-d-eau-l-ete')">arrow_back</div>
-		    <div class="gallery-arrow material-icons-outlined"
-			 onclick="change_url('/des-etiages-plus-severe/des-etiages-plus-longs')">arrow_forward</div>
-		</div> -->
-		<h2 class="gallery-item">
-		    ET C’EST CERTAIN
-		</h2>
-	    </div>
-	</div>
-	    
-	<p class="gallery-item small-text">
-	    L’ensemble des projections du projet Explore2 s’accorde sur cette <b>sévérité accrue des étiages d’été</b>.
-	</p>
-
-
-	<div class="bunch column column-small-gap row-small-gap">
-	    <div id="grid-chain" class="gallery-item">
-		<div id="grid-chain_drawer-narratif" class="bunch column">
-		    <span class="grid-chain_drawer">Chaînes de modélisation<br>pour chaque narratif</span>
-		    <span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
-		    <span class="jaune grid-chain_text">JAUNE Changements futurs relativement peu marqués</span>
-		    <span class="orange grid-chain_text">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</span>
-		    <span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span>
-		</div>
-	    </div>
-	    
-	    <div class="bunch row column-small-gap row-small-gap">
-		<div id="grid-colorbar" class="gallery-item">
-		    <svg id="svg-colorbar"></svg>
-		</div>
-
-		<div class="bunch column column-small-gap row-small-gap baseline">
-		    <div id="grid-variable" class="gallery-item">
-			<div class="bunch column">
-			    <span id="grid-variable_variable"></span>
-			    <span id="grid-variable_name"></span>
-			    <span id="grid-variable_sampling-period"></span>
-			</div>
-		    </div>
-
-		    <div id="grid-horizon" class="gallery-item">
-			<div class="bunch column">
-			    <span id="grid-horizon_name"></span>
-			    <span id="grid-horizon_period-l1"></span>
-			    <span id="grid-horizon_period-l2"></span>
-			</div>
-		    </div>
-
-		    <div id="grid-n" class="gallery-item-small">
-			<div class="bunch row column-small-gap row-small-gap cross-baseline">
-			    <span class="grid-n_text" style="display: none;">Au moins</span>
-			    <span id="grid-n_number"></span>
-			    <span class="grid-n_text" style="display: none;">modèles hydrologiques par point</span>
-			</div>
-		    </div>
-		</div>
-	    </div>
-	</div>
-
-	
-	<div class="bunch column column-small-gap row-small-gap">
-	    <div id="grid-line" class="gallery-item bunch column nowrap" style="display: none;">
-		<div id="grid-line_cross"
-		     class="grid-cross material-icons-outlined" onclick="close_serie()">close</div>
-		<div class="bunch column">
-		    <div id="grid-line_title">
-			Série des changements relatifs
-		    </div>
-		    <div id="grid-line_tooltip"></div>
-		</div>
-		<div id="line-loading" class="container-loading">
-		    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-		</div>
-		<svg id="svg-line"></svg>			    
-	    </div>
-	    
-	    <div id="grid-point" class="gallery-item" style="display: none;">
-		<div id="grid-point_cross"
-		     class="grid-cross material-icons-outlined" onclick="close_serie()">close</div>
-		<div class="bunch column">
-		    <div id="grid-point_code-value"
-			 class="bunch row column-gap cross-center">
-			<span id="grid-point_code"></span>
-		    </div>
-		    <span id="grid-point_name"></span>
-		    <span id="grid-point_hr" class="grid-point_info"></span>
-		    <span id="grid-point_reference" class="grid-point_info"></span>
-		    <span id="grid-point_surface" class="grid-point_info"></span>
-		    <div class="bunch row column-gap">
-			<span id="grid-point_xl93" class="grid-point_info"></span>
-			<span id="grid-point_yl93" class="grid-point_info"></span>
-		    </div>
-		    <span id="grid-point_n" class="grid-point_info"></span>
-		    <span id="grid-point_HM" class="grid-point_info"></span>
-		</div>
-	    </div>
+<div class="container-lower bunch column">
+	<div id="grid-chain" class="gallery-item">
+			<span class="gallery-item small-text">Colorbar</span>
 	</div>
 	
+	<div class="sub-container-lower-map">
+		<div id="map-QA-loading" class="container-loading">
+		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		</div>
+		<svg id="svg-france-QA"></svg>
 
+		<!-- TO DO ADD ZOOM BUTONS -->
+		<div id="action-zoom-plus" class="bunch row">
+			<button id="zoom-plus" class="material-icons-outlined"
+				onclick="exportData()">info</button>
+    	</div>
+
+		<div id="action-zoom-minus" class="bunch row">
+			<button id="zoom-minus" class="material-icons-outlined"
+				onclick="exportData()">info</button>
+    	</div>
+
+		
+	</div>
+	
+	<div class="sub-container-lower-map">
+		<div id="map-QJXA-loading" class="container-loading">
+		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		</div>
+		<svg id="svg-france-QJXA"></svg>
+	</div>
+	
+	<div class="sub-container-lower-map">
+		<div id="map-VCN10-loading" class="container-loading">
+		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		</div>
+		<svg id="svg-france-VCN10"></svg>
+	</div>
+
+    <div id="action-bar" class="bunch row">
+		<button id="export" class="material-icons-outlined"
+			onclick="exportData()">file_download</button>
     </div>
+
 </div>
