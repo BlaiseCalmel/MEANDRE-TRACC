@@ -1,7 +1,7 @@
 <!--
      Copyright 2024
      Louis Héraut (louis.heraut@inrae.fr)*1,
-     Jean-Philippe Vidal (jean-philippe.vidal@inrae.fr)*1
+     Éric Sauquet (eric.sauquet@inrae.fr)*1
      
      *1   INRAE, France
 
@@ -34,15 +34,15 @@
 	<!-- <button id="screenshot" class="material-icons-outlined" -->
 	<!-- onclick="exportSVG()">photo_camera</button> -->
 	<button id="export" class="material-icons-outlined"
-		    onclick="exportData()">file_download</button>
+		onclick="exportData()">file_download</button>
     </div>
 
-    <div id="map-loading" class="container-loading">
+    <!-- <div id="map-loading" class="container-loading">
 	<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
     </div>
-    <svg id="svg-france"></svg>
+    <svg id="svg-france"></svg> -->
 
-    <div id="svg-france-narratif" class="bunch" style="display: none;">
+    <div id="svg-france-narratif" class="bunch">
 	
 	<div class="sub-container-map">
 	    <span class="map-color vert border material-icons-outlined">gesture</span>
@@ -68,13 +68,13 @@
 	    <svg id="svg-france-VCN10"></svg>
 	</div>
 	
-	<div class="sub-container-map">
+	<!-- <div class="sub-container-map">
 	    <span class="map-color violet border material-icons-outlined">gesture</span>
 	    <div id="map-violet-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 	    </div>
 	    <svg id="svg-france-violet"></svg>
-	</div>
+	</div> -->
     </div>
 </div>
 
@@ -84,83 +84,34 @@
 
 	<div class="bunch column column-small-gap row-small-gap">
 	    <h1 class="gallery-item">
-		PLUS 
-		<span class="nowrap">D<span class="h1b">’</span>EAU</span> 
-		<br>
-		OU MOINS 
-		<span class="nowrap">D<span class="h1b">’</span>EAU</span> 
-		<span class="h1b">?</span>
+		AAAAAAAAAAAAAAa
 	    </h1>
 	    <div class="bunch row column-small-gap row-small-gap nowrap">
-		<div class="bunch column column-small-gap row-small-gap">
+		<!-- <div class="bunch column column-small-gap row-small-gap">
 		    <div class="gallery-arrow material-icons-outlined"
-			 onclick="change_url('/plus-d-eau-ou-moins-d-eau/ajouter-une-pincee-de-variabilite-naturelle')">arrow_back</div>
+			 onclick="change_url('/des-etiages-plus-severe/moins-d-eau-l-ete')">arrow_back</div>
 		    <div class="gallery-arrow material-icons-outlined"
-			 onclick="change_url('/des-etiages-plus-severe/moins-d-eau-l-ete')">arrow_forward</div>
-		</div>
+			 onclick="change_url('/des-etiages-plus-severe/des-etiages-plus-longs')">arrow_forward</div>
+		</div> -->
 		<h2 class="gallery-item">
-		    RACONTER LES TRAJECTOIRES
+		    ET C’EST CERTAIN
 		</h2>
 	    </div>
 	</div>
+	    
+	<p class="gallery-item small-text">
+	    L’ensemble des projections du projet Explore2 s’accorde sur cette <b>sévérité accrue des étiages d’été</b>.
+	</p>
 
 
-	<div id="grid-line-container" class="bunch column column-small-gap row-small-gap"> 
-	    <div class="gallery-item text">
-		<p>Pour explorer l’ensemble des <b>trajectoires possibles</b> et de la <b>variabilité</b> associée, le projet Explore2 propose <b>4 trajectoires</b> individuelles appelés <b>narratifs</b> :</p>
-		<ul class="last">
-		    <li class="vert">VERT Réchauffement marqué et augmentation des précipitations</li>
-		    <li class="jaune">JAUNE Changements futurs relativement peu marqués</li>
-		    <li class="orange">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</li>
-		    <li class="violet">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</li>
-		</ul>
-	    </div>
-
-	    <div id="grid-line" class="gallery-item bunch column nowrap">
-		<div class="bunch column">
-		    <div id="grid-line_title">
-			Série des changements relatifs
-		    </div>
-		    <div id="grid-line_tooltip"></div>
-		</div>
-		<div id="line-loading" class="container-loading">
-		    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-		</div>
-		<svg id="svg-line"></svg>			    
-	    </div>
-
-	    <div class="bunch row column-small-gap row-small-gap">
-		<div id="grid-point" class="gallery-item">
-		    <div class="bunch column">
-			<div id="grid-point_code-value"
-			     class="bunch row column-gap cross-center">
-			    <span id="grid-point_code"></span>
-			</div>
-			<span id="grid-point_name"></span>
-			<span id="grid-point_hr" class="grid-point_info"></span>
-			<span id="grid-point_reference" class="grid-point_info"></span>
-			<span id="grid-point_surface" class="grid-point_info"></span>
-			<div class="bunch row column-gap">
-			    <span id="grid-point_xl93" class="grid-point_info"></span>
-			    <span id="grid-point_yl93" class="grid-point_info"></span>
-			</div>
-			<span id="grid-point_n" class="grid-point_info"></span>
-			<span id="grid-point_HM" class="grid-point_info"></span>
-		    </div>
-		</div>
-		
-		<p class="gallery-item small-text">
-		    Tout cela rend compte de l’évolution du débit moyen dans le cours d’eau.<br>
-		    Mais au cours de l’année, les <b>changements</b> sont aussi <b>importants</b>, notamment en <b>été</b>.
-		</p>
-	    </div>
-	</div>
-
-	
 	<div class="bunch column column-small-gap row-small-gap">
 	    <div id="grid-chain" class="gallery-item">
 		<div id="grid-chain_drawer-narratif" class="bunch column">
-		    <span class="grid-chain_drawer" style="margin: 0;">Chaînes de modélisation<br>pour chaque narratif</span>
+		    <span class="grid-chain_drawer">Chaînes de modélisation<br>pour chaque narratif</span>
+		    <span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
+		    <span class="jaune grid-chain_text">JAUNE Changements futurs relativement peu marqués</span>
+		    <span class="orange grid-chain_text">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</span>
+		    <span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span>
 		</div>
 	    </div>
 	    
@@ -185,7 +136,7 @@
 			    <span id="grid-horizon_period-l2"></span>
 			</div>
 		    </div>
-		    
+
 		    <div id="grid-n" class="gallery-item-small">
 			<div class="bunch row column-small-gap row-small-gap cross-baseline">
 			    <span class="grid-n_text" style="display: none;">Au moins</span>
@@ -196,6 +147,46 @@
 		</div>
 	    </div>
 	</div>
+
+	
+	<div class="bunch column column-small-gap row-small-gap">
+	    <div id="grid-line" class="gallery-item bunch column nowrap" style="display: none;">
+		<div id="grid-line_cross"
+		     class="grid-cross material-icons-outlined" onclick="close_serie()">close</div>
+		<div class="bunch column">
+		    <div id="grid-line_title">
+			Série des changements relatifs
+		    </div>
+		    <div id="grid-line_tooltip"></div>
+		</div>
+		<div id="line-loading" class="container-loading">
+		    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+		</div>
+		<svg id="svg-line"></svg>			    
+	    </div>
+	    
+	    <div id="grid-point" class="gallery-item" style="display: none;">
+		<div id="grid-point_cross"
+		     class="grid-cross material-icons-outlined" onclick="close_serie()">close</div>
+		<div class="bunch column">
+		    <div id="grid-point_code-value"
+			 class="bunch row column-gap cross-center">
+			<span id="grid-point_code"></span>
+		    </div>
+		    <span id="grid-point_name"></span>
+		    <span id="grid-point_hr" class="grid-point_info"></span>
+		    <span id="grid-point_reference" class="grid-point_info"></span>
+		    <span id="grid-point_surface" class="grid-point_info"></span>
+		    <div class="bunch row column-gap">
+			<span id="grid-point_xl93" class="grid-point_info"></span>
+			<span id="grid-point_yl93" class="grid-point_info"></span>
+		    </div>
+		    <span id="grid-point_n" class="grid-point_info"></span>
+		    <span id="grid-point_HM" class="grid-point_info"></span>
+		</div>
+	    </div>
+	</div>
+	
 
     </div>
 </div>

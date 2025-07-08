@@ -78,16 +78,16 @@ function load_slider() {
 }
 
 
-function selectVariableButton(selectedButton) {
-    if (selectedButton) {
-	var buttons = selectedButton.parentNode.querySelectorAll('button');
-	buttons.forEach(function (button) {
-	    button.classList.remove('selected');
-	});
-	selectedButton.classList.add('selected');
-	update_data_point_debounce();
-    }
-}
+// function selectVariableButton(selectedButton) {
+//     if (selectedButton) {
+// 	var buttons = selectedButton.parentNode.querySelectorAll('button');
+// 	buttons.forEach(function (button) {
+// 	    button.classList.remove('selected');
+// 	});
+// 	selectedButton.classList.add('selected');
+// 	update_data_point_debounce();
+//     }
+// }
 
 
 function selectHorizonButton(selectedButton) {
@@ -140,8 +140,6 @@ function toggle_menu() {
     }, 300);
 }
 
-
-let drawer_mode = 'drawer-chain';
 
 function change_drawer(drawerId) {
     drawer_mode = drawerId;

@@ -45,39 +45,12 @@ const geoJSONfiles = [
 ];
 
 
-let URL_QA = ["/",
-	      "/plus-d-eau-ou-moins-d-eau/nord-et-sud",
-	      "/plus-d-eau-ou-moins-d-eau/et-entre-les-deux",
-	      "/plus-d-eau-ou-moins-d-eau/le-changement-dans-la-continuite",
-	      "/plus-d-eau-ou-moins-d-eau/ajouter-une-pincee-de-variabilite-naturelle",
-	      "/plus-d-eau-ou-moins-d-eau/raconter-les-trajectoires"];
+let URL_QA = ["/", "/et-c-est-certain"];
 
-let URL_VCN10 = ["/des-etiages-plus-severe/moins-d-eau-l-ete",
-		 "/des-etiages-plus-severe/et-c-est-certain"];
+let URL_narratifs = ["/", 
+		     "/et-c-est-certain",]; 
 
-let URL_dtLF = ["/des-etiages-plus-severe/des-etiages-plus-longs"];
-
-let URL_QJXA = ["/des-crues-incertaines/quelle-evolution-en-france",
-		"/des-crues-incertaines/et-d-abord-dans-quelle-direction",
-		"/des-crues-incertaines/ajouter-une-louche-de-variabilite"];
-
-let URL_narratifs = ["/plus-d-eau-ou-moins-d-eau/et-entre-les-deux",
-		     "/plus-d-eau-ou-moins-d-eau/raconter-les-trajectoires",
-		     "/des-etiages-plus-severe/et-c-est-certain",
-		     "/des-etiages-plus-severe/des-etiages-plus-longs",
-		     "/des-crues-incertaines/et-d-abord-dans-quelle-direction"]; 
-
-let URL_serie = ["/plus-d-eau-ou-moins-d-eau/ajouter-une-pincee-de-variabilite-naturelle",
-		 "/plus-d-eau-ou-moins-d-eau/raconter-les-trajectoires",
-		 "/des-etiages-plus-severe/des-etiages-plus-longs",
-		 "/des-crues-incertaines/ajouter-une-louche-de-variabilite"];
-
-let URL_noSL = ["/",
-		"/plus-d-eau-ou-moins-d-eau/nord-et-sud",
-		"/plus-d-eau-ou-moins-d-eau/et-entre-les-deux",
-		"/plus-d-eau-ou-moins-d-eau/le-changement-dans-la-continuite",
-		"/plus-d-eau-ou-moins-d-eau/ajouter-une-pincee-de-variabilite-naturelle"]; 
-
+let drawer_mode = 'drawer-narratif';
 
 $(document).ready(function() {
     // console.log("ready");
@@ -141,20 +114,20 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_basinHydro = geoJSONdata[1];
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
-		if (drawer_mode === 'drawer-narratif') {
-		    svgFrance_vert = update_map("#svg-france-vert", svgFrance, data_point=null);
-		    svgFrance_jaune = update_map("#svg-france-jaune", svgFrance, data_point=null);
-		    svgFrance_orange = update_map("#svg-france-orange", svgFrance, data_point=null);
-		    svgFrance_violet = update_map("#svg-france-violet", svgFrance, data_point=null);
-		} else {
-		    svgFrance = update_map("#svg-france", svgFrance, data_point=null);
-		}
+		// if (drawer_mode === 'drawer-narratif') {
+        svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
+        svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
+        svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
+        // svgFrance_violet = update_map("#svg-france-violet", svgFrance_violet, data_point=null);
+		// } else {
+		//     svgFrance = update_map("#svg-france", svgFrance, data_point=null);
+		// }
 	    });
     }
 
     if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-map-gallery").load("/html" + "/plus-d-eau-ou-moins-d-eau/nord-et-sud" + ".html", function() {
+	    $("#container-map-gallery").load("/html" + "/et-c-est-certain" + ".html", function() {
 		check_url();
 	    });
 	    update_data_point_debounce();
@@ -180,26 +153,26 @@ function check_url() {
     
     if (URL_QA.includes(url) && selected_variable != "QA") {
 	var variable = document.getElementById("button-QA");
-	selectVariableButton(variable);
+	// selectVariableButton(variable);
 
-    } else if (URL_VCN10.includes(url) && selected_variable != "VCN10_summer") {
-	var variable = document.getElementById("button-VCN10_summer");
-	selectVariableButton(variable);
+    // } else if (URL_VCN10.includes(url) && selected_variable != "VCN10_summer") {
+	// var variable = document.getElementById("button-VCN10_summer");
+	// selectVariableButton(variable);
 	
-    } else if (URL_dtLF.includes(url) && selected_variable != "dtLF_summer") {
-	var variable = document.getElementById("button-dtLF_summer");
-	selectVariableButton(variable);
+    // } else if (URL_dtLF.includes(url) && selected_variable != "dtLF_summer") {
+	// var variable = document.getElementById("button-dtLF_summer");
+	// selectVariableButton(variable);
 	
-    } else if (URL_QJXA.includes(url) && selected_variable != "QJXA") {
-	var variable = document.getElementById("button-QJXA");
-	selectVariableButton(variable);
+    // } else if (URL_QJXA.includes(url) && selected_variable != "QJXA") {
+	// var variable = document.getElementById("button-QJXA");
+	// selectVariableButton(variable);
     }
 
-    if (URL_narratifs.includes(url)) {
-	change_drawer("drawer-narratif");
-    } else {
-	change_drawer("drawer-chain");
-    }
+    // if (URL_narratifs.includes(url)) {
+	// change_drawer("drawer-narratif");
+    // } else {
+	// change_drawer("drawer-chain");
+    // }
 }
 
 
@@ -261,17 +234,17 @@ function debounce(func, delay) {
 
 let data_back;
 let data_point;
-let data_point_vert;
-let data_point_jaune;
-let data_point_orange;
-let data_point_violet;
+let data_point_QA;
+let data_point_QJXA;
+let data_point_VCN10;
+// let data_point_violet;
 let data_serie;
 
-let svgFrance;
-let svgFrance_vert;
-let svgFrance_jaune;
-let svgFrance_orange;
-let svgFrance_violet;
+// let svgFrance;
+let svgFrance_QA;
+let svgFrance_QJXA;
+let svgFrance_VCN10;
+// let svgFrance_violet;
 
 function update_data_point() {
 
@@ -283,21 +256,21 @@ function update_data_point() {
 	check_cache = true;
     }
     
-    if (drawer_mode === 'drawer-narratif') {
-	$('#map-vert-loading').css('display', 'flex');
-	$('#map-jaune-loading').css('display', 'flex');
-	$('#map-orange-loading').css('display', 'flex');
-	$('#map-violet-loading').css('display', 'flex');
-    } else {
-	$('#map-loading').css('display', 'flex');	
-    }
+    // if (drawer_mode === 'drawer-narratif') {
+	$('#map-QA-loading').css('display', 'flex');
+	$('#map-QJXA-loading').css('display', 'flex');
+	$('#map-VCN10-loading').css('display', 'flex');
+	// $('#map-violet-loading').css('display', 'flex');
+    // } else {
+	// $('#map-loading').css('display', 'flex');	
+    // }
     
     var n = get_n();
     var variable = get_variable();
     var horizon = get_horizon();
     var projection = get_projection();
     
-    if (drawer_mode === 'drawer-narratif') {
+    // if (drawer_mode === 'drawer-narratif') {
 	var data_query = {
 	    n: n,
             exp: projection.exp,
@@ -325,7 +298,7 @@ function update_data_point() {
 	    n: n,
             exp: projection.exp,
             chain: projection.chain_vert,
-            variable: variable,
+            variable: "QA",
             horizon: horizon.H,
 	    check_cache: check_cache,
 	};
@@ -338,16 +311,16 @@ function update_data_point() {
 	})
 	    .then(response => response.json())
 	    .then(data_back => {
-		data_point_vert = data_back;
-		svgFrance_vert = update_map("#svg-france-vert", svgFrance_vert, data_point_vert);
-		$('#map-vert-loading').css('display', 'none');
+		data_point_QA = data_back;
+		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
+		$('#map-QA-loading').css('display', 'none');
 	    })
 
 	var data_query = {
 	    n: n,
             exp: projection.exp,
             chain: projection.chain_jaune,
-            variable: variable,
+            variable: "QJXA",
             horizon: horizon.H,
 	    check_cache: check_cache,
 	};
@@ -360,16 +333,16 @@ function update_data_point() {
 	})
 	    .then(response => response.json())
 	    .then(data_back => {
-		data_point_jaune = data_back;
-		svgFrance_jaune = update_map("#svg-france-jaune", svgFrance_jaune, data_point_jaune);
-		$('#map-jaune-loading').css('display', 'none');
+		data_point_QJXA = data_back;
+		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
+		$('#map-QJXA-loading').css('display', 'none');
 	    })
 
 	var data_query = {
 	    n: n,
             exp: projection.exp,
             chain: projection.chain_orange,
-            variable: variable,
+            variable: "VCN10_summer",
             horizon: horizon.H,
 	    check_cache: check_cache,
 	};
@@ -382,64 +355,64 @@ function update_data_point() {
 	})
 	    .then(response => response.json())
 	    .then(data_back => {
-		data_point_orange = data_back;
-		svgFrance_orange = update_map("#svg-france-orange", svgFrance_orange, data_point_orange);
-		$('#map-orange-loading').css('display', 'none');
+		data_point_VCN10 = data_back;
+		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
+		$('#map-VCN10-loading').css('display', 'none');
 	    })
 
-	var data_query = {
-	    n: n,
-            exp: projection.exp,
-            chain: projection.chain_violet,
-            variable: variable,
-            horizon: horizon.H,
-	    check_cache: check_cache,
-	};
-	fetch(api_base_url + "/get_delta_on_horizon", {
-            method: 'POST',
-            headers: {
-		'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data_query)
-	})
-	    .then(response => response.json())
-	    .then(data_back => {
-		data_point_violet = data_back;
-		svgFrance_violet = update_map("#svg-france-violet", svgFrance_violet, data_point_violet);
-		$('#map-violet-loading').css('display', 'none');
-	    })
+	// var data_query = {
+	//     n: n,
+    //         exp: projection.exp,
+    //         chain: projection.chain_violet,
+    //         variable: variable,
+    //         horizon: horizon.H,
+	//     check_cache: check_cache,
+	// };
+	// fetch(api_base_url + "/get_delta_on_horizon", {
+    //         method: 'POST',
+    //         headers: {
+	// 	'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data_query)
+	// })
+	//     .then(response => response.json())
+	//     .then(data_back => {
+	// 	data_point_violet = data_back;
+	// 	svgFrance_violet = update_map("#svg-france-violet", svgFrance_violet, data_point_violet);
+	// 	$('#map-violet-loading').css('display', 'none');
+	//     })
 	
 	
-    } else {
-	var data_query = {
-	    n: n,
-            exp: projection.exp,
-            chain: projection.chain,
-            variable: variable,
-            horizon: horizon.H,
-	    check_cache: check_cache,
-	};
+    // } else {
+	// var data_query = {
+	//     n: n,
+    //         exp: projection.exp,
+    //         chain: projection.chain,
+    //         variable: variable,
+    //         horizon: horizon.H,
+	//     check_cache: check_cache,
+	// };
 
-	fetch(api_base_url + "/get_delta_on_horizon", {
-            method: 'POST',
-            headers: {
-		'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data_query)
-	})
-	    .then(response => response.json())
-	    .then(data_back => {
-		data_point = data_back;
-		// delete data_back.data;
-		// meta_point = data_back;
-		update_grid(data_back);
-		draw_colorbar(data_back);
-		svgFrance = update_map("#svg-france", svgFrance, data_point);
-		svgFrance = redrawPoint(svgFrance, data_point);
-		$('#map-loading').css('display', 'none');
-		check_url_after_data();
-	    })
-    }
+	// fetch(api_base_url + "/get_delta_on_horizon", {
+    //         method: 'POST',
+    //         headers: {
+	// 	'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(data_query)
+	// })
+	//     .then(response => response.json())
+	//     .then(data_back => {
+	// 	data_point = data_back;
+	// 	// delete data_back.data;
+	// 	// meta_point = data_back;
+	// 	update_grid(data_back);
+	// 	draw_colorbar(data_back);
+	// 	svgFrance = update_map("#svg-france", svgFrance, data_point);
+	// 	svgFrance = redrawPoint(svgFrance, data_point);
+	// 	$('#map-loading').css('display', 'none');
+	// 	check_url_after_data();
+	//     })
+    // }
 }
 const update_data_point_debounce = debounce(update_data_point, 1000);
 // update_data_point_debounce();
@@ -687,35 +660,35 @@ function update_grid(data_back) {
     $(".grid-n_text").css("display", "flex");
     document.getElementById("grid-n_number").innerHTML = n;
     
-    var url = window.location.pathname;
-    if (url === "/exploration-avancee") {
-	$("#grid-chain_drawer-narratif").css("display", "none");
-	$("#grid-chain_drawer-RCP").css("display", "none");
-	$("#grid-chain_drawer-chain").css("display", "none");
+    // var url = window.location.pathname;
+    // if (url === "/exploration-avancee") {
+	// $("#grid-chain_drawer-narratif").css("display", "none");
+	// $("#grid-chain_drawer-RCP").css("display", "none");
+	// $("#grid-chain_drawer-chain").css("display", "none");
 	
-	if (drawer_mode === "drawer-narratif") {
-	    $("#grid-chain_drawer-narratif").css("display", "flex");
+	// if (drawer_mode === "drawer-narratif") {
+	//     $("#grid-chain_drawer-narratif").css("display", "flex");
 	    
-	} else if (drawer_mode === "drawer-RCP") {
-    	    $("#grid-chain_drawer-RCP").css("display", "flex");
+	// } else if (drawer_mode === "drawer-RCP") {
+    // 	    $("#grid-chain_drawer-RCP").css("display", "flex");
 
-	    var RCP_value = get_RCP_value();
-	    $("#grid-chain_RCP26-text").css("display", "none");
-	    $("#grid-chain_RCP45-text").css("display", "none");
-	    $("#grid-chain_RCP85-text").css("display", "none");
+	//     var RCP_value = get_RCP_value();
+	//     $("#grid-chain_RCP26-text").css("display", "none");
+	//     $("#grid-chain_RCP45-text").css("display", "none");
+	//     $("#grid-chain_RCP85-text").css("display", "none");
 	    
-	    if (RCP_value === "26") {
-		$("#grid-chain_RCP26-text").css("display", "block");
-	    } else if (RCP_value === "45") {
-		$("#grid-chain_RCP45-text").css("display", "block");
-	    } else if (RCP_value === "85") {
-		$("#grid-chain_RCP85-text").css("display", "block");
-	    }
+	//     if (RCP_value === "26") {
+	// 	$("#grid-chain_RCP26-text").css("display", "block");
+	//     } else if (RCP_value === "45") {
+	// 	$("#grid-chain_RCP45-text").css("display", "block");
+	//     } else if (RCP_value === "85") {
+	// 	$("#grid-chain_RCP85-text").css("display", "block");
+	//     }
 	    
-	} else if (drawer_mode === "drawer-chain") {
-	    $("#grid-chain_drawer-chain").css("display", "flex");
-	}
-    }
+	// } else if (drawer_mode === "drawer-chain") {
+    $("#grid-chain_drawer-chain").css("display", "flex");
+	// }
+    // }
     
 }
 
@@ -1044,11 +1017,11 @@ function update_map(id_svg, svgElement, data_back) {
     
     d3.select(id_svg).selectAll("*").remove();
 
-    if (drawer_mode === 'drawer-narratif') {
+    // if (drawer_mode === 'drawer-narratif') {
 	var fact = 2;
-    } else {
-	var fact = 1;
-    }
+    // } else {
+	// var fact = 1;
+    // }
 
     function redrawMap() {
 
@@ -1573,29 +1546,27 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
     let chain_text_shift = 0;
     let chain_text;
     var projection = get_projection();
-    if (drawer_mode === 'drawer-narratif') {
+    // if (drawer_mode === 'drawer-narratif') {
 	chain_text = "Chaînes de modélisation par narratif sous le";
 	top_text = narratif_text;
 	top_text_color = narratif_color;
-    } else if (drawer_mode === 'drawer-RCP') {
-	// width_max_chain_text = 56;
-	// chain_text_shift = 60;
-	chain_text = "Ensemble des chaînes de modélisation pour le";
-	if (projection.RCP === "RCP 2.6") {
-	    top_text = "Scénario où des efforts importants sont fait pour réduire les émissions.";
-	    top_text_color = "#003466";
-	} else if (projection.RCP === "RCP 4.5") {
-	    top_text = "Scénario où des efforts modérés sont fait pour réduire les émissions.";
-	    top_text_color = "#70A0CD";
-	} else if (projection.RCP === "RCP 8.5") {
-	    top_text = "Scénario où l'augmentation des émissions continue selon la tendance actuelle.";
-	    top_text_color = "#990002";
-	}
-    } else if (drawer_mode === 'drawer-chain') {
-	// /!\ PB : le nombre de HM dépend de la sélection
-	const nChain = 0;
-	chain_text = "Sélection de " + projection.chain.length + " chaînes de modélisation sous le";
-    }
+    // } else if (drawer_mode === 'drawer-RCP') {
+	// chain_text = "Ensemble des chaînes de modélisation pour le";
+	// if (projection.RCP === "RCP 2.6") {
+	//     top_text = "Scénario où des efforts importants sont fait pour réduire les émissions.";
+	//     top_text_color = "#003466";
+	// } else if (projection.RCP === "RCP 4.5") {
+	//     top_text = "Scénario où des efforts modérés sont fait pour réduire les émissions.";
+	//     top_text_color = "#70A0CD";
+	// } else if (projection.RCP === "RCP 8.5") {
+	//     top_text = "Scénario où l'augmentation des émissions continue selon la tendance actuelle.";
+	//     top_text_color = "#990002";
+	// }
+    // } else if (drawer_mode === 'drawer-chain') {
+	// // /!\ PB : le nombre de HM dépend de la sélection
+	// const nChain = 0;
+	// chain_text = "Sélection de " + projection.chain.length + " chaînes de modélisation sous le";
+    // }
     const RCP_text = projection.RCP;
     const model_text = "avec au moins " + get_n() + " modèles hydrologiques par point";
     chain_text = chain_text + " " + RCP_text + " " + model_text;
@@ -1780,25 +1751,25 @@ function exportSVG() {
     const zip = new JSZip(); // Create a ZIP archive
     let pngPromises = [];
 
-    if (drawer_mode === 'drawer-narratif') {
-        const svgDataArray = [
-            { id: "#svg-france-vert", name: "france-vert",
-	      narratif: "Réchauffement marqué et augmentation des précipitations", color: "#569A71"},
-            { id: "#svg-france-jaune", name: "france-jaune",
-	      narratif: "Changements futurs relativement peu marqués", color: "#EECC66"},
-            { id: "#svg-france-orange", name: "france-orange",
-	      narratif: "Fort réchauffement et fort assèchement en été (et en annuel)", color: "#E09B2F"},
-            { id: "#svg-france-violet", name: "france-violet",
-	      narratif: "Fort réchauffement et forts contrastes saisonniers en précipitations", color: "#791F5D"}
-        ];
+    // if (drawer_mode === 'drawer-narratif') {
+    const svgDataArray = [
+        { id: "#svg-france-QA", name: "france-vert",
+        narratif: "Réchauffement marqué et augmentation des précipitations", color: "#569A71"},
+        { id: "#svg-france-QJXA", name: "france-jaune",
+        narratif: "Changements futurs relativement peu marqués", color: "#EECC66"},
+        { id: "#svg-france-VCN10", name: "france-orange",
+        narratif: "Fort réchauffement et fort assèchement en été (et en annuel)", color: "#E09B2F"},
+        // { id: "#svg-france-violet", name: "france-violet",
+        // narratif: "Fort réchauffement et forts contrastes saisonniers en précipitations", color: "#791F5D"}
+    ];
 
-        pngPromises = svgDataArray.map(({id, name, narratif, color}) => {
-            return convertSVGToPNG(id, name, zip, Height, Width, narratif, color);
-        });
+    pngPromises = svgDataArray.map(({id, name, narratif, color}) => {
+        return convertSVGToPNG(id, name, zip, Height, Width, narratif, color);
+    });
 
-    } else {
-        pngPromises.push(convertSVGToPNG("#svg-france", "france", zip, Height, Width));
-    }
+    // } else {
+    //     pngPromises.push(convertSVGToPNG("#svg-france", "france", zip, Height, Width));
+    // }
 
     // Wait for all PNG conversions to complete, then generate the ZIP
     Promise.all(pngPromises).then(() => {
@@ -1941,12 +1912,12 @@ const Storylines_map = {
 	info_readme: "Narratif orange, fort réchauffement et fort assèchement en été\n(et en annuel).",
 	color: "#E09B2F"
     },
-    "violet": {
-	chain: "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT",
-	info: "Fort réchauffement et forts contrastes saisonniers en précipitations",
-	info_readme: "Narratif violet, fort réchauffement et forts contrastes saisonniers\nen précipitations",
-	color: "#791F5D"
-    }
+    // "violet": {
+	// chain: "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT",
+	// info: "Fort réchauffement et forts contrastes saisonniers en précipitations",
+	// info_readme: "Narratif violet, fort réchauffement et forts contrastes saisonniers\nen précipitations",
+	// color: "#791F5D"
+    // }
 };
 
 
@@ -2100,21 +2071,21 @@ async function exportData() {
         ".zip";
 
     let chain_info;
-    if (drawer_mode === 'drawer-RCP') {
-        chain_info = "Moyenne multi-modèles par niveau d'émissions.\n";
-        if (projection.RCP === "RCP 2.6") {
-            chain_info = chain_info + "Le RCP 2.6 est un scénario compatible avec les objectifs\ndes accords de Paris.";
-        } else if (projection.RCP === "RCP 4.5") {
-            chain_info = chain_info + "Le RCP 4.5 est un scénario où des efforts modérés sont fait pour\nréduire les émissions.";
-        } else if (projection.RCP === "RCP 8.5") {
-            chain_info = chain_info + "Le RCP 8.5 est un scénario où l'augmentation des émissions\ncontinue selon la tendance actuelle.";
-        }
-    } else if (drawer_mode === 'drawer-chain') {
-        chain_info = "Attention : Chaînes de modélisation spécifiques, l'approche\n" +
-            "multi-modèle doit être privilégiée. Le détail des chaînes de\n" +
-            "modélisation sélectionnées est disponible dans le fichier\n" +
-            "meta_projection.csv"
-    }
+    // if (drawer_mode === 'drawer-RCP') {
+    //     chain_info = "Moyenne multi-modèles par niveau d'émissions.\n";
+    //     if (projection.RCP === "RCP 2.6") {
+    //         chain_info = chain_info + "Le RCP 2.6 est un scénario compatible avec les objectifs\ndes accords de Paris.";
+    //     } else if (projection.RCP === "RCP 4.5") {
+    //         chain_info = chain_info + "Le RCP 4.5 est un scénario où des efforts modérés sont fait pour\nréduire les émissions.";
+    //     } else if (projection.RCP === "RCP 8.5") {
+    //         chain_info = chain_info + "Le RCP 8.5 est un scénario où l'augmentation des émissions\ncontinue selon la tendance actuelle.";
+    //     }
+    // } else if (drawer_mode === 'drawer-chain') {
+    //     chain_info = "Attention : Chaînes de modélisation spécifiques, l'approche\n" +
+    //         "multi-modèle doit être privilégiée. Le détail des chaînes de\n" +
+    //         "modélisation sélectionnées est disponible dans le fichier\n" +
+    //         "meta_projection.csv"
+    // }
 
     // README
     let README = await fetch('/resources/README.txt');
@@ -2143,59 +2114,59 @@ async function exportData() {
 
     let zip;
 
-    if (drawer_mode === 'drawer-narratif') {
+    // if (drawer_mode === 'drawer-narratif') {
         const data_point_storyline = {
-            "vert": data_point_vert,
-            "jaune": data_point_jaune,
-            "orange": data_point_orange,
-            "violet": data_point_violet
-        }
-        zip = new JSZip();
-        for (const storyline of Object.keys(data_point_storyline)) {
-            const folder = zip.folder(storyline);
-            const files = get_files(data_point_storyline[storyline],
-                variable,
-                projection["chain_" + storyline]);
-            for (const [fileName, content] of Object.entries(files)) {
-                folder.file(fileName, content);
-            }
-
-            var param_tmp = param + Storylines_map[storyline].info_readme;
-            README_tmp = README
-                .replace(/\[DATE\]/g, time)
-                .replace(/\[PARAM\]/g, param_tmp);
-            folder.file("README.txt", README_tmp);
-
-            folder.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
-            folder.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
-
-            // Await the PNG conversion
-            await convertSVGToPNG("#svg-france-" + storyline, "map-" + storyline,
-                folder, Height, Width,
-                Storylines_map[storyline].info,
-                Storylines_map[storyline].color);
-        }
-
-    } else {
-        zip = new JSZip();
-        const files = get_files(data_point, variable,
-            projection.chain);
+        "vert": data_point_QA,
+        "jaune": data_point_QJXA,
+        "orange": data_point_VCN10,
+        // "violet": data_point_violet
+    }
+    zip = new JSZip();
+    for (const storyline of Object.keys(data_point_storyline)) {
+        const folder = zip.folder(storyline);
+        const files = get_files(data_point_storyline[storyline],
+            variable,
+            projection["chain_" + storyline]);
         for (const [fileName, content] of Object.entries(files)) {
-            zip.file(fileName, content);
+            folder.file(fileName, content);
         }
 
-        var param_tmp = param + chain_info;
+        var param_tmp = param + Storylines_map[storyline].info_readme;
         README_tmp = README
             .replace(/\[DATE\]/g, time)
             .replace(/\[PARAM\]/g, param_tmp);
-        zip.file("README.txt", README_tmp);
+        folder.file("README.txt", README_tmp);
 
-        zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
-        zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
+        folder.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
+        folder.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
 
         // Await the PNG conversion
-        await convertSVGToPNG("#svg-france", "map", zip, Height, Width);
+        await convertSVGToPNG("#svg-france-" + storyline, "map-" + storyline,
+            folder, Height, Width,
+            Storylines_map[storyline].info,
+            Storylines_map[storyline].color);
     }
+
+    // } else {
+    //     zip = new JSZip();
+    //     const files = get_files(data_point, variable,
+    //         projection.chain);
+    //     for (const [fileName, content] of Object.entries(files)) {
+    //         zip.file(fileName, content);
+    //     }
+
+    //     var param_tmp = param + chain_info;
+    //     README_tmp = README
+    //         .replace(/\[DATE\]/g, time)
+    //         .replace(/\[PARAM\]/g, param_tmp);
+    //     zip.file("README.txt", README_tmp);
+
+    //     zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
+    //     zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
+
+    //     // Await the PNG conversion
+    //     await convertSVGToPNG("#svg-france", "map", zip, Height, Width);
+    // }
 
     zip.generateAsync({ type: "blob" })
         .then(function (content) {

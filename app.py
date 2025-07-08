@@ -58,19 +58,8 @@ engine = create_engine(db_url, poolclass=QueuePool)
 
 
 @app.route('/')
-@app.route('/plus-d-eau-ou-moins-d-eau/nord-et-sud')
-@app.route('/plus-d-eau-ou-moins-d-eau/et-entre-les-deux')
-@app.route('/plus-d-eau-ou-moins-d-eau/le-changement-dans-la-continuite')
-@app.route('/plus-d-eau-ou-moins-d-eau/ajouter-une-pincee-de-variabilite-naturelle')
-@app.route('/plus-d-eau-ou-moins-d-eau/raconter-les-trajectoires')
-@app.route('/des-etiages-plus-severe/moins-d-eau-l-ete')
-@app.route('/des-etiages-plus-severe/et-c-est-certain')
-@app.route('/des-etiages-plus-severe/des-etiages-plus-longs')
-@app.route('/des-crues-incertaines/quelle-evolution-en-france')
-@app.route('/des-crues-incertaines/et-d-abord-dans-quelle-direction')
-@app.route('/des-crues-incertaines/ajouter-une-louche-de-variabilite')
+@app.route('/et-c-est-certain')
 @app.route('/a-propos')
-@app.route('/exploration-avancee')
 def index():
     return render_template('index.html')
 
