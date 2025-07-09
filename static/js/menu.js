@@ -78,16 +78,16 @@ function load_slider() {
 }
 
 
-// function selectVariableButton(selectedButton) {
-//     if (selectedButton) {
-// 	var buttons = selectedButton.parentNode.querySelectorAll('button');
-// 	buttons.forEach(function (button) {
-// 	    button.classList.remove('selected');
-// 	});
-// 	selectedButton.classList.add('selected');
-// 	update_data_point_debounce();
-//     }
-// }
+function selectVariableButton(selectedButton) {
+    if (selectedButton) {
+	var buttons = selectedButton.parentNode.querySelectorAll('button');
+	buttons.forEach(function (button) {
+	    button.classList.remove('selected');
+	});
+	selectedButton.classList.add('selected');
+	update_data_point_debounce();
+    }
+}
 
 
 function selectHorizonButton(selectedButton) {
@@ -315,6 +315,7 @@ function get_horizon() {
     var bunchHorizon = $('#bunch-horizon_futur');
     var buttonHorizon = bunchHorizon.find('.selected')[0];
     var H = buttonHorizon.getAttribute('value');
+	console.log(H)
 
     if (H === "H1") {
 	var horizon_period = "2021 - 2050";

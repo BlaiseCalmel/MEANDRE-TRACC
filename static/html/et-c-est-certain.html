@@ -23,57 +23,93 @@
 -->
 
 <div id="container-upper">
-    <div id="panel-hover">
-		<div class="bunch row column-small-gap center cross-center">
-			<div id="panel-hover_code"></div>
-			<!-- <div id="panel-hover_value"></div> -->
-		</div>
-    </div>
 
 	<div class="sub-container-upper-map">
 		<!-- TO DO ADD REAL MAP WITH REGIONS -->
-		<span class="map-color vert border material-icons-outlined">gesture</span>
 		<div id="map-region-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 		</div>
 		<svg id="svg-france-region"></svg>
+
+		<div id="panel-hover-basin">
+			<div class="bunch row column-small-gap center cross-center">
+				<div id="panel-hover_basin-id"></div>
+				<!-- <div id="panel-hover_value"></div> -->
+			</div>
+		</div>
+	<!-- <div id="panel-hover">
+		<div class="bunch row column-small-gap center cross-center">
+			<div id="panel-hover_code"></div>
+		</div>
+    </div> -->
 	</div>
 
-	
-	<div class="sub-container-upper-info">
-		<div class="bunch column column-small-gap row-small-gap">
-			<div id="grid-chain" class="gallery-item">
-				<span class="gallery-item small-text">Région(s) sélectionnée(s)</span>
-			</div>
-			<div id="grid-chain" class="gallery-item">
-				<span class="gallery-item small-text">Niveau de réchauffement</span>
+	<div class="sub-container-upper-info bunch column column-small-gap row-small-gap">
+		<div id="selected-basin-display">Aucun bassin sélectionné</div>
+		<div class="sub-container-upper-horizons gallery-item bunch column row-small-gap">
+			<span class="small-text">Niveau de réchauffement</span>
+			
+			<!-- <div id="bunch-variable" class="bunch row space">
+				<button id="button-tracc20" value="tracc20" onclick="selectTraccButton(this);">
+				<span>+2.0°C</span>
+				</button>
+
+				<button id="button-tracc27" value="tracc27" onclick="selectTraccButton(this);">
+				<span>+2.7°C</span>
+				</button>
+
+				<button id="button-tracc40" value="tracc40" class="selected" onclick="selectTraccButton(this);">
+				<span>+4.0°C</span>
+				</button>
+			</div> -->
+			<div id="bunch-horizon_futur" class="bunch space">
+				<button id="button-tracc20" value="H1"
+					onclick="selectTraccButton(this);">
+				<span>+2.0°C</span>
+				</button>
+				<button id="button-tracc27" value="H2"
+					onclick="selectTraccButton(this);">
+				<span>+2.7°C</span>
+				</button>
+				<button id="button-tracc40" value="H3" class="selected"
+					onclick="selectTraccButton(this);">
+				<span>+4.0°C</span>
+				</button>
 			</div>
 		</div>
 
-	</div>
-	
-	<div class="sub-container-upper-narratives">
-		<div class="bunch column column-small-gap row-small-gap">
-			<div id="grid-chain" class="gallery-item">
-				<div id="grid-chain_drawer-narratif" class="bunch column">
-					<span class="grid-chain_drawer">Chaînes de modélisation<br>pour chaque narratif</span>
-					<span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
-					<span class="jaune grid-chain_text">JAUNE Changements futurs relativement peu marqués</span>
-					<span class="orange grid-chain_text">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</span>
-					<span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span>
+		
+		<div class="sub-container-upper-narratives">
+			<div class="bunch column column-small-gap row-small-gap">
+				<div id="grid-chain" class="gallery-item">
+					<div id="grid-chain_drawer-narratif" class="bunch column">
+						<span class="grid-chain_drawer">Chaînes de modélisation<br>pour chaque narratif</span>
+						<span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
+						<span class="jaune grid-chain_text">JAUNE Changements futurs relativement peu marqués</span>
+						<span class="orange grid-chain_text">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</span>
+						<span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span>
+					</div>
 				</div>
 			</div>
-		</div>
 
+		</div>
 	</div>
+	
 
 </div>
 
 
 <div class="container-lower bunch column">
-	<div id="grid-chain" class="gallery-item">
-			<span class="gallery-item small-text">Colorbar</span>
+	<div class="bunch column column-small-gap row-small-gap">
+		<div id="grid-chain" class="gallery-item">
+				<span class="gallery-item small-text">infos ?</span>
+		</div>
+
+		<div id="grid-colorbar" class="gallery-item">
+			<svg id="svg-colorbar"></svg>
+		</div>
 	</div>
+	
 	
 	<div class="sub-container-lower-map">
 		<div id="map-QA-loading" class="container-loading">
@@ -108,6 +144,12 @@
 		</div>
 		<svg id="svg-france-VCN10"></svg>
 	</div>
+
+	<!-- <div id="panel-hover">
+		<div class="bunch row column-small-gap center cross-center">
+			<div id="panel-hover_code"></div>
+		</div>
+    </div> -->
 
     <div id="action-bar" class="bunch row">
 		<button id="export" class="material-icons-outlined"

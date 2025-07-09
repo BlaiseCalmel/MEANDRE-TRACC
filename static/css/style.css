@@ -350,17 +350,21 @@ h3 {
 
 .sub-container-upper-info {
     position: relative;
-    width: calc(100% / 5);
+    width: calc(100% * 2 / 3);
     height: calc(100%);
     top: 1rem;
 }
 
+.sub-container-upper-horizons {
+    position: relative;
+    width: calc(100% / 3);
+    height: calc(100%);
+}
+
 .sub-container-upper-narratives {
     position: relative;
-    /* width: calc(100% / 2); */
-    width: auto;
+    width: calc(100% * 2 / 3);
     height: calc(100%);
-    top: 1rem;
 }
 
 .map-color {
@@ -465,6 +469,29 @@ h3 {
     height: fit-content;
 }
 #panel-hover_code {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: #89898a;
+    margin-bottom: 0.1rem;
+}
+
+#panel-hover-basin {
+    display: none;
+    position: absolute;
+    bottom: 0.5rem;
+    left: 2rem;
+    color: #060508;
+    font-size: 1rem;
+    border: 3px solid #ffffff;
+    background-color: #ffffff;
+    padding: 0.2rem 0.3rem;
+    overflow: hidden;
+    border-radius: 8px;
+    width: fit-content;
+    height: fit-content;
+}
+#panel-hover_basin-id {
     font-family: 'Lato', sans-serif;
     font-weight: 400;
     font-size: 0.8rem;
