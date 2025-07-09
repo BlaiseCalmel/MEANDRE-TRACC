@@ -83,6 +83,14 @@ function loadGeoJSON(fileURL) {
 	});
 }
 
+function updateMaps(){
+    console.log(selectedBasinId)
+    svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
+    svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
+    svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
+    update_data_point_debounce()
+}
+
 
 function updateContent(start=false, actualise=true) {
     var url = window.location.pathname;
@@ -118,7 +126,8 @@ function updateContent(start=false, actualise=true) {
         svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
         svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
         svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
-        svgFrance_region = update_map_region("#svg-france-region", svgFrance);
+        // svgFrance_region = update_map_region("#svg-france-region", svgFrance);
+        
 
 	    });
     }
@@ -868,7 +877,7 @@ function update_map_region(id_svg, svgElement) {
 	    .duration(10);
 
     // let selectedBasinId = null;
-
+    let change_region = false
     layer_basin.selectAll("path.basinHydro")
         .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)  // clé unique
         .join("path")
@@ -890,26 +899,18 @@ function update_map_region(id_svg, svgElement) {
                 document.getElementById("panel-hover_basin-id").innerHTML =
                     "<span style='font-weight: 900; color:" + selectedBasinId ? `Bassin sélectionné : ${selectedBasinId}` : "Aucun bassin sélectionné" + "'>" +
                     d.properties.TopoOH + "</span>"; 
+                let change_region = true
             }
 
             // Met à jour le fill des polygones
             layer_basin.selectAll("path.basinHydro")
                 .attr("fill", d => d.properties.name === selectedBasinId ? stroke_basin_selected : fill_basinHydro);
 
-            // Affiche l'id sélectionné (ou message si aucun)
+            updateMaps()
             
         })
         .transition()
-	    .duration(10);
-        // document.getElementById("panel-hover-basin").style.display = "block";
-        // document.getElementById("panel-hover_basin-id").innerHTML =
-        //     "<span style='font-weight: 900; color:" + selectedBasinId ? `Bassin sélectionné : ${selectedBasinId}` : "Aucun bassin sélectionné" + "'>" +
-        //     d.properties.TopoOH + "</span>"; 
-    
-        console.log(selectedBasinId)
-        // display.textContent = selectedBasinId ? `Bassin sélectionné : ${selectedBasinId}` : "Aucun bassin sélectionné";
-
-	    
+	    .duration(1000);    
 	
 	layer_france.selectAll("path.france")
 	    .data(simplifiedGeoJSON_france.features)
@@ -929,20 +930,20 @@ function update_map_region(id_svg, svgElement) {
     // const redrawMap_debounce = debounce(() => redrawMap(svgElement), 100);
 
     function handleResize() {
-	if (window.innerWidth < window.innerHeight) {
-	    var width = window.innerWidth / fact;
-	    var height = window.innerWidth / fact;
-	} else {
-	    var width = (window.innerHeight - 50 ) / fact;
-	    var height = (window.innerHeight - 50) / fact;
-	}
+        if (window.innerWidth < window.innerHeight) {
+            var width = window.innerWidth / fact;
+            var height = window.innerWidth / fact;
+        } else {
+            var width = (window.innerHeight - 50 ) / fact;
+            var height = (window.innerHeight - 50) / fact;
+        }
 
-	zoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
-	svgElement.attr("width", width).attr("height", height);
-	projectionMap.scale([height*scale]).translate([width / 2, height / 2]);	    
+        zoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
+        svgElement.attr("width", width).attr("height", height);
+        projectionMap.scale([height*scale]).translate([width / 2, height / 2.3]);	    
 
-	redrawMap();
-	highlight_selected_point();
+        redrawMap();
+        highlight_selected_point();
     }
     window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
 
@@ -985,17 +986,14 @@ function update_map_region(id_svg, svgElement) {
 }
 
 
+
 function update_map(id_svg, svgElement, data_back) {
 
     riverLength = riverLength_max;
     
     d3.select(id_svg).selectAll("*").remove();
 
-    // if (drawer_mode === 'drawer-narratif') {
 	var fact = 2;
-    // } else {
-	// var fact = 1;
-    // }
 
     function redrawMap() {
 
@@ -1076,20 +1074,20 @@ function update_map(id_svg, svgElement, data_back) {
     // const redrawMap_debounce = debounce(() => redrawMap(svgElement), 100);
 
     function handleResize() {
-	if (window.innerWidth < window.innerHeight) {
-	    var width = window.innerWidth / fact;
-	    var height = window.innerWidth / fact;
-	} else {
-	    var width = (window.innerHeight - 50 ) / fact;
-	    var height = (window.innerHeight - 50) / fact;
-	}
+        if (window.innerWidth < window.innerHeight) {
+            var width = window.innerWidth / fact;
+            var height = window.innerWidth / fact;
+        } else {
+            var width = (window.innerHeight - 50 ) / fact;
+            var height = (window.innerHeight - 50) / fact;
+        }
 
-	zoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
-	svgElement.attr("width", width).attr("height", height);
-	projectionMap.scale([height*scale]).translate([width / 2, height / 2]);	    
+        zoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
+        svgElement.attr("width", width).attr("height", height);
+        projectionMap.scale([height*scale]).translate([width / 2, height / 2]);	    
 
-	redrawMap();
-	highlight_selected_point();
+        redrawMap();
+        highlight_selected_point();
     }
     window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
 
@@ -1127,6 +1125,36 @@ function update_map(id_svg, svgElement, data_back) {
 
     redrawMap();
     handleResize();
+
+    // Zoom on selectedBasinId
+    if (selectedBasinId) {
+        const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
+        const selectedFeature = simplifiedGeoJSON_basinHydro.features.find(f => f.properties.name === selectedBasinId);
+
+        if (selectedFeature) {
+            const path = d3.geoPath(projectionMap); 
+            const bounds = path.bounds(selectedFeature); 
+            const width = +svgElement.attr("width");
+            const height = +svgElement.attr("height");
+            const bboxMargin = 20;
+
+            const dx = bounds[1][0] - bounds[0][0];
+            const dy = bounds[1][1] - bounds[0][1];
+            const x = (bounds[0][0] + bounds[1][0]) / 2;
+            const y = (bounds[0][1] + bounds[1][1]) / 2;
+
+            const scale = Math.min((width - 2 * bboxMargin) / dx, (height - 2 * bboxMargin) / dy) * 0.9;
+            const translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+            // Appliquer la transformation
+            d3.select(svgElement.node().parentNode) 
+                .transition()
+                .duration(750)
+                .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+        }
+    }
+
+
 
     return svgElement
 }
