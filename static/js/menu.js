@@ -78,26 +78,26 @@ function load_slider() {
 }
 
 
-function selectVariableButton(selectedButton) {
-    if (selectedButton) {
-	var buttons = selectedButton.parentNode.querySelectorAll('button');
-	buttons.forEach(function (button) {
-	    button.classList.remove('selected');
-	});
-	selectedButton.classList.add('selected');
-	update_data_point_debounce();
-    }
-}
+// function selectVariableButton(selectedButton) {
+//     if (selectedButton) {
+// 	var buttons = selectedButton.parentNode.querySelectorAll('button');
+// 	buttons.forEach(function (button) {
+// 	    button.classList.remove('selected');
+// 	});
+// 	selectedButton.classList.add('selected');
+// 	update_data_point_debounce();
+//     }
+// }
 
 
-function selectHorizonButton(selectedButton) {
-    var buttons = selectedButton.parentNode.querySelectorAll('button');
-    buttons.forEach(function (button) {
-	button.classList.remove('selected');
-    });
-    selectedButton.classList.add('selected');
-    update_data_point_debounce();
-}
+// function selectHorizonButton(selectedButton) {
+//     var buttons = selectedButton.parentNode.querySelectorAll('button');
+//     buttons.forEach(function (button) {
+// 	button.classList.remove('selected');
+//     });
+//     selectedButton.classList.add('selected');
+//     update_data_point_debounce();
+// }
 
 
 
@@ -378,16 +378,11 @@ const RCP_map = {
     }
 };
 
-function get_RCP_value() {
-    if (drawer_mode === 'drawer-chain') {
-	var RCP_value = document.querySelector('#bunch_RCP .selected').value;
-    } else if (drawer_mode === 'drawer-narratif') {
-	var RCP_value = "85";
-    } else if (drawer_mode === 'drawer-RCP') {
-	var RCP_value = document.querySelector('#bunch_RCP_only .selected').value;
-    }
-    return RCP_value;
-}
+const RCP_value = "85"
+// function get_RCP_value() {
+//     var RCP_value = "85"
+//     return RCP_value;
+// }
 
 function get_narratif_only() {
     var container = document.getElementById('bunch_narratif');
@@ -399,69 +394,22 @@ function get_narratif_only() {
     return values;
 }
 
+
 function get_projection() {
-    var RCP_value = get_RCP_value();
-    
-    if (drawer_mode === 'drawer-chain') {
-	var type = "Sélection avancée";
-	var EXP_GCM_RCM = get_chunk_of_chain('[id^="block_"][id$="_RCM"]:visible');
-	var BC_HM = get_chunk_of_chain('[id^="block_"][id$="_HM"]:visible');
-	var chain = [];
-	EXP_GCM_RCM.forEach(function(item1) {
-            BC_HM.forEach(function(item2) {
-		chain.push(item1 + "_" + item2);
-            });
-	});
-	
-    } else if (drawer_mode === 'drawer-narratif') {
+
 	var type = "Sélection par narratif";
-	var EXP_GCM_RCM_BC = get_narratif_only();
-	var HM = ["CTRIP", "EROS", "GRSD", "J2000", "MORDOR-SD",
-		  "MORDOR-TS", "ORCHIDEE", "SIM2", "SMASH"];
-	var chain = [];
-	EXP_GCM_RCM_BC.forEach(function(item1) {
-            HM.forEach(function(item2) {
-		chain.push(item1 + "_" + item2);
-            });
-	});
-
-    } else if (drawer_mode === 'drawer-RCP') {
-	var type = "Par niveau d'émissions";
-	var rcp = "chain_" + RCP_value;
-	var EXP_GCM_RCM = get_chunk_of_chain('[id^="block_"][id$="_RCM"]',
-					     search=rcp);
-	var BC_HM = get_chunk_of_chain('[id^="block_"][id$="_HM"]',
-				       search="chain");
-	var chain = [];
-	EXP_GCM_RCM.forEach(function(item1) {
-            BC_HM.forEach(function(item2) {
-		chain.push(item1 + "_" + item2);
-            });
-	});
-    }
-
-    var chain = chain.map(function(element) {
-	return "historical-rcp" + element;
-    });
-
-    var exp = chain[0].split('_')[0].replace('-', '_');
-
-    var chain_vert = chain.filter(item => item.includes("85_HadGEM2-ES_ALADIN63_ADAMONT"));
-    var chain_jaune = chain.filter(item => item.includes("85_CNRM-CM5_ALADIN63_ADAMONT"));
-    var chain_orange = chain.filter(item => item.includes("85_EC-EARTH_HadREM3-GA7_ADAMONT"));
-    var chain_violet = chain.filter(item => item.includes("85_HadGEM2-ES_CCLM4-8-17_ADAMONT"));
+	if (selected_storyline) {
+		var exp = selected_storyline.chain.split('_')[0].replace('-', '_');
+		var projection = {
+			type: type,
+			RCP: RCP_map[RCP_value].chain,
+			exp: exp,
+			chain: [selected_storyline.chain]
+		};
+	} else {
+		var projection = null
+	}
     
-    const projection = {
-	type: type,
-	RCP: RCP_map[RCP_value].name,
-	exp: exp,
-	chain: chain,
-	chain_vert:chain_vert,
-	chain_jaune:chain_jaune,
-	chain_orange:chain_orange,
-	chain_violet:chain_violet
-    };
-
     return projection;
 }
 

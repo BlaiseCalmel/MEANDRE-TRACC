@@ -45,7 +45,6 @@
 	</div>
 
 	<div class="sub-container-upper-info bunch column column-small-gap row-small-gap">
-		<div id="selected-basin-display">Aucun bassin sélectionné</div>
 		<div class="sub-container-upper-horizons gallery-item bunch column row-small-gap">
 			<span class="small-text">Niveau de réchauffement</span>
 			
@@ -84,10 +83,22 @@
 				<div id="grid-chain" class="gallery-item">
 					<div id="grid-chain_drawer-narratif" class="bunch column">
 						<span class="grid-chain_drawer">Chaînes de modélisation<br>pour chaque narratif</span>
-						<span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
+						<!-- <span class="vert grid-chain_text">VERT Réchauffement marqué et augmentation des précipitations</span>
 						<span class="jaune grid-chain_text">JAUNE Changements futurs relativement peu marqués</span>
 						<span class="orange grid-chain_text">ORANGE Fort réchauffement et fort assèchement en été (et en annuel)</span>
-						<span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span>
+						<span class="violet grid-chain_text">VIOLET Fort réchauffement et forts contrastes saisonniers en précipitations</span> -->
+						<button id="button-storyline1" onclick="selectStorylineButton(this);">
+								<span>Narratif 1</span>
+						</button>
+						<button id="button-storyline2" onclick="selectStorylineButton(this);">
+								<span>Narratif 2</span>
+						</button>
+						<button id="button-storyline3" onclick="selectStorylineButton(this);">
+								<span>Narratif 3</span>
+						</button>
+						<button id="button-storyline4" onclick="selectStorylineButton(this);">
+								<span>Narratif 4</span>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -145,11 +156,11 @@
 		<svg id="svg-france-VCN10"></svg>
 	</div>
 
-	<!-- <div id="panel-hover">
+	<div id="panel-hover">
 		<div class="bunch row column-small-gap center cross-center">
 			<div id="panel-hover_code"></div>
 		</div>
-    </div> -->
+    </div>
 
     <div id="action-bar" class="bunch row">
 		<button id="export" class="material-icons-outlined"

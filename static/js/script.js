@@ -20,7 +20,6 @@
 // along with MEANDRE.
 // If not, see <https://www.gnu.org/licenses/>.
 
-
 const is_production = false;
 let api_base_url;
 let default_n;
@@ -32,7 +31,6 @@ if (is_production) {
     api_base_url = "http://127.0.0.1:5000";
     default_n = 7;
 }
-
 
 
 let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river;//, geoJSONdata_entiteHydro;
@@ -51,6 +49,47 @@ let URL_narratifs = ["/",
 		     "/et-c-est-certain",]; 
 
 let drawer_mode = 'drawer-narratif';
+
+// let storyline1 = "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT_CTRIP";
+// let storyline2 = "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT_EROS";
+// let storyline3 = "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT_GRSD";
+let storyline1 = {
+    'chain': "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT_CTRIP",
+    'name': "HadGEM2-ES_ALADIN63_ADAMONT_CTRIP",
+    'family': "E1",
+    'color': "#569A71",
+    'description': "tarte aux fraises"
+};
+
+let storyline2 = {
+    'chain': "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT_EROS",
+    'name': "EC-EARTH_HadREM3-GA7_ADAMONT_EROS",
+    'family': "C2",
+    'color': "#EECC66",
+    'description': "crumble aux pommes"
+};
+
+let storyline3 = {
+    'chain': "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT_GRSD",
+    'name': "HadGEM2-ES_CCLM4-8-17_ADAMONT_GRSD",
+    'family': "X1",
+    'color': "#E09B2F",
+    'description': "compote de poire"
+};
+
+let storyline4 = null;
+
+const allStorylines = {
+    storyline1,
+    storyline2,
+    storyline3,
+    storyline4
+};
+
+const activeStorylines = Object.entries(allStorylines)
+    .filter(([key, value]) => value !== null);
+
+let selected_storyline = null;
 
 $(document).ready(function() {
     // console.log("ready");
@@ -232,6 +271,8 @@ let svgFrance_QJXA;
 let svgFrance_VCN10;
 // let svgFrance_violet;
 
+let data_indicator = ["QA", "QJXA", "VCN10_summer"]
+
 function update_data_point() {
 
     var url = window.location.pathname;
@@ -242,116 +283,180 @@ function update_data_point() {
 	check_cache = true;
     }
     
-    // if (drawer_mode === 'drawer-narratif') {
 	$('#map-QA-loading').css('display', 'flex');
 	$('#map-QJXA-loading').css('display', 'flex');
 	$('#map-VCN10-loading').css('display', 'flex');
-	// $('#map-violet-loading').css('display', 'flex');
-    // } else {
-	// $('#map-loading').css('display', 'flex');	
-    // }
-    
+
     var n = get_n();
-    var variable = get_variable();
-    var horizon = get_horizon();
+    // var variable = get_variable();
     var projection = get_projection();
+    var horizon = get_horizon();
     
-    // if (drawer_mode === 'drawer-narratif') {
-	var data_query = {
-	    n: n,
+    // Initialize top left for region selection
+    if (start) {
+        svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+            $('#map-region-loading').css('display', 'none');
+    }
+
+    if (projection) {
+        data_indicator.forEach(variable => {
+            const data_query = {
+            n: n,
             exp: projection.exp,
             chain: projection.chain,
-            variable: "QA",
+            variable: variable,   // variable change à chaque itération
             horizon: horizon.H,
-	    check_cache: check_cache,
-	};
-	fetch(api_base_url + "/get_delta_on_horizon", {
+            check_cache: check_cache,
+            };
+
+            fetch(api_base_url + "/get_delta_on_horizon", {
             method: 'POST',
             headers: {
-		'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data_query)
-	})
-	    .then(response => response.json())
-	    .then(data_back => {
-		data_point = data_back;
-		update_grid(data_back);
-		draw_colorbar(data_back);
-		check_url_after_data();
-	    })
+            })
+            .then(response => response.json())
+            .then(data_back => {
+            if (variable === "QA") {
+                data_point_QA = data_back;
+                svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
+                $('#map-QA-loading').css('display', 'none');
+            } else if (variable === "QJXA") {
+                data_point_QJXA = data_back;
+                svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
+                $('#map-QJXA-loading').css('display', 'none');
+            } else if (variable === "VCN10_summer") {
+                data_point_VCN10 = data_back;
+                svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
+                $('#map-VCN10-loading').css('display', 'none');
+            }
+            });
+        });
+        }
     
-    svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-    $('#map-region-loading').css('display', 'none');
+    
+//     if (projection) {
+        
+//         var data_query = {
+// 	    n: n,
+//             exp: projection.exp,
+//             chain: projection.chain,
+//             variable: "QA",
+//             horizon: horizon.H,
+// 	    check_cache: check_cache,
+// 	};
+//     } else {
+//         var data_query = null
+//     }
+	
+// 	fetch(api_base_url + "/get_delta_on_horizon", {
+//             method: 'POST',
+//             headers: {
+// 		'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(data_query)
+// 	})
+// 	    .then(response => response.json())
+// 	    .then(data_back => {
+// 		data_point_QA = data_back;
+// 		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
+// 		$('#map-QA-loading').css('display', 'none');
+// 	    })
 
-	var data_query = {
-	    n: n,
-            exp: projection.exp,
-            chain: projection.chain_vert,
-            variable: "QA",
-            horizon: horizon.H,
-	    check_cache: check_cache,
-	};
-	fetch(api_base_url + "/get_delta_on_horizon", {
-            method: 'POST',
-            headers: {
-		'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data_query)
-	})
-	    .then(response => response.json())
-	    .then(data_back => {
-		data_point_QA = data_back;
-		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
-		$('#map-QA-loading').css('display', 'none');
-	    })
+// 	var data_query = {
+// 	    n: n,
+//             exp: projection.exp,
+//             chain: projection.chain,
+//             variable: "QJXA",
+//             horizon: horizon.H,
+// 	    check_cache: check_cache,
+// 	};
+// 	fetch(api_base_url + "/get_delta_on_horizon", {
+//             method: 'POST',
+//             headers: {
+// 		'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(data_query)
+// 	})
+// 	    .then(response => response.json())
+// 	    .then(data_back => {
+// 		data_point_QJXA = data_back;
+// 		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
+// 		$('#map-QJXA-loading').css('display', 'none');
+// 	    })
 
-	var data_query = {
-	    n: n,
-            exp: projection.exp,
-            chain: projection.chain_jaune,
-            variable: "QJXA",
-            horizon: horizon.H,
-	    check_cache: check_cache,
-	};
-	fetch(api_base_url + "/get_delta_on_horizon", {
-            method: 'POST',
-            headers: {
-		'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data_query)
-	})
-	    .then(response => response.json())
-	    .then(data_back => {
-		data_point_QJXA = data_back;
-		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
-		$('#map-QJXA-loading').css('display', 'none');
-	    })
-
-	var data_query = {
-	    n: n,
-            exp: projection.exp,
-            chain: projection.chain_orange,
-            variable: "VCN10_summer",
-            horizon: horizon.H,
-	    check_cache: check_cache,
-	};
-	fetch(api_base_url + "/get_delta_on_horizon", {
-            method: 'POST',
-            headers: {
-		'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data_query)
-	})
-	    .then(response => response.json())
-	    .then(data_back => {
-		data_point_VCN10 = data_back;
-		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
-		$('#map-VCN10-loading').css('display', 'none');
-	    })
+// 	var data_query = {
+// 	    n: n,
+//             exp: projection.exp,
+//             chain: projection.chain,
+//             variable: "VCN10_summer",
+//             horizon: horizon.H,
+// 	    check_cache: check_cache,
+// 	};
+// 	fetch(api_base_url + "/get_delta_on_horizon", {
+//             method: 'POST',
+//             headers: {
+// 		'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(data_query)
+// 	})
+// 	    .then(response => response.json())
+// 	    .then(data_back => {
+// 		data_point_VCN10 = data_back;
+// 		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
+// 		$('#map-VCN10-loading').css('display', 'none');
+// 	    })
 }
 
 function selectTraccButton(selectedButton) {
 	console.log(selectedButton.value);
+    if (selectedButton) {
+	var buttons = selectedButton.parentNode.querySelectorAll('button');
+	buttons.forEach(function (button) {
+	    button.classList.remove('selected');
+	});
+	selectedButton.classList.add('selected');
+	update_data_point_debounce();
+    }
+}
+
+
+function updateStorylineButton(){
+    var init_storyline_button = true
+    // Update dynamic name of storylines
+    Object.entries(allStorylines)
+    .forEach(([key, val]) => {
+        const button = document.getElementById(`button-${key}`);
+        
+        if (button) {
+            if (val) {
+                button.textContent = val.name;
+                button.value = JSON.stringify(key);
+                // Initialize selected_storyline as the first button
+                if (init_storyline_button) {
+                    init_storyline_button = false
+                    selected_storyline = allStorylines[key]
+                    console.log(selected_storyline)
+                }
+            } else {
+                button.textContent = " "
+                button.value = null
+            }
+        }
+    });
+    
+    // Select the first button
+    const buttons = document.querySelectorAll("[id^='button-storyline']");
+    buttons.forEach(btn => btn.classList.remove("selected"));
+    if (buttons.length > 0) buttons[0].classList.add("selected");
+    }
+
+function selectStorylineButton(selectedButton) {
+	// Update selected_storyline
+    selected_storyline = allStorylines[selectedButton.value.replace(/"/g, '')]
+    console.log(selected_storyline);
+    // Change selected storyline button 
     if (selectedButton) {
 	var buttons = selectedButton.parentNode.querySelectorAll('button');
 	buttons.forEach(function (button) {
@@ -399,172 +504,169 @@ window.addEventListener('resize', function() {
     plot_data_serie();
 });
 
-function plot_data_serie() {
-    if (data_serie) {
-	var url = window.location.pathname;
-	if (URL_noSL.includes(url)) {
-	    data_serie = data_serie.filter(item => item.order === 0);
-	}
+// function plot_data_serie() {
+//     if (data_serie) {
+// 	var url = window.location.pathname;
+// 	if (URL_noSL.includes(url)) {
+// 	    data_serie = data_serie.filter(item => item.order === 0);
+// 	}
 	
-	d3.select("#svg-line").selectAll("*").remove();
-	var svgContainer = d3.select("#svg-line");
+// 	d3.select("#svg-line").selectAll("*").remove();
+// 	var svgContainer = d3.select("#svg-line");
 
-	var svgNode = d3.select("#grid-line").node();
-	var computedStyle = window.getComputedStyle(svgNode);
-	var paddingLeft = parseFloat(computedStyle.paddingLeft);
-	var paddingRight = parseFloat(computedStyle.paddingRight);
-	var containerPadding = paddingLeft + paddingRight;
-	var svgWidth = svgNode.getBoundingClientRect().width - containerPadding;
+// 	var svgNode = d3.select("#grid-line").node();
+// 	var computedStyle = window.getComputedStyle(svgNode);
+// 	var paddingLeft = parseFloat(computedStyle.paddingLeft);
+// 	var paddingRight = parseFloat(computedStyle.paddingRight);
+// 	var containerPadding = paddingLeft + paddingRight;
+// 	var svgWidth = svgNode.getBoundingClientRect().width - containerPadding;
 	
-	var svgHeight_min = 250;
-	var svgHeight = Math.max(svgHeight_min,
-				 +svgContainer.node().getBoundingClientRect().height);
+// 	var svgHeight_min = 250;
+// 	var svgHeight = Math.max(svgHeight_min,
+// 				 +svgContainer.node().getBoundingClientRect().height);
 	
-	var margin = { top: 10, right: 10, bottom: 20, left: 40 };
-	var width = svgWidth - margin.left - margin.right;
-	var height = svgHeight - margin.top - margin.bottom;
+// 	var margin = { top: 10, right: 10, bottom: 20, left: 40 };
+// 	var width = svgWidth - margin.left - margin.right;
+// 	var height = svgHeight - margin.top - margin.bottom;
 
-	var svg = svgContainer
-	    .attr("width", width + margin.left + margin.right)
-	    .attr("height", height + margin.top + margin.bottom)
-	    .append("g")
-	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+// 	var svg = svgContainer
+// 	    .attr("width", width + margin.left + margin.right)
+// 	    .attr("height", height + margin.top + margin.bottom)
+// 	    .append("g")
+// 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	data_serie.forEach(function(line) {
-	    line.values.forEach(function(d) {
-		d.x = new Date(d.x);
-	    });
-	});
+// 	data_serie.forEach(function(line) {
+// 	    line.values.forEach(function(d) {
+// 		d.x = new Date(d.x);
+// 	    });
+// 	});
 	
-	var xScale = d3.scaleTime()
-	    .domain(d3.extent(data_serie[0].values, function(d) { return d.x; }))
-	    .range([0, width]);
+// 	var xScale = d3.scaleTime()
+// 	    .domain(d3.extent(data_serie[0].values, function(d) { return d.x; }))
+// 	    .range([0, width]);
 
-	var yScale = d3.scaleLinear()
-	    .domain([
-		d3.min(data_serie, function(line) {
-		    return d3.min(line.values, function(d) { return d.y; });
-		}),
-		d3.max(data_serie, function(line) {
-		    return d3.max(line.values, function(d) { return d.y; });
-		})
-	    ])
-	    .range([height, 0]);
+// 	var yScale = d3.scaleLinear()
+// 	    .domain([
+// 		d3.min(data_serie, function(line) {
+// 		    return d3.min(line.values, function(d) { return d.y; });
+// 		}),
+// 		d3.max(data_serie, function(line) {
+// 		    return d3.max(line.values, function(d) { return d.y; });
+// 		})
+// 	    ])
+// 	    .range([height, 0]);
 
-	// Define axes
-	if (window.innerWidth < 768) {
-            xAxis = d3.axisBottom(xScale)
-                .tickSize(0)
-		.tickSizeInner(5)
-                .tickFormat(d3.timeFormat("%Y"))
-                .ticks(d3.timeYear.every(20)); // Show ticks every 20 years
-        } else {
-            xAxis = d3.axisBottom(xScale)
-                .tickSize(0)
-		.tickSizeInner(5)
-                .tickFormat(d3.timeFormat("%Y"))
-                .ticks(d3.timeYear.every(10)); // Show ticks every 10 years by default
-        }
+// 	// Define axes
+// 	if (window.innerWidth < 768) {
+//             xAxis = d3.axisBottom(xScale)
+//                 .tickSize(0)
+// 		.tickSizeInner(5)
+//                 .tickFormat(d3.timeFormat("%Y"))
+//                 .ticks(d3.timeYear.every(20)); // Show ticks every 20 years
+//         } else {
+//             xAxis = d3.axisBottom(xScale)
+//                 .tickSize(0)
+// 		.tickSizeInner(5)
+//                 .tickFormat(d3.timeFormat("%Y"))
+//                 .ticks(d3.timeYear.every(10)); // Show ticks every 10 years by default
+//         }
 
-	var customTickFormat = function(d) {
-	    return d > 0 ? "+" + d : d;
-	};
+// 	var customTickFormat = function(d) {
+// 	    return d > 0 ? "+" + d : d;
+// 	};
 	
-	var yAxis = d3.axisLeft().scale(yScale)
-	    .tickSize(0)
-	    .tickSizeInner(-width)
-	    .ticks(5)
-	    .tickPadding(6)
-	    .tickFormat(customTickFormat);
+// 	var yAxis = d3.axisLeft().scale(yScale)
+// 	    .tickSize(0)
+// 	    .tickSizeInner(-width)
+// 	    .ticks(5)
+// 	    .tickPadding(6)
+// 	    .tickFormat(customTickFormat);
 	
-	// Append axes
-	svg.append("g")
-	    .attr("class", "x axis")
-	    .attr("transform", "translate(0," + height + ")")
-	    .call(xAxis)
-	    .selectAll("text")
-            .style("fill", "grey")
-            .style("font-size", "12px");
+// 	// Append axes
+// 	svg.append("g")
+// 	    .attr("class", "x axis")
+// 	    .attr("transform", "translate(0," + height + ")")
+// 	    .call(xAxis)
+// 	    .selectAll("text")
+//             .style("fill", "grey")
+//             .style("font-size", "12px");
 
-	svg.selectAll('.x.axis').selectAll("line")
-	    .style("stroke", "#ccc");
-	svg.select(".x.axis").select(".domain")
-	    .style("stroke", "#aaa");
+// 	svg.selectAll('.x.axis').selectAll("line")
+// 	    .style("stroke", "#ccc");
+// 	svg.select(".x.axis").select(".domain")
+// 	    .style("stroke", "#aaa");
 	
-	svg.append("g")
-    	    .attr("class", "y axis")
-    	    .call(yAxis)
-    	    .selectAll("text")
-            .style("fill", "grey")
-            .style("font-size", "12px");
+// 	svg.append("g")
+//     	    .attr("class", "y axis")
+//     	    .call(yAxis)
+//     	    .selectAll("text")
+//             .style("fill", "grey")
+//             .style("font-size", "12px");
 	
-	svg.selectAll('.y.axis').selectAll("line")
-	    .style("stroke", "#ccc")
-	    .filter(function(d) { return d === 0; })
-	    .remove();
+// 	svg.selectAll('.y.axis').selectAll("line")
+// 	    .style("stroke", "#ccc")
+// 	    .filter(function(d) { return d === 0; })
+// 	    .remove();
 
-	svg.select(".y.axis").select(".domain").remove();
+// 	svg.select(".y.axis").select(".domain").remove();
 
-	var line = d3.line()
-	    .x(function(d) { return xScale(d.x); })
-	    .y(function(d) { return yScale(d.y); });
+// 	var line = d3.line()
+// 	    .x(function(d) { return xScale(d.x); })
+// 	    .y(function(d) { return yScale(d.y); });
 
-	var tooltip = d3.select("#grid-line_tooltip");
+// 	var tooltip = d3.select("#grid-line_tooltip");
 
-	var lines = svg.selectAll(".line")
-	    .data(data_serie)
-	    .enter().append("path")
-	    .attr("class", "line")
-	    .attr("fill", "none")
-	    .attr("id", function(d) { return d.chain; })
-	    .attr("d", function(d) { return line(d.values); })
-	    .attr("opacity", function(d) { return d.opacity; })
-	    .attr("stroke", function(d) { return d.color; })
-	    .attr("stroke-width", function(d) { return d.stroke_width; });
+// 	var lines = svg.selectAll(".line")
+// 	    .data(data_serie)
+// 	    .enter().append("path")
+// 	    .attr("class", "line")
+// 	    .attr("fill", "none")
+// 	    .attr("id", function(d) { return d.chain; })
+// 	    .attr("d", function(d) { return line(d.values); })
+// 	    .attr("opacity", function(d) { return d.opacity; })
+// 	    .attr("stroke", function(d) { return d.color; })
+// 	    .attr("stroke-width", function(d) { return d.stroke_width; });
 	
-	lines.on("mouseover", function(event, d) {
-	    if (d.order === 2) {
-		d3.select(this)
-		    .attr("stroke-width", "2px");
-		d3.select("#" + d.chain + "_back")
-		    .attr("stroke-width", "5px");
-		tooltip.style("opacity", 1)
-		    .style("color", d.color)
-		    .html(d.chain.replace(/_/g, " "));
+// 	lines.on("mouseover", function(event, d) {
+// 	    if (d.order === 2) {
+// 		d3.select(this)
+// 		    .attr("stroke-width", "2px");
+// 		d3.select("#" + d.chain + "_back")
+// 		    .attr("stroke-width", "5px");
+// 		tooltip.style("opacity", 1)
+// 		    .style("color", d.color)
+// 		    .html(d.chain.replace(/_/g, " "));
 		
-	    } else if (d.order === 0) {
-		d3.select(this)
-		    .attr("opacity", "1");
-		tooltip.style("opacity", 1)
-		    .style("color", d.color)
-		    .html(d.chain.replace(/_/g, " "));
-	    }
-	});
-	lines.on("mouseout", function(event, d) {
-            d3.select(this)
-		.attr("opacity", d.opacity)
-		.attr("stroke-width", d.stroke_width);
-	    if (d.order === 2) {
-		d3.select("#" + d.chain + "_back")
-		    .attr("stroke-width", "3px");
-	    }
-            tooltip.style("opacity", 0);
-	});
+// 	    } else if (d.order === 0) {
+// 		d3.select(this)
+// 		    .attr("opacity", "1");
+// 		tooltip.style("opacity", 1)
+// 		    .style("color", d.color)
+// 		    .html(d.chain.replace(/_/g, " "));
+// 	    }
+// 	});
+// 	lines.on("mouseout", function(event, d) {
+//             d3.select(this)
+// 		.attr("opacity", d.opacity)
+// 		.attr("stroke-width", d.stroke_width);
+// 	    if (d.order === 2) {
+// 		d3.select("#" + d.chain + "_back")
+// 		    .attr("stroke-width", "3px");
+// 	    }
+//             tooltip.style("opacity", 0);
+// 	});
 	
-	svg.append("line")
-	    .attr("class", "zero-line")
-	    .attr("x1", 0)
-	    .attr("y1", yScale(0))
-	    .attr("x2", width)
-	    .attr("y2", yScale(0))
-	    .style("stroke", "#555")
-	    .style("stroke-dasharray", ("3, 3"))
-	    .style("stroke-width", 1);
-    }
-}
-
-
-
+// 	svg.append("line")
+// 	    .attr("class", "zero-line")
+// 	    .attr("x1", 0)
+// 	    .attr("y1", yScale(0))
+// 	    .attr("x2", width)
+// 	    .attr("y2", yScale(0))
+// 	    .style("stroke", "#555")
+// 	    .style("stroke-dasharray", ("3, 3"))
+// 	    .style("stroke-width", 1);
+//     }
+// }
 
 
 
@@ -595,18 +697,18 @@ function update_grid(data_back) {
 	sampling_period = "débutant au " + sampling_period.toLowerCase();
     }    
     
-    document.getElementById("grid-variable_variable").textContent = variable;
-    document.getElementById("grid-variable_sampling-period").innerHTML = "Année hydrologique " + sampling_period;
-    document.getElementById("grid-variable_name").innerHTML = data_back.name_fr;
+    // document.getElementById("grid-variable_variable").textContent = variable;
+    // document.getElementById("grid-variable_sampling-period").innerHTML = "Année hydrologique " + sampling_period;
+    // document.getElementById("grid-variable_name").innerHTML = data_back.name_fr;
     
-    document.getElementById("grid-horizon_name").innerHTML = "Horizon " + horizon.name;
+    // document.getElementById("grid-horizon_name").innerHTML = "Horizon " + horizon.name;
 
-    horizon_period = horizon.period.replace(/ - /g, "</b> à <b>");
-    document.getElementById("grid-horizon_period-l1").innerHTML = "Période futur de <b>" + horizon_period + "</b>";
-    document.getElementById("grid-horizon_period-l2").innerHTML = "Période de référence de <b>1991</b> à <b>2020</b>";
+    // horizon_period = horizon.period.replace(/ - /g, "</b> à <b>");
+    // document.getElementById("grid-horizon_period-l1").innerHTML = "Période futur de <b>" + horizon_period + "</b>";
+    // document.getElementById("grid-horizon_period-l2").innerHTML = "Période de référence de <b>1991</b> à <b>2020</b>";
 
-    $(".grid-n_text").css("display", "flex");
-    document.getElementById("grid-n_number").innerHTML = n;
+    // $(".grid-n_text").css("display", "flex");
+    // document.getElementById("grid-n_number").innerHTML = n;
     
     // var url = window.location.pathname;
     // if (url === "/exploration-avancee") {
@@ -877,7 +979,6 @@ function update_map_region(id_svg, svgElement) {
 	    .duration(10);
 
     // let selectedBasinId = null;
-    let change_region = false
     layer_basin.selectAll("path.basinHydro")
         .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)  // clé unique
         .join("path")
@@ -899,7 +1000,7 @@ function update_map_region(id_svg, svgElement) {
                 document.getElementById("panel-hover_basin-id").innerHTML =
                     "<span style='font-weight: 900; color:" + selectedBasinId ? `Bassin sélectionné : ${selectedBasinId}` : "Aucun bassin sélectionné" + "'>" +
                     d.properties.TopoOH + "</span>"; 
-                let change_region = true
+                updateStorylineButton();
             }
 
             // Met à jour le fill des polygones
