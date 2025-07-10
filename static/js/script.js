@@ -37,16 +37,16 @@ let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river;//, geoJSONdat
 
 const geoJSONfiles = [
     "/data/france.geo.json",
-    "/data/basinHydro.geo.json",
+    "/data/regions.geo.json",
     "/data/river.geo.json"
     // "/data/entityHydro.geo.json"
 ];
 
 
-let URL_QA = ["/", "/et-c-est-certain"];
+let URL_QA = ["/", "/tracc-explore"];
 
 let URL_narratifs = ["/", 
-		     "/et-c-est-certain",]; 
+		     "/tracc-explore",]; 
 
 let drawer_mode = 'drawer-narratif';
 
@@ -173,7 +173,7 @@ function updateContent(start=false, actualise=true) {
 
     if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-upper-lower").load("/html" + "/et-c-est-certain" + ".html", function() {
+	    $("#container-upper-lower").load("/html" + "/tracc-explore" + ".html", function() {
 		check_url();
 	    });
 	    update_data_point_debounce();
@@ -317,6 +317,9 @@ function update_data_point() {
             body: JSON.stringify(data_query)
             })
             .then(response => response.json())
+            // .then(data_back => {
+            //     console.log(data_back); 
+            // })
             .then(data_back => {
             if (variable === "QA") {
                 data_point_QA = data_back;

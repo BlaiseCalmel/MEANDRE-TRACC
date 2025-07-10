@@ -296,6 +296,7 @@ function show_HM(selectedButton) {
 function get_n() {
     var slider = document.getElementById('slider-n');
     var n = parseInt(slider.noUiSlider.get());
+	// var n = 7
     return n;
 }
 
@@ -402,7 +403,7 @@ function get_projection() {
 		var exp = selected_storyline.chain.split('_')[0].replace('-', '_');
 		var projection = {
 			type: type,
-			RCP: RCP_map[RCP_value].chain,
+			RCP: RCP_map[RCP_value].name,
 			exp: exp,
 			chain: [selected_storyline.chain]
 		};

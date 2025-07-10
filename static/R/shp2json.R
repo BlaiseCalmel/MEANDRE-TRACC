@@ -98,7 +98,7 @@ writeLines(json_string, output)
 
 
 # bassin
-output = file.path(data_dir, "basinHydro.geo.json")
+output = file.path(data_dir, "regions.geo.json")
 basin = st_read(file.path(computer_data_path, map_dir, "bassinHydro"))
 basin = st_transform(basin, 2154)
 basin = st_simplify(basin,

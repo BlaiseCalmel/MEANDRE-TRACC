@@ -57,8 +57,40 @@ db_url = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 engine = create_engine(db_url, poolclass=QueuePool)
 
 
+# from sqlalchemy import MetaData, Table
+
+# metadata = MetaData()
+# metadata.reflect(bind=engine)  # récupère toutes les tables
+
+# for table_name in metadata.tables:
+#     print("Table:", table_name)
+#     table = metadata.tables[table_name]
+#     # for column in table.columns:
+#     #     print(" -", column.name, column.type)
+
+# table_name = "delta_historical_rcp85_qa_h3"
+# table = metadata.tables[table_name]
+# for column in table.columns:
+#     print(" -", column.name, column.type)
+
+# with engine.connect() as conn:
+#     df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
+
+# df.columns
+# df.variable_en
+# len(np.unique(df.id))
+# df.id.min()
+# np.unique(df.code)
+
+# with engine.connect() as conn:
+#     projections = pd.read_sql(f"SELECT * FROM projections", conn)
+#     stations = pd.read_sql(f"SELECT * FROM stations", conn)
+#     variables = pd.read_sql(f"SELECT * FROM variables", conn)
+
+# stations['id_region'] = stations['colonne_existante'].apply(ma_fonction_personnalisée)
+
 @app.route('/')
-@app.route('/et-c-est-certain')
+@app.route('/tracc-explore')
 @app.route('/a-propos')
 def index():
     return render_template('index.html')
