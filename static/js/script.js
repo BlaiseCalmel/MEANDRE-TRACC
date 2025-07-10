@@ -333,80 +333,15 @@ function update_data_point() {
             }
             });
         });
+        } else {
+            // Empty maps
+            svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
+            $('#map-QA-loading').css('display', 'none');
+            svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
+            $('#map-QJXA-loading').css('display', 'none');
+            svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
+            $('#map-VCN10-loading').css('display', 'none');
         }
-    
-    
-//     if (projection) {
-        
-//         var data_query = {
-// 	    n: n,
-//             exp: projection.exp,
-//             chain: projection.chain,
-//             variable: "QA",
-//             horizon: horizon.H,
-// 	    check_cache: check_cache,
-// 	};
-//     } else {
-//         var data_query = null
-//     }
-	
-// 	fetch(api_base_url + "/get_delta_on_horizon", {
-//             method: 'POST',
-//             headers: {
-// 		'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(data_query)
-// 	})
-// 	    .then(response => response.json())
-// 	    .then(data_back => {
-// 		data_point_QA = data_back;
-// 		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
-// 		$('#map-QA-loading').css('display', 'none');
-// 	    })
-
-// 	var data_query = {
-// 	    n: n,
-//             exp: projection.exp,
-//             chain: projection.chain,
-//             variable: "QJXA",
-//             horizon: horizon.H,
-// 	    check_cache: check_cache,
-// 	};
-// 	fetch(api_base_url + "/get_delta_on_horizon", {
-//             method: 'POST',
-//             headers: {
-// 		'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(data_query)
-// 	})
-// 	    .then(response => response.json())
-// 	    .then(data_back => {
-// 		data_point_QJXA = data_back;
-// 		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
-// 		$('#map-QJXA-loading').css('display', 'none');
-// 	    })
-
-// 	var data_query = {
-// 	    n: n,
-//             exp: projection.exp,
-//             chain: projection.chain,
-//             variable: "VCN10_summer",
-//             horizon: horizon.H,
-// 	    check_cache: check_cache,
-// 	};
-// 	fetch(api_base_url + "/get_delta_on_horizon", {
-//             method: 'POST',
-//             headers: {
-// 		'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(data_query)
-// 	})
-// 	    .then(response => response.json())
-// 	    .then(data_back => {
-// 		data_point_VCN10 = data_back;
-// 		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
-// 		$('#map-VCN10-loading').css('display', 'none');
-// 	    })
 }
 
 function selectTraccButton(selectedButton) {
@@ -422,35 +357,52 @@ function selectTraccButton(selectedButton) {
 }
 
 
-function updateStorylineButton(){
-    var init_storyline_button = true
-    // Update dynamic name of storylines
-    Object.entries(allStorylines)
-    .forEach(([key, val]) => {
-        const button = document.getElementById(`button-${key}`);
-        
-        if (button) {
-            if (val) {
-                button.textContent = val.name;
-                button.value = JSON.stringify(key);
-                // Initialize selected_storyline as the first button
-                if (init_storyline_button) {
-                    init_storyline_button = false
-                    selected_storyline = allStorylines[key]
-                    console.log(selected_storyline)
+function updateStorylineButton(reset=false){
+    if (reset){
+        // Reset storyline buttons and disable them
+        let compteur = 1
+        selected_storyline = null
+        Object.entries(allStorylines)
+        .forEach(([key, val]) => {
+            const button = document.getElementById(`button-${key}`);
+            button.classList.remove("selected")
+            button.innerHTML = `<i>Narratif ${compteur}</i>`;
+            button.disabled = true;
+            compteur++;
+        })
+        const buttons = document.querySelectorAll("[id^='button-storyline']");
+        buttons.forEach(btn => btn.classList.remove("selected"));
+    } else {
+        var init_storyline_button = true
+        // Update dynamic name of storylines
+        Object.entries(allStorylines)
+        .forEach(([key, val]) => {
+            const button = document.getElementById(`button-${key}`);
+            
+            if (button) {
+                if (val) {
+                    button.disabled = false
+                    button.textContent = val.name;
+                    button.value = JSON.stringify(key);
+                    // Initialize selected_storyline as the first button
+                    if (init_storyline_button) {
+                        init_storyline_button = false
+                        selected_storyline = allStorylines[key]
+                        console.log(selected_storyline)
+                    }
+                } else {
+                    button.textContent = " "
+                    button.value = null
                 }
-            } else {
-                button.textContent = " "
-                button.value = null
             }
-        }
-    });
-    
-    // Select the first button
-    const buttons = document.querySelectorAll("[id^='button-storyline']");
-    buttons.forEach(btn => btn.classList.remove("selected"));
-    if (buttons.length > 0) buttons[0].classList.add("selected");
+        });
+        
+        // Select the first button
+        const buttons = document.querySelectorAll("[id^='button-storyline']");
+        buttons.forEach(btn => btn.classList.remove("selected"));
+        if (buttons.length > 0) buttons[0].classList.add("selected");
     }
+}
 
 function selectStorylineButton(selectedButton) {
 	// Update selected_storyline
@@ -994,6 +946,7 @@ function update_map_region(id_svg, svgElement) {
             if (selectedBasinId === d.properties.name) {
                 selectedBasinId = null;  // désélection
                 document.getElementById("panel-hover-basin").style.display = "none";
+                updateStorylineButton(reset=true)
             } else {
                 selectedBasinId = d.properties.name;  // sélection
                 document.getElementById("panel-hover-basin").style.display = "block";

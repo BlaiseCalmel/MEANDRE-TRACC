@@ -164,9 +164,15 @@ button:hover {
     font-weight: normal;
     color: #060508;
 }
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 .unselected button {
     color: #89898a !important;
 }
+
 
 button.selected .notif,
 button:hover .notif {
