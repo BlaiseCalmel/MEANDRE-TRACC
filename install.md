@@ -104,8 +104,9 @@ sudo systemctl start postgresql
 source .env
 sudo -u postgres psql -U postgres -c "CREATE DATABASE \"${DB_NAME}\";"
 
-sudo -u postgres psql -U postgres -c "CREATE USER \"${DB_SUPER_USER}\" WITH PASSWORD '${DB_SUPER_PASSWORD}';"
-sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"${DB_NAME}\" TO \"${DB_SUPER_USER}\";"
+# sudo -u postgres psql -U postgres -c "CREATE USER \"${DB_SUPER_USER}\" WITH PASSWORD '${DB_SUPER_PASSWORD}';"
+# sudo -u postgres psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"${DB_NAME}\" TO \"${DB_SUPER_USER}\";"
+sudo -u postgres psql -U postgres -c "CREATE ROLE \"${DB_SUPER_USER}\" WITH LOGIN PASSWORD '${DB_SUPER_PASSWORD}' SUPERUSER;"
 
 sudo -u postgres psql -U postgres -c "CREATE USER \"${DB_USER}\" WITH PASSWORD '${DB_PASSWORD}';"
 sudo -u postgres psql -U postgres -d $DB_NAME -c "GRANT CONNECT ON DATABASE \"${DB_NAME}\" TO \"${DB_USER}\";"

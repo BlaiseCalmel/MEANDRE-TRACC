@@ -48,6 +48,9 @@ DB_PORT = os.environ.get('DB_PORT')
 DB_NAME = os.environ.get('DB_NAME')
 debug = os.environ.get('DEBUG')
 
+DB_SUPER_USER = os.environ.get('DB_SUPER_USER')
+DB_SUPER_PASSWORD = os.environ.get('DB_SUPER_PASSWORD')
+
 current_dir = os.path.dirname(os.path.abspath(__file__))
 R_dir = os.path.join(current_dir, "static", "R")
 app = Flask(__name__, static_url_path='', static_folder='static')
@@ -55,39 +58,6 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 db_url = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 engine = create_engine(db_url, poolclass=QueuePool)
-
-
-# from sqlalchemy import MetaData, Table
-
-# metadata = MetaData()
-# metadata.reflect(bind=engine)  # récupère toutes les tables
-
-# for table_name in metadata.tables:
-#     print("Table:", table_name)
-#     table = metadata.tables[table_name]
-#     # for column in table.columns:
-#     #     print(" -", column.name, column.type)
-
-# table_name = "delta_historical_rcp85_qa_h3"
-# table = metadata.tables[table_name]
-# for column in table.columns:
-#     print(" -", column.name, column.type)
-
-# with engine.connect() as conn:
-#     df = pd.read_sql(f"SELECT * FROM {table_name}", conn)
-
-# df.columns
-# df.variable_en
-# len(np.unique(df.id))
-# df.id.min()
-# np.unique(df.code)
-
-# with engine.connect() as conn:
-#     projections = pd.read_sql(f"SELECT * FROM projections", conn)
-#     stations = pd.read_sql(f"SELECT * FROM stations", conn)
-#     variables = pd.read_sql(f"SELECT * FROM variables", conn)
-
-# stations['id_region'] = stations['colonne_existante'].apply(ma_fonction_personnalisée)
 
 @app.route('/')
 @app.route('/tracc-explore')
@@ -107,6 +77,125 @@ cache = {}
 def get_hash(chr):
     return hashlib.sha256(chr.encode()).hexdigest()
 
+@app.route('/get_narrative', methods=['POST'])
+def get_narrative_post():
+    data = request.json
+    horizon = data.get('horizon')
+    region_id = data.get('region_id')
+    region_id_request = '_'.join(region_id.split('-'))
+
+    query = text("""
+    SELECT *
+    FROM narratracc
+    WHERE region_id = :region_id AND gwl = :horizon
+    """)
+
+    with engine.connect() as conn:
+        result = conn.execute(query, {"region_id": region_id_request, "horizon": horizon})
+        rows = result.mappings().all()
+        data = [dict(row) for row in rows] 
+
+    return jsonify(data)
+
+@app.route('/get_narrative_data', methods=['POST'])
+def narrative_post():
+    # Get parameters from the JSON payload
+    data = request.json
+    horizon = data.get('horizon')
+    exp = data.get('exp')
+    variable = data.get('variable')
+    check_cache = data.get('check_cache')
+    n = data.get('n')
+    region_id = data.get('region_id')
+    region_id_request = '_'.join(region_id.split('-'))
+    chain = data.get('chain')
+
+    # chr = str(n)+exp+str(chain)+variable+horizon
+    # hash = get_hash(chr)
+    
+    # if check_cache and hash in cache:
+    #     # print("read from cache")
+    #     response = cache[hash]
+
+    # else:
+    #     # print("computed")
+
+    query_delta_join = text(f"""
+        SELECT s.*, d.*
+        FROM stations s
+        JOIN (
+            SELECT *
+            FROM delta_{exp}_{variable}_{horizon}
+            WHERE chain = :chain AND region_id = :region_id AND n >= {n}
+        ) d ON s.code = d.code
+    """)
+    with engine.connect() as conn:
+        result_data = conn.execute(query_delta_join, {"region_id": region_id_request, "chain": chain})
+
+    columns = result_data.keys()
+    rows = result_data.fetchall()
+    data = [{f"{column_name}": value for column_name, value in zip(columns, row)} for row in rows]
+
+    # Get current variable information
+    query_variables = text(f"""
+    SELECT *
+    FROM variables
+    WHERE variable_en = :variable;
+    """)
+    with engine.connect() as conn:
+        result_variables = conn.execute(query_variables, {'variable': variable})
+
+    columns = result_variables.keys()
+    rows = result_variables.fetchall()
+    meta = [{f"{column_name}": value for column_name, value in zip(columns, row)} for row in rows][0]
+
+    # Format data
+    if meta["to_normalise"]:
+        meta["unit_fr"] = "%"
+        meta["unit_en"] = "%"
+        
+    Palette = meta['palette']
+    Palette = Palette.split(" ")
+    meta['palette'] = Palette
+    
+    Code = [x['code'] for x in data]
+    nCode = len(Code)
+    
+    Delta = [x['value'] for x in data]
+    if len(Delta) > 0:
+        q01Delta = np.quantile(Delta, 0.01)
+        q99Delta = np.quantile(Delta, 0.99)
+        
+        res = color.compute_colorBin(q01Delta, q99Delta,
+                                        len(Palette), center=0)
+        bin = res['bin']
+        bin = [str(round_int(x)) for x in bin]
+        
+        Fill = color.get_colors(Delta, res['upBin'],
+                                res['lowBin'], Palette)
+        
+        color_to_find = np.array(["#F6E8C3", "#C7EAE5",
+                                    "#EFE2E9", "#F5E4E2"])
+        color_to_switch = np.array(["#EFD695", "#A1DCD3",
+                                    "#DBBECE", "#E7BDB8"])
+        
+        for i, d in enumerate(data):
+            d['fill'] = Fill[i]
+            d['fill_text'] = color.switch_color(Fill[i],
+                                                color_to_find,
+                                                color_to_switch)
+        response = {'data': data,
+                    'bin': bin}
+    else:
+        response = {'data': data}
+
+    response.update(meta)
+    response = jsonify(response)
+    cache[hash] = response
+
+    return response
+
+
 @app.route('/get_delta_on_horizon', methods=['POST'])
 def delta_post():
     # Get parameters from the JSON payload
@@ -124,7 +213,6 @@ def delta_post():
     if check_cache and hash in cache:
         # print("read from cache")
         response = cache[hash]
-
     else:
         # print("computed")
         connection = engine.connect()

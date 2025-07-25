@@ -50,43 +50,19 @@ let URL_narratifs = ["/",
 
 let drawer_mode = 'drawer-narratif';
 
-// let storyline1 = "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT_CTRIP";
-// let storyline2 = "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT_EROS";
-// let storyline3 = "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT_GRSD";
-let storyline1 = {
-    'chain': "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT_CTRIP",
-    'name': "HadGEM2-ES_ALADIN63_ADAMONT_CTRIP",
-    'family': "E1",
-    'color': "#569A71",
-    'description': "tarte aux fraises"
-};
-
-let storyline2 = {
-    'chain': "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT_EROS",
-    'name': "EC-EARTH_HadREM3-GA7_ADAMONT_EROS",
-    'family': "C2",
-    'color': "#EECC66",
-    'description': "crumble aux pommes"
-};
-
-let storyline3 = {
-    'chain': "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT_GRSD",
-    'name': "HadGEM2-ES_CCLM4-8-17_ADAMONT_GRSD",
-    'family': "X1",
-    'color': "#E09B2F",
-    'description': "compote de poire"
-};
-
+let storyline1 = null;
+let storyline2 = null;
+let storyline3 = null;
 let storyline4 = null;
 
-const allStorylines = {
+let allStorylines = {
     storyline1,
     storyline2,
     storyline3,
     storyline4
 };
 
-const activeStorylines = Object.entries(allStorylines)
+let activeStorylines = Object.entries(allStorylines)
     .filter(([key, value]) => value !== null);
 
 let selected_storyline = null;
@@ -123,7 +99,7 @@ function loadGeoJSON(fileURL) {
 }
 
 function updateMaps(){
-    console.log(selectedBasinId)
+    console.log(selectedRegionId)
     svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
     svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
     svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
@@ -256,20 +232,17 @@ function debounce(func, delay) {
 }
 
 
-
 let data_back;
 let data_point;
 let data_point_QA;
 let data_point_QJXA;
 let data_point_VCN10;
-// let data_point_violet;
 let data_serie;
 
 let svgFrance_region;
 let svgFrance_QA;
 let svgFrance_QJXA;
 let svgFrance_VCN10;
-// let svgFrance_violet;
 
 let data_indicator = ["QA", "QJXA", "VCN10_summer"]
 
@@ -301,40 +274,43 @@ function update_data_point() {
     if (projection) {
         data_indicator.forEach(variable => {
             const data_query = {
-            n: n,
-            exp: projection.exp,
-            chain: projection.chain,
-            variable: variable,   // variable change à chaque itération
-            horizon: horizon.H,
-            check_cache: check_cache,
-            };
+                horizon: horizon.H,
+                check_cache: check_cache,
+                region_id: selectedRegionId,
+                exp: projection.exp,
+                variable: variable,
+                n: n,
+                chain: projection.chain
+                };
 
-            fetch(api_base_url + "/get_delta_on_horizon", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data_query)
-            })
-            .then(response => response.json())
-            // .then(data_back => {
-            //     console.log(data_back); 
-            // })
-            .then(data_back => {
-            if (variable === "QA") {
-                data_point_QA = data_back;
-                svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
-                $('#map-QA-loading').css('display', 'none');
-            } else if (variable === "QJXA") {
-                data_point_QJXA = data_back;
-                svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
-                $('#map-QJXA-loading').css('display', 'none');
-            } else if (variable === "VCN10_summer") {
-                data_point_VCN10 = data_back;
-                svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
-                $('#map-VCN10-loading').css('display', 'none');
-            }
-            });
+                fetch(api_base_url + "/get_narrative_data", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data_query)
+                })
+                .then(response => response.json())
+                .then(data_back => {
+                     if (data_back.length === 0) {
+                        console.log("Aucune donnée trouvée");
+                    } else {
+                        if (variable === "QA") {
+                            data_point_QA = data_back;
+                            svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
+                            $('#map-QA-loading').css('display', 'none');
+                        } else if (variable === "QJXA") {
+                            data_point_QJXA = data_back;
+                            svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
+                            $('#map-QJXA-loading').css('display', 'none');
+                        } else if (variable === "VCN10_summer") {
+                            data_point_VCN10 = data_back;
+                            svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
+                            $('#map-VCN10-loading').css('display', 'none');
+                        }
+                    }
+                
+                });
         });
         } else {
             // Empty maps
@@ -355,8 +331,57 @@ function selectTraccButton(selectedButton) {
 	    button.classList.remove('selected');
 	});
 	selectedButton.classList.add('selected');
-	update_data_point_debounce();
+	// update_data_point_debounce();
+    updateStorylineButton()
     }
+}
+
+function getStorylines() {
+    storyline1 = null;
+    storyline2 = null;
+    storyline3 = null;
+    storyline4 = null;
+
+    var horizon = get_horizon();
+
+    const data_query = {
+        horizon: horizon.H,
+        region_id: selectedRegionId,
+    };
+
+    return fetch(api_base_url + "/get_narrative", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data_query)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Erreur HTTP " + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const storylines = [null, null, null, null];
+
+        for (let i = 0; i < data.length && i < 4; i++) {
+            storylines[i] = data[i];
+        }
+        storyline1 = storylines[0];
+        storyline2 = storylines[1];
+        storyline3 = storylines[2];
+        storyline4 = storylines[3];
+
+        allStorylines = {
+            storyline1,
+            storyline2,
+            storyline3,
+            storyline4
+        };
+
+        return allStorylines; 
+    });
 }
 
 
@@ -377,33 +402,33 @@ function updateStorylineButton(reset=false){
         buttons.forEach(btn => btn.classList.remove("selected"));
     } else {
         var init_storyline_button = true
-        // Update dynamic name of storylines
-        Object.entries(allStorylines)
-        .forEach(([key, val]) => {
+        getStorylines()
+        .then((allStorylines) => {Object.entries(allStorylines).forEach(([key, val]) => {
             const button = document.getElementById(`button-${key}`);
-            
             if (button) {
                 if (val) {
-                    button.disabled = false
-                    button.textContent = val.name;
+                    button.disabled = false;
+                    button.textContent = val.chain;
                     button.value = JSON.stringify(key);
-                    // Initialize selected_storyline as the first button
+                    
                     if (init_storyline_button) {
-                        init_storyline_button = false
-                        selected_storyline = allStorylines[key]
-                        console.log(selected_storyline)
+                        init_storyline_button = false;
+                        selected_storyline = val;
+                        console.log("Selected storyline:", selected_storyline);
                     }
                 } else {
-                    button.textContent = " "
-                    button.value = null
+                    button.textContent = " ";
+                    button.value = null;
+                    button.disabled = true;
                 }
             }
         });
-        
-        // Select the first button
-        const buttons = document.querySelectorAll("[id^='button-storyline']");
-        buttons.forEach(btn => btn.classList.remove("selected"));
-        if (buttons.length > 0) buttons[0].classList.add("selected");
+    // Select the first button
+    const buttons = document.querySelectorAll("[id^='button-storyline']");
+    buttons.forEach(btn => btn.classList.remove("selected"));
+    if (buttons.length > 0) buttons[0].classList.add("selected");
+    });    
+       
     }
 }
 
@@ -858,7 +883,7 @@ const stroke_france = "#89898A";
 const fill_basinHydro = "transparent";
 const stroke_basinHydro = "#ACACAD";
 const stroke_basin_selected = "#7BBFBA80";
-let selectedBasinId = null;
+let selectedRegionId = null;
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
 
@@ -933,35 +958,35 @@ function update_map_region(id_svg, svgElement) {
 	    .transition()
 	    .duration(10);
 
-    // let selectedBasinId = null;
+    // let selectedRegionId = null;
     layer_basin.selectAll("path.basinHydro")
         .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)  // clé unique
         .join("path")
         .attr("class", "basinHydro")
         .style("pointer-events", "all")
-        .attr("fill", d => d.properties.name === selectedBasinId ? stroke_basin_selected : fill_basinHydro)
+        .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro)
         .attr("stroke", stroke_basinHydro)
         .attr("stroke-width", strokeWith_basinHydro)
         .attr("stroke-linejoin", "miter")
         .attr("stroke-miterlimit", 1)
         .attr("d", pathGenerator)
         .on("click", function(event, d) {
-            if (selectedBasinId === d.properties.name) {
-                selectedBasinId = null;  // désélection
+            if (selectedRegionId === d.properties.name) {
+                selectedRegionId = null;  // désélection
                 document.getElementById("panel-hover-basin").style.display = "none";
                 updateStorylineButton(reset=true)
             } else {
-                selectedBasinId = d.properties.name;  // sélection
+                selectedRegionId = d.properties.name;  // sélection
                 document.getElementById("panel-hover-basin").style.display = "block";
                 document.getElementById("panel-hover_basin-id").innerHTML =
-                    "<span style='font-weight: 900; color:" + selectedBasinId ? `Bassin sélectionné : ${selectedBasinId}` : "Aucun bassin sélectionné" + "'>" +
+                    "<span style='font-weight: 900; color:" + selectedRegionId ? `Bassin sélectionné : ${selectedRegionId}` : "Aucun bassin sélectionné" + "'>" +
                     d.properties.TopoOH + "</span>"; 
                 updateStorylineButton();
             }
 
             // Met à jour le fill des polygones
             layer_basin.selectAll("path.basinHydro")
-                .attr("fill", d => d.properties.name === selectedBasinId ? stroke_basin_selected : fill_basinHydro);
+                .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro);
 
             updateMaps()
             
@@ -1183,10 +1208,10 @@ function update_map(id_svg, svgElement, data_back) {
     redrawMap();
     handleResize();
 
-    // Zoom on selectedBasinId
-    if (selectedBasinId) {
+    // Zoom on selectedRegionId
+    if (selectedRegionId) {
         const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
-        const selectedFeature = simplifiedGeoJSON_basinHydro.features.find(f => f.properties.name === selectedBasinId);
+        const selectedFeature = simplifiedGeoJSON_basinHydro.features.find(f => f.properties.name === selectedRegionId);
 
         if (selectedFeature) {
             const path = d3.geoPath(projectionMap); 

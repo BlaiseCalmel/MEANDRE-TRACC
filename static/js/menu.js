@@ -332,6 +332,15 @@ function get_horizon() {
 	var horizon_period = "2070 - 2099";
 	var horizon_name = "lointain";
 	var horizon_text = "en fin de siècle 2070-2099";
+    } else if (H === "gwl15") {
+	var horizon_name = "+2.0°C";
+	var horizon_text = "pour une France à +2.0°C";
+    } else if (H === "gwl20") {
+	var horizon_name = "+2.7°C";
+	var horizon_text = "pour une France à +2.7°C";
+    } else if (H === "gwl30") {
+	var horizon_name = "+4.0°C";
+	var horizon_text = "pour une France à +4.0°C";
     }
 
     const horizon = {
@@ -401,11 +410,12 @@ function get_projection() {
 	var type = "Sélection par narratif";
 	if (selected_storyline) {
 		var exp = selected_storyline.chain.split('_')[0].replace('-', '_');
+		
 		var projection = {
 			type: type,
 			RCP: RCP_map[RCP_value].name,
 			exp: exp,
-			chain: [selected_storyline.chain]
+			chain: selected_storyline.chain
 		};
 	} else {
 		var projection = null
