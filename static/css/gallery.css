@@ -57,6 +57,10 @@
     width: unset;
     height: unset;
 }
+.gallery-item.full-width {
+    width: 100%;
+    height: unset;
+}
 .gallery-item a:hover {
     color: #70757A;
 }
@@ -289,7 +293,10 @@ p.warning {
     max-width: 27rem;
 }
 #grid-chain_drawer-narratif {
-    max-width: 31rem;
+    max-width: 16rem;
+}
+#grid-chain_drawer-gwl {
+    max-width: 16rem;
 }
 #grid-chain_drawer-chain {
     max-width: 27rem;
@@ -298,7 +305,7 @@ p.warning {
 .grid-chain_drawer {
     font-family: "Raleway", sans-serif;
     font-weight: 400;
-    font-size: 2rem;
+    font-size: 1.4rem;
     color: #3d3e3e;
     line-height: 2rem;
     margin-bottom: 0.4rem;

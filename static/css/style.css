@@ -342,11 +342,7 @@ h3 {
     width: 100%;
     height: 100%;
 }
-/* .sub-container-upper {
-    position: relative;
-    width: calc(100% / 2);
-    height: calc(100% / 2);
-} */
+
 
 .sub-container-upper-map {
     position: relative;
@@ -356,27 +352,49 @@ h3 {
 
 .sub-container-upper-info {
     position: relative;
-    width: calc(100% * 2 / 3);
-    height: calc(100%);
-    top: 1rem;
+    width: calc(100% / 3);
+    height: 100%;
+    top: 1rem; /* tu peux garder si tu veux un petit décalage */
 }
 
-.sub-container-upper-horizons {
+/* 
+.sub-container-upper-box {
+    display: relative;
+    width: calc(100% / 3);
+    height: calc(100%);
+    top: 0.5rem; 
+} */
+
+.sub-container-upper-box {
     position: relative;
     width: calc(100% / 3);
     height: calc(100%);
+    top: 0.5rem;
+}
+
+.sub-container-upper-horizons {
+    display: flex;
+    width: calc(100%);
+    height: calc(30%);
 }
 
 .sub-container-upper-narratives {
-    position: relative;
-    width: calc(100% * 2 / 3);
-    height: calc(100%);
+    display: flex;
+    width: calc(100%);
+    height: calc(65%);
 }
 
 .map-color {
     position: absolute;
     top: 1rem;
     left: 1rem;   
+}
+
+#bunch-horizon_futur {
+  display: flex;
+  justify-content: center; /* centre les boutons */
+  gap: 10px; /* espace horizontal entre les boutons */
+  margin-top: 8px; /* espace sous le titre */
 }
 
 

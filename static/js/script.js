@@ -991,6 +991,18 @@ function update_map_region(id_svg, svgElement) {
             updateMaps()
             
         })
+        .attr("cursor", "pointer")
+        .each(function() {
+            // stocke la couleur originale dans l'élément lui-même
+            d3.select(this).attr("data-original-fill", d3.select(this).attr("fill"));
+        })
+        .on("mouseover", function(event, d) {
+            d3.select(this).attr("fill", stroke_basin_selected); // couleur au survol
+        })
+        .on("mouseout", function(event, d) {
+            const original = d3.select(this).attr("data-original-fill");
+            d3.select(this).attr("fill", original); // restaure la couleur originale
+        })
         .transition()
 	    .duration(1000);    
 	
