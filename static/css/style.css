@@ -139,8 +139,6 @@ span.align-start {
 }
 
 
-
-
 button {
     font: inherit;
     border: none;
@@ -154,16 +152,19 @@ button {
     position: relative;
     display: inline-flex;
     flex-wrap: nowrap;
-    align-items: center;
+    /* align-items: center; */
 }
 button.selected {
     color: #060508;
-    font-weight: bold;
+    font-weight: bold; 
+    background-color: #7BBFBA80;
 }
+
 button:hover {
     font-weight: normal;
     color: #060508;
 }
+
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -346,42 +347,36 @@ h3 {
 
 .sub-container-upper-map {
     position: relative;
-    width: calc(100% / 3);
+    width: calc(100% / 4);
     height: calc(100%);
 }
 
-.sub-container-upper-info {
+.sub-container-upper-center {
     position: relative;
-    width: calc(100% / 3);
-    height: 100%;
-    top: 1rem; /* tu peux garder si tu veux un petit décalage */
-}
-
-/* 
-.sub-container-upper-box {
-    display: relative;
-    width: calc(100% / 3);
-    height: calc(100%);
-    top: 0.5rem; 
-} */
-
-.sub-container-upper-box {
-    position: relative;
-    width: calc(100% / 3);
-    height: calc(100%);
+    width: calc(100% / 4);
+    height: calc(100% - 0.5rem);
     top: 0.5rem;
 }
 
 .sub-container-upper-horizons {
     display: flex;
     width: calc(100%);
-    height: calc(30%);
+    height: calc(25%);
 }
 
 .sub-container-upper-narratives {
     display: flex;
     width: calc(100%);
-    height: calc(65%);
+    height: calc(70%);
+}
+
+
+.sub-container-upper-info {
+    position: relative;
+    width: calc(100% / 3);
+    height: calc(95% - 2.3rem);
+    top: 0.25rem; 
+    padding: 0.25rem 0.25rem;
 }
 
 .map-color {
@@ -392,7 +387,7 @@ h3 {
 
 #bunch-horizon_futur {
   display: flex;
-  justify-content: center; /* centre les boutons */
+  /*justify-content: center;  centre les boutons */
   gap: 10px; /* espace horizontal entre les boutons */
   margin-top: 8px; /* espace sous le titre */
 }

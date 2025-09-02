@@ -44,11 +44,11 @@
     </div> -->
 	</div>
 	
-	<div class="sub-container-upper-box bunch column column-small-gap row-small-gap">
+	<div class="sub-container-upper-center bunch column column-small-gap row-small-gap">
 
 		<div class="sub-container-upper-horizons">
-			<div id="grid-chain" class="gallery-item bunch column full-width">
-				<span class="grid-chain_drawer">Niveau de réchauffement</span>
+			<div id="grid-chain_drawer-gwl" class="gallery-item bunch column">
+				<span class="grid-chain_drawer">Niveau de réchauffement</span><br>
 				
 				<div id="bunch-horizon_futur" class="bunch row">
 					<button id="button-tracc20" value="gwl15"
@@ -68,38 +68,47 @@
 		</div>
 
 		<div class="sub-container-upper-narratives">
-				<div id="grid-chain" class="gallery-item bunch column full-width">
-						<span class="small-text">Chaînes de modélisation<br>pour chaque narratif</span>
-						<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
-								<span><i>Narratif 1</i></span>
-						</button>
-						<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
-								<span><i>Narratif 2</i></span>
-						</button>
-						<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
-								<span><i>Narratif 3</i></span>
-						</button>
-						<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
-								<span><i>Narratif 4</i></span>
-						</button>
-				</div>
+			<div id="grid-chain_drawer-narratif" class="gallery-item bunch column">
+					<span class="grid-chain_drawer">Chaînes de modélisation pour chaque narratif</span>
+					<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
+							<span><i>Narratif 1</i></span>
+					</button>
+					<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
+							<span><i>Narratif 2</i></span>
+					</button>
+					<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
+							<span><i>Narratif 3</i></span>
+					</button>
+					<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
+							<span><i>Narratif 4</i></span>
+					</button>
+			</div>
 		</div>
 	</div>
-	
 
+	<div class="sub-container-upper-info">
+		<div id="grid-chain_drawer-info" class="gallery-item fill">
+			<span class="grid-chain_drawer"><i>Informations</i></span>
+		</div>
+	</div>
+
+	<div id="grid-colorbar" class="gallery-item">
+		<svg id="svg-colorbar"></svg>
+	</div>
+	
 </div>
 
 
 <div class="container-lower bunch column">
-	<div class="bunch column column-small-gap row-small-gap">
+	<!-- <div class="bunch column column-small-gap row-small-gap">
 		<div id="grid-chain" class="gallery-item">
 				<span class="gallery-item small-text">infos ?</span>
-		</div>
+		</div> -->
 
-		<div id="grid-colorbar" class="gallery-item">
-			<svg id="svg-colorbar"></svg>
-		</div>
-	</div>
+	<!-- <div id="grid-colorbar" class="gallery-item">
+		<svg id="svg-colorbar"></svg>
+	</div> -->
+	<!-- </div> -->
 	
 	
 	<div class="sub-container-lower-map">
@@ -109,7 +118,7 @@
 		<svg id="svg-france-QA"></svg>
 
 		<!-- TO DO ADD ZOOM BUTONS -->
-		<div id="action-zoom-plus" class="bunch row">
+		<!-- <div id="action-zoom-plus" class="bunch row">
 			<button id="zoom-plus" class="material-icons-outlined"
 				onclick="exportData()">info</button>
     	</div>
@@ -117,7 +126,7 @@
 		<div id="action-zoom-minus" class="bunch row">
 			<button id="zoom-minus" class="material-icons-outlined"
 				onclick="exportData()">info</button>
-    	</div>
+    	</div> -->
 
 		
 	</div>

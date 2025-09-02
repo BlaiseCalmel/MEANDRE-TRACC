@@ -363,11 +363,15 @@ function getStorylines() {
         return response.json();
     })
     .then(data => {
-        const storylines = [null, null, null, null];
+        // const storylines = [null, null, null, null];
+        // for (let i = 0; i < data.length && i < 4; i++) {
+        //     storylines[i] = data[i];
+        // }
 
-        for (let i = 0; i < data.length && i < 4; i++) {
-            storylines[i] = data[i];
-        }
+        let storylines = data.sort((a, b) => 
+            a.narratif_id.localeCompare(b.narratif_id)
+            );
+        
         storyline1 = storylines[0];
         storyline2 = storylines[1];
         storyline3 = storylines[2];
@@ -408,12 +412,24 @@ function updateStorylineButton(reset=false){
             if (button) {
                 if (val) {
                     button.disabled = false;
-                    button.textContent = val.chain;
+                    // const btn = document.querySelector('#monBouton');
+                    button.replaceChildren(); // vide le bouton
+
+                    const span = document.createElement('span');
+                    // <span class="id" style="color:blue;">C1</span> <span class="desc"><b>Débits annuels en hausse, crues et étiages légèrement plus sévères</b></span>
+                    span.style.color = val.narratif_couleur;
+                    span.textContent = val.narratif_id;
+                    span.class = "id"
+
+                    button.append(span, `: ${val.narratif_description}`);
+
+                    // button.textContent = `<span style="color: ${val.narratif_couleur};">${val.narratif_id}</span>: ${val.narratif_description}`;
                     button.value = JSON.stringify(key);
                     
                     if (init_storyline_button) {
                         init_storyline_button = false;
                         selected_storyline = val;
+                        // button.style.backgroundColor = stroke_basin_selected
                         console.log("Selected storyline:", selected_storyline);
                     }
                 } else {
