@@ -138,32 +138,37 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
 
+        // update_data_point_debounce();
+        // Initialize top left for region selection
+        if (start) {
+            svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+                $('#map-region-loading').css('display', 'none');
+        }
         svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
         svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
         svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
         // svgFrance_region = update_map_region("#svg-france-region", svgFrance);
         
-
 	    });
     }
 
-    if (url !== "/a-propos") {
+    // if (url !== "/a-propos") {
 	if (start && url == "/") {
 	    $("#container-upper-lower").load("/html" + "/tracc-explore" + ".html", function() {
 		check_url();
 	    });
-	    update_data_point_debounce();
+	    // update_data_point_debounce();
 	    
 	} else if (actualise && url !== "/") {
 	    $("#container-upper-lower").load("/html" + url + ".html", function() {
 		check_url();
 	    });
-	    update_data_point_debounce();
+	    // update_data_point_debounce();
 	}
 	
-    } else {
-	$("#container-upper-lower").load("/html" + url + ".html");
-    }
+    // } else {
+	// $("#container-upper-lower").load("/html" + url + ".html");
+    // }
 }
 
 
@@ -265,57 +270,13 @@ function update_data_point() {
     var projection = get_projection();
     var horizon = get_horizon();
     
-    // Initialize top left for region selection
-    if (start) {
-        svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-            $('#map-region-loading').css('display', 'none');
-    }
+    // // Initialize top left for region selection
+    // if (start) {
+    //     svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+    //         $('#map-region-loading').css('display', 'none');
+    // }
 
     if (projection) {
-        // let data_all = {}
-
-        // data_indicator.forEach(variable => {
-        //     const data_query = {
-        //         horizon: horizon.H,
-        //         check_cache: check_cache,
-        //         region_id: selectedRegionId,
-        //         exp: projection.exp,
-        //         variable: variable,
-        //         n: n,
-        //         chain: projection.chain
-        //         };
-
-        //         fetch(api_base_url + "/get_narrative_data", {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(data_query)
-        //         })
-        //         .then(response => response.json())
-        //         .then(data_back => {
-        //          if (variable === "QA") {
-        //                 data_all['data_point_QA'] = data_back;
-        //             } else if (variable === "QJXA") {
-        //                 data_all['data_point_QJXA'] = data_back;
-        //             } else if (variable === "VCN10_summer") {
-        //                 data_all['data_point_VCN10'] = data_back;
-        //             };
-        //         })
-                
-        // });
-        // fetch(api_base_url + "/define_data_palette", {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //     data_point_QA: data_point_QA,
-        //     data_point_QJXA: data_point_QJXA,
-        //     data_point_VCN10: data_point_VCN10,
-        // })
-        //     })
-        //     .then(response => response.json())
         let data_all = {};
 
         let promises = data_indicator.map(variable => {
@@ -382,7 +343,11 @@ function update_data_point() {
 }
 
 function selectTraccButton(selectedButton) {
-	console.log(selectedButton.value);
+	const wasSelected = selectedButton.classList.contains('selected');
+    if (wasSelected) {
+        return;
+    }
+    
     if (selectedButton) {
 	var buttons = selectedButton.parentNode.querySelectorAll('button');
 	buttons.forEach(function (button) {
@@ -1127,7 +1092,7 @@ function update_map_region(id_svg, svgElement) {
 	      redrawMap_debounce();
 	      highlight_selected_point();
 	  });
-
+    
     projectionMap = d3.geoMercator()
 	  .center(geoJSONdata_france.features[0].properties.centroid);
 
