@@ -304,8 +304,9 @@ p.warning {
     max-width: 27rem;
     /* width: calc(100vw) */
 }
+
 #grid-chain_drawer-info {
-    /* max-width: 16rem; */
+    max-width: 16rem;
     /* width: calc(100vw) */
 }
 

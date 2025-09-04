@@ -10,26 +10,26 @@ import sys
 import hashlib
 from datetime import datetime
 import pandas as pd
+
 # from scipy.interpolate import interp1d
 from scipy.interpolate import UnivariateSpline
+
 # import rpy2.robjects as robjects
 import os
 from dotenv import load_dotenv
+
 # import static.py.color
 from static.py import color
 
-name_of_storylines = np.array([
-    "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT",
-    "historical-rcp85_CNRM-CM5_ALADIN63_ADAMONT",
-    "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT",
-    "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT"
-])
-color_of_storylines = np.array([
-    "#569A71",
-    "#EECC66",
-    "#E09B2F",
-    "#791F5D"
-])
+name_of_storylines = np.array(
+    [
+        "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT",
+        "historical-rcp85_CNRM-CM5_ALADIN63_ADAMONT",
+        "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT",
+        "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT",
+    ]
+)
+color_of_storylines = np.array(["#569A71", "#EECC66", "#E09B2F", "#791F5D"])
 
 
 def round_int(value):
@@ -41,30 +41,30 @@ def round_int(value):
 
 
 load_dotenv()
-DB_USER = os.environ.get('DB_USER')
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_HOST = os.environ.get('DB_HOST')
-DB_PORT = os.environ.get('DB_PORT')
-DB_NAME = os.environ.get('DB_NAME')
-debug = os.environ.get('DEBUG')
+DB_USER = os.environ.get("DB_USER")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
+DB_HOST = os.environ.get("DB_HOST")
+DB_PORT = os.environ.get("DB_PORT")
+DB_NAME = os.environ.get("DB_NAME")
+debug = os.environ.get("DEBUG")
 
-DB_SUPER_USER = os.environ.get('DB_SUPER_USER')
-DB_SUPER_PASSWORD = os.environ.get('DB_SUPER_PASSWORD')
+DB_SUPER_USER = os.environ.get("DB_SUPER_USER")
+DB_SUPER_PASSWORD = os.environ.get("DB_SUPER_PASSWORD")
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 R_dir = os.path.join(current_dir, "static", "R")
-app = Flask(__name__, static_url_path='', static_folder='static')
+app = Flask(__name__, static_url_path="", static_folder="static")
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-db_url = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+db_url = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 engine = create_engine(db_url, poolclass=QueuePool)
 
-@app.route('/')
-@app.route('/tracc-explore')
-@app.route('/a-propos')
-def index():
-    return render_template('index.html')
 
+@app.route("/")
+@app.route("/tracc-explore")
+@app.route("/a-propos")
+def index():
+    return render_template("index.html")
 
 
 # @app.route('/api/base_url', methods=['GET'])
@@ -74,45 +74,53 @@ def index():
 
 
 cache = {}
+
+
 def get_hash(chr):
     return hashlib.sha256(chr.encode()).hexdigest()
 
-@app.route('/get_narrative', methods=['POST'])
+
+@app.route("/get_narrative", methods=["POST"])
 def get_narrative_post():
     data = request.json
-    horizon = data.get('horizon')
-    region_id = data.get('region_id')
-    region_id_request = '_'.join(region_id.split('-'))
+    horizon = data.get("horizon")
+    region_id = data.get("region_id")
+    region_id_request = "_".join(region_id.split("-"))
 
-    query = text("""
+    query = text(
+        """
     SELECT *
     FROM narratracc
     WHERE region_id = :region_id AND gwl = :horizon
-    """)
+    """
+    )
 
     with engine.connect() as conn:
-        result = conn.execute(query, {"region_id": region_id_request, "horizon": horizon})
+        result = conn.execute(
+            query, {"region_id": region_id_request, "horizon": horizon}
+        )
         rows = result.mappings().all()
-        data = [dict(row) for row in rows] 
+        data = [dict(row) for row in rows]
 
     return jsonify(data)
 
-@app.route('/get_narrative_data', methods=['POST'])
+
+@app.route("/get_narrative_data", methods=["POST"])
 def narrative_post():
     # Get parameters from the JSON payload
     data = request.json
-    horizon = data.get('horizon')
-    exp = data.get('exp')
-    variable = data.get('variable')
-    check_cache = data.get('check_cache')
-    n = data.get('n')
-    region_id = data.get('region_id')
-    region_id_request = '_'.join(region_id.split('-'))
-    chain = data.get('chain')
+    horizon = data.get("horizon")
+    exp = data.get("exp")
+    variable = data.get("variable")
+    check_cache = data.get("check_cache")
+    n = data.get("n")
+    region_id = data.get("region_id")
+    region_id_request = "_".join(region_id.split("-"))
+    chain = data.get("chain")
 
     # chr = str(n)+exp+str(chain)+variable+horizon
     # hash = get_hash(chr)
-    
+
     # if check_cache and hash in cache:
     #     # print("read from cache")
     #     response = cache[hash]
@@ -120,7 +128,8 @@ def narrative_post():
     # else:
     #     # print("computed")
 
-    query_delta_join = text(f"""
+    query_delta_join = text(
+        f"""
         SELECT s.*, d.*
         FROM stations s
         JOIN (
@@ -128,66 +137,72 @@ def narrative_post():
             FROM delta_{exp}_{variable}_{horizon}
             WHERE chain = :chain AND region_id = :region_id AND n >= {n}
         ) d ON s.code = d.code
-    """)
+    """
+    )
     with engine.connect() as conn:
-        result_data = conn.execute(query_delta_join, {"region_id": region_id_request, "chain": chain})
+        result_data = conn.execute(
+            query_delta_join, {"region_id": region_id_request, "chain": chain}
+        )
 
     columns = result_data.keys()
     rows = result_data.fetchall()
-    data = [{f"{column_name}": value for column_name, value in zip(columns, row)} for row in rows]
+    data = [
+        {f"{column_name}": value for column_name, value in zip(columns, row)}
+        for row in rows
+    ]
 
     # Get current variable information
-    query_variables = text(f"""
+    query_variables = text(
+        f"""
     SELECT *
     FROM variables
     WHERE variable_en = :variable;
-    """)
+    """
+    )
     with engine.connect() as conn:
-        result_variables = conn.execute(query_variables, {'variable': variable})
+        result_variables = conn.execute(query_variables, {"variable": variable})
 
     columns = result_variables.keys()
     rows = result_variables.fetchall()
-    meta = [{f"{column_name}": value for column_name, value in zip(columns, row)} for row in rows][0]
+    meta = [
+        {f"{column_name}": value for column_name, value in zip(columns, row)}
+        for row in rows
+    ][0]
 
     # Format data
     if meta["to_normalise"]:
         meta["unit_fr"] = "%"
         meta["unit_en"] = "%"
-        
-    Palette = meta['palette']
+
+    Palette = meta["palette"]
     Palette = Palette.split(" ")
-    meta['palette'] = Palette
-    
-    Code = [x['code'] for x in data]
+    meta["palette"] = Palette
+
+    Code = [x["code"] for x in data]
     nCode = len(Code)
-    
-    Delta = [x['value'] for x in data]
-    if len(Delta) > 0:
-        q01Delta = np.quantile(Delta, 0.01)
-        q99Delta = np.quantile(Delta, 0.99)
-        
-        res = color.compute_colorBin(q01Delta, q99Delta,
-                                        len(Palette), center=0)
-        bin = res['bin']
-        bin = [str(round_int(x)) for x in bin]
-        
-        Fill = color.get_colors(Delta, res['upBin'],
-                                res['lowBin'], Palette)
-        
-        color_to_find = np.array(["#F6E8C3", "#C7EAE5",
-                                    "#EFE2E9", "#F5E4E2"])
-        color_to_switch = np.array(["#EFD695", "#A1DCD3",
-                                    "#DBBECE", "#E7BDB8"])
-        
-        for i, d in enumerate(data):
-            d['fill'] = Fill[i]
-            d['fill_text'] = color.switch_color(Fill[i],
-                                                color_to_find,
-                                                color_to_switch)
-        response = {'data': data,
-                    'bin': bin}
-    else:
-        response = {'data': data}
+
+    # Delta = [x["value"] for x in data]
+    # if len(Delta) > 0:
+    #     q01Delta = np.quantile(Delta, 0.01)
+    #     q99Delta = np.quantile(Delta, 0.99)
+
+    #     res = color.compute_colorBin(q01Delta, q99Delta, len(Palette), center=0)
+    #     bin = res["bin"]
+    #     bin = [str(round_int(x)) for x in bin]
+
+    #     Fill = color.get_colors(Delta, res["upBin"], res["lowBin"], Palette)
+
+    #     color_to_find = np.array(["#F6E8C3", "#C7EAE5", "#EFE2E9", "#F5E4E2"])
+    #     color_to_switch = np.array(["#EFD695", "#A1DCD3", "#DBBECE", "#E7BDB8"])
+
+    #     for i, d in enumerate(data):
+    #         d["fill"] = Fill[i]
+    #         d["fill_text"] = color.switch_color(Fill[i], color_to_find, color_to_switch)
+    #     response = {"data": data, "bin": bin}
+    # else:
+    #     response = {"data": data}
+
+    response = {"data": data}
 
     response.update(meta)
     response = jsonify(response)
@@ -196,27 +211,65 @@ def narrative_post():
     return response
 
 
-@app.route('/get_delta_on_horizon', methods=['POST'])
+@app.route("/define_data_palette", methods=["POST"])
+def data_palette():
+    print("DATA PALETTE")
+    data = request.json
+    # Delta = [x["value"] for x in data]
+    delta_variables = data.keys()
+
+    Delta = []
+    for variable in delta_variables:
+        values = [x["value"] for x in data[variable]["data"]]
+        Delta.extend(values)
+    q01Delta, q99Delta = np.quantile(Delta, [0.01, 0.99])
+
+    for variable in delta_variables:
+
+        res = color.compute_colorBin(
+            q01Delta, q99Delta, len(data[variable]["palette"]), center=0
+        )
+        bin = res["bin"]
+        bin = [str(round_int(x)) for x in bin]
+
+        Fill = color.get_colors(
+            Delta, res["upBin"], res["lowBin"], data[variable]["palette"]
+        )
+
+        color_to_find = np.array(["#F6E8C3", "#C7EAE5", "#EFE2E9", "#F5E4E2"])
+        color_to_switch = np.array(["#EFD695", "#A1DCD3", "#DBBECE", "#E7BDB8"])
+
+        for i, d in enumerate(data[variable]["data"]):
+            d["fill"] = Fill[i]
+            d["fill_text"] = color.switch_color(Fill[i], color_to_find, color_to_switch)
+
+        data[variable]["bin"] = bin
+
+    response = jsonify(data)
+    return response
+
+
+@app.route("/get_delta_on_horizon", methods=["POST"])
 def delta_post():
     # Get parameters from the JSON payload
     data = request.json
-    n = data.get('n')
-    exp = data.get('exp')
-    chain = data.get('chain')
-    variable = data.get('variable')
-    horizon = data.get('horizon')
-    check_cache = data.get('check_cache')
+    n = data.get("n")
+    exp = data.get("exp")
+    chain = data.get("chain")
+    variable = data.get("variable")
+    horizon = data.get("horizon")
+    check_cache = data.get("check_cache")
 
-    chr = str(n)+exp+str(chain)+variable+horizon
+    chr = str(n) + exp + str(chain) + variable + horizon
     hash = get_hash(chr)
-    
+
     if check_cache and hash in cache:
         # print("read from cache")
         response = cache[hash]
     else:
         # print("computed")
         connection = engine.connect()
-        
+
         sql_query = f"""
         WITH hm_average AS (
         SELECT code, gcm, rcm, bc, AVG(value) AS value
@@ -237,85 +290,77 @@ def delta_post():
         GROUP BY code
         ) b ON s.code = b.code;
         """
-        result = connection.execute(
-            text(sql_query),
-            {'chain': tuple(chain)}
-        )
+        result = connection.execute(text(sql_query), {"chain": tuple(chain)})
         columns = result.keys()
         rows = result.fetchall()
-        data = [{f"{column_name}": value for column_name, value in zip(columns, row)} for row in rows]
-        
+        data = [
+            {f"{column_name}": value for column_name, value in zip(columns, row)}
+            for row in rows
+        ]
+
         sql_query = f"""
         SELECT *
         FROM variables
         WHERE variable_en = :variable;
         """
-        result = connection.execute(
-            text(sql_query),
-            {'variable': variable}
-        )
+        result = connection.execute(text(sql_query), {"variable": variable})
         columns = result.keys()
         rows = result.fetchall()
-        meta = [{f"{column_name}": value for column_name, value in zip(columns, row)} for row in rows][0]
+        meta = [
+            {f"{column_name}": value for column_name, value in zip(columns, row)}
+            for row in rows
+        ][0]
         connection.close()
 
         if meta["to_normalise"]:
             meta["unit_fr"] = "%"
             meta["unit_en"] = "%"
-          
-        Palette = meta['palette']
+
+        Palette = meta["palette"]
         Palette = Palette.split(" ")
-        meta['palette'] = Palette
-      
-        Code = [x['code'] for x in data]
+        meta["palette"] = Palette
+
+        Code = [x["code"] for x in data]
         nCode = len(Code)
-        
-        Delta = [x['value'] for x in data]
+
+        Delta = [x["value"] for x in data]
         q01Delta = np.quantile(Delta, 0.01)
         q99Delta = np.quantile(Delta, 0.99)
-        
-        res = color.compute_colorBin(q01Delta, q99Delta,
-                                     len(Palette), center=0)
-        bin = res['bin']
+
+        res = color.compute_colorBin(q01Delta, q99Delta, len(Palette), center=0)
+        bin = res["bin"]
         bin = [str(round_int(x)) for x in bin]
-        
-        Fill = color.get_colors(Delta, res['upBin'],
-                                res['lowBin'], Palette)
-        
-        color_to_find = np.array(["#F6E8C3", "#C7EAE5",
-                                  "#EFE2E9", "#F5E4E2"])
-        color_to_switch = np.array(["#EFD695", "#A1DCD3",
-                                    "#DBBECE", "#E7BDB8"])
-        
+
+        Fill = color.get_colors(Delta, res["upBin"], res["lowBin"], Palette)
+
+        color_to_find = np.array(["#F6E8C3", "#C7EAE5", "#EFE2E9", "#F5E4E2"])
+        color_to_switch = np.array(["#EFD695", "#A1DCD3", "#DBBECE", "#E7BDB8"])
+
         for i, d in enumerate(data):
-            d['fill'] = Fill[i]
-            d['fill_text'] = color.switch_color(Fill[i],
-                                                color_to_find,
-                                                color_to_switch)
-        response = {'data': data,
-                    'bin': bin}
+            d["fill"] = Fill[i]
+            d["fill_text"] = color.switch_color(Fill[i], color_to_find, color_to_switch)
+        response = {"data": data, "bin": bin}
         response.update(meta)
         response = jsonify(response)
 
         cache[hash] = response
 
     # print(sys.getsizeof(cache))
-        
+
     return response
 
 
-
-@app.route('/get_delta_serie', methods=['POST'])
+@app.route("/get_delta_serie", methods=["POST"])
 def serie_post():
     # Get parameters from the JSON payload
     data = request.json
-    code = data.get('code')
-    exp = data.get('exp')
-    chain = data.get('chain')
-    variable = data.get('variable')
+    code = data.get("code")
+    exp = data.get("exp")
+    chain = data.get("chain")
+    variable = data.get("variable")
 
     # print("a")
-    
+
     connection = engine.connect()
 
     sql_query = f"""
@@ -324,29 +369,31 @@ def serie_post():
     WHERE chain IN :chain AND code = '{code}';
     """
 
-    result = connection.execute(
-        text(sql_query),
-        {'chain': tuple(chain)}
-    )
+    result = connection.execute(text(sql_query), {"chain": tuple(chain)})
     connection.close()
-    
+
     columns = result.keys()
     rows = result.fetchall()
 
     # print("b")
 
     data = pd.DataFrame(rows, columns=columns)
-    data['date'] = pd.to_datetime(data['date'])
-    data['climate_chain'] = data['chain'].str.rsplit("_", n=1).str[0]
-    data['opacity'] = "0.08"
-    data['stroke_width'] = "1px"
-    data['color'] = "#ADABAA"
-    data['order'] = 0
+    data["date"] = pd.to_datetime(data["date"])
+    data["climate_chain"] = data["chain"].str.rsplit("_", n=1).str[0]
+    data["opacity"] = "0.08"
+    data["stroke_width"] = "1px"
+    data["color"] = "#ADABAA"
+    data["order"] = 0
 
     # print("c")
 
     for storyline in name_of_storylines:
-        data_med = data[data['climate_chain'] == storyline].groupby(['date'])['value'].median().reset_index()
+        data_med = (
+            data[data["climate_chain"] == storyline]
+            .groupby(["date"])["value"]
+            .median()
+            .reset_index()
+        )
 
         data_med = data_med.dropna()
         # x = pd.to_numeric(data_med['date']) / 10**9
@@ -365,66 +412,70 @@ def serie_post():
         # output, error = process.communicate()
         # y = output.decode().strip().split('\n')
         # data_med['value'] = pd.to_numeric(y)
-        
-        x = pd.to_numeric(data_med['date']) / 10**9
-        y = data_med['value']
+
+        x = pd.to_numeric(data_med["date"]) / 10**9
+        y = data_med["value"]
         smoothing_factor = 10**100
         spline = UnivariateSpline(x, y, s=smoothing_factor, k=4)
         y_smooth = spline(x)
-        data_med['value'] = y_smooth
-        
-        data_med['chain'] = storyline + "_back"
-        data_med['climate_chain'] = storyline + "_back"
-        data_med['opacity'] = "1"
-        data_med['stroke_width'] = "4px"
-        data_med['color'] = "#ffffff"
-        data_med['order'] = 1
-        data = pd.concat([data, data_med], ignore_index=True)
-        
-        data_med['chain'] = storyline
-        data_med['climate_chain'] = storyline
-        data_med['opacity'] = "1"
-        data_med['stroke_width'] = "2px"
-        data_med['color'] = color_of_storylines[name_of_storylines == storyline][0]
-        data_med['order'] = 2
+        data_med["value"] = y_smooth
+
+        data_med["chain"] = storyline + "_back"
+        data_med["climate_chain"] = storyline + "_back"
+        data_med["opacity"] = "1"
+        data_med["stroke_width"] = "4px"
+        data_med["color"] = "#ffffff"
+        data_med["order"] = 1
         data = pd.concat([data, data_med], ignore_index=True)
 
+        data_med["chain"] = storyline
+        data_med["climate_chain"] = storyline
+        data_med["opacity"] = "1"
+        data_med["stroke_width"] = "2px"
+        data_med["color"] = color_of_storylines[name_of_storylines == storyline][0]
+        data_med["order"] = 2
+        data = pd.concat([data, data_med], ignore_index=True)
 
     # print("d")
-    
-    data['date'] = data['date'].dt.strftime("%Y-%m-%d")
-    data = data.rename(columns={'value': 'y', 'date': 'x'})
 
-    group = ['chain', 'color', 'stroke_width', 'opacity', 'order']
-    data = data.groupby(group).apply(lambda x: x[['x', 'y']].to_dict('records')).reset_index(name='values')
+    data["date"] = data["date"].dt.strftime("%Y-%m-%d")
+    data = data.rename(columns={"value": "y", "date": "x"})
 
-    data = data.sort_values(by=['order'], ascending=True)
+    group = ["chain", "color", "stroke_width", "opacity", "order"]
+    data = (
+        data.groupby(group)
+        .apply(lambda x: x[["x", "y"]].to_dict("records"))
+        .reset_index(name="values")
+    )
+
+    data = data.sort_values(by=["order"], ascending=True)
 
     # print("e")
-    
+
     json_output = []
     for index, row in data.iterrows():
-        json_row = {'chain': row['chain'],
-                    'color': row['color'],
-                    'order': row['order'],
-                    'stroke_width': row['stroke_width'],
-                    'opacity': row['opacity'],
-                    'values': row['values']}
+        json_row = {
+            "chain": row["chain"],
+            "color": row["color"],
+            "order": row["order"],
+            "stroke_width": row["stroke_width"],
+            "opacity": row["opacity"],
+            "values": row["values"],
+        }
         json_output.append(json_row)
 
     # print("f")
 
     json_output_cleaned = json_output.copy()
     for item in json_output_cleaned:
-        for record in item['values']:
-            if np.isnan(record['y']):
-                record['y'] = None
-   
+        for record in item["values"]:
+            if np.isnan(record["y"]):
+                record["y"] = None
+
     json_output_str = json.dumps(json_output_cleaned)
-   
+
     return json_output_str
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=debug)

@@ -13,3 +13,4 @@ access_log/access_log.csv
 access_log/hash_access_log/
 access_log/figures/
 python_env
+sql.py

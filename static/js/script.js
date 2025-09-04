@@ -272,7 +272,53 @@ function update_data_point() {
     }
 
     if (projection) {
-        data_indicator.forEach(variable => {
+        // let data_all = {}
+
+        // data_indicator.forEach(variable => {
+        //     const data_query = {
+        //         horizon: horizon.H,
+        //         check_cache: check_cache,
+        //         region_id: selectedRegionId,
+        //         exp: projection.exp,
+        //         variable: variable,
+        //         n: n,
+        //         chain: projection.chain
+        //         };
+
+        //         fetch(api_base_url + "/get_narrative_data", {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(data_query)
+        //         })
+        //         .then(response => response.json())
+        //         .then(data_back => {
+        //          if (variable === "QA") {
+        //                 data_all['data_point_QA'] = data_back;
+        //             } else if (variable === "QJXA") {
+        //                 data_all['data_point_QJXA'] = data_back;
+        //             } else if (variable === "VCN10_summer") {
+        //                 data_all['data_point_VCN10'] = data_back;
+        //             };
+        //         })
+                
+        // });
+        // fetch(api_base_url + "/define_data_palette", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //     data_point_QA: data_point_QA,
+        //     data_point_QJXA: data_point_QJXA,
+        //     data_point_VCN10: data_point_VCN10,
+        // })
+        //     })
+        //     .then(response => response.json())
+        let data_all = {};
+
+        let promises = data_indicator.map(variable => {
             const data_query = {
                 horizon: horizon.H,
                 check_cache: check_cache,
@@ -281,46 +327,56 @@ function update_data_point() {
                 variable: variable,
                 n: n,
                 chain: projection.chain
-                };
+            };
 
-                fetch(api_base_url + "/get_narrative_data", {
+            return fetch(api_base_url + "/get_narrative_data", {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data_query)
-                })
-                .then(response => response.json())
-                .then(data_back => {
-                     if (data_back.length === 0) {
-                        console.log("Aucune donnée trouvée");
-                    } else {
-                        if (variable === "QA") {
-                            data_point_QA = data_back;
-                            svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
-                            $('#map-QA-loading').css('display', 'none');
-                        } else if (variable === "QJXA") {
-                            data_point_QJXA = data_back;
-                            svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
-                            $('#map-QJXA-loading').css('display', 'none');
-                        } else if (variable === "VCN10_summer") {
-                            data_point_VCN10 = data_back;
-                            svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
-                            $('#map-VCN10-loading').css('display', 'none');
-                        }
-                    }
-                
-                });
+            })
+            .then(response => response.json())
+            .then(data_back => {
+                if (variable === "QA") {
+                    data_all['data_point_QA'] = data_back;
+                } else if (variable === "QJXA") {
+                    data_all['data_point_QJXA'] = data_back;
+                } else if (variable === "VCN10_summer") {
+                    data_all['data_point_VCN10'] = data_back;
+                }
+            });
         });
-        } else {
-            // Empty maps
-            svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
+
+        // Attendre que toutes les promesses soient finies
+        Promise.all(promises).then(() => {
+            return fetch(api_base_url + "/define_data_palette", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data_all)  
+            });
+        })
+        .then(response => response.json())
+        .then(data_back => {
+            let data_point_QA   = data_back.data_point_QA;
+            let data_point_QJXA = data_back.data_point_QJXA;
+            let data_point_VCN10 = data_back.data_point_VCN10;
+            
+            svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
             $('#map-QA-loading').css('display', 'none');
-            svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
-            $('#map-QJXA-loading').css('display', 'none');
-            svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
-            $('#map-VCN10-loading').css('display', 'none');
-        }
+            svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
+        $('#map-QJXA-loading').css('display', 'none');
+            svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
+        $('#map-VCN10-loading').css('display', 'none');
+        })
+        
+    } else {
+        // Empty maps
+        svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
+        $('#map-QA-loading').css('display', 'none');
+        svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
+        $('#map-QJXA-loading').css('display', 'none');
+        svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
+        $('#map-VCN10-loading').css('display', 'none');
+    }
 }
 
 function selectTraccButton(selectedButton) {
@@ -1431,7 +1487,7 @@ function redrawPoint(svgElement, data_back) {
 		document.getElementById("panel-hover").style.display = "block";
 		document.getElementById("panel-hover_code").innerHTML =
 		    "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-		    d.code + "</span>";
+		    d.code + " [" + d.value.toFixed(1) + "%]"  + "</span>";
 		// const value = d.value.toFixed(2);
 		// document.getElementById("panel-hover_value").innerHTML =
 		// "<span style='color:" + d.fill_text + ";'>" +
