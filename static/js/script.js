@@ -363,9 +363,11 @@ function update_data_point() {
             svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
             $('#map-QA-loading').css('display', 'none');
             svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point_QJXA);
-        $('#map-QJXA-loading').css('display', 'none');
+            $('#map-QJXA-loading').css('display', 'none');
             svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point_VCN10);
-        $('#map-VCN10-loading').css('display', 'none');
+            $('#map-VCN10-loading').css('display', 'none');
+
+            draw_colorbar(data_point_QA)
         })
         
     } else {

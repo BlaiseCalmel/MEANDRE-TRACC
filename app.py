@@ -215,20 +215,20 @@ def narrative_post():
 def data_palette():
     print("DATA PALETTE")
     data = request.json
-    # Delta = [x["value"] for x in data]
     delta_variables = data.keys()
 
-    Delta = []
+    Delta_all = []
     for variable in delta_variables:
         values = [x["value"] for x in data[variable]["data"]]
-        Delta.extend(values)
-    q01Delta, q99Delta = np.quantile(Delta, [0.01, 0.99])
+        Delta_all.extend(values)
+    q01Delta, q99Delta = np.quantile(Delta_all, [0.01, 0.99])
 
     for variable in delta_variables:
-
+        Delta = [x["value"] for x in data[variable]["data"]]
         res = color.compute_colorBin(
             q01Delta, q99Delta, len(data[variable]["palette"]), center=0
         )
+
         bin = res["bin"]
         bin = [str(round_int(x)) for x in bin]
 
