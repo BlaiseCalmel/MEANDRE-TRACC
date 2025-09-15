@@ -68,27 +68,172 @@
 		</div>
 
 		<div class="sub-container-upper-narratives">
-			<div id="grid-chain_drawer-narratif" class="gallery-item bunch column">
-					<span class="grid-chain_drawer">Chaînes de modélisation pour chaque narratif</span>
-					<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
-							<span><i>Narratif 1</i></span>
-					</button>
-					<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
-							<span><i>Narratif 2</i></span>
-					</button>
-					<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
-							<span><i>Narratif 3</i></span>
-					</button>
-					<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
-							<span><i>Narratif 4</i></span>
-					</button>
+			<div id="grid-chain_drawer-narratif-container" class="gallery-item bunch row">
+					<span class="grid-chain_drawer">Chaînes de modélisation pour chaque narratif</span><br>
+					<!-- <table id="narratif-table" style="width:100%; table-layout:fixed;">
+						<colgroup>
+							<col style="width:20%;">
+							<col style="width:80%;">
+						</colgroup>
+						<tr>
+							<button id="button-storyline1-name" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif 1: </span>
+							</button>
+							<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+							</button>
+						</tr>
+						<tr>
+							<button id="button-storyline2-name" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif 2: </span>
+							</button>
+							<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+							</button>
+						</tr>
+						<tr>
+							<button id="button-storyline3-name" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif 3: </span>
+							</button>
+							<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+							</button>
+						</tr>
+						<tr>
+							<button id="button-storyline4-name" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif 4: </span>
+							</button>
+							<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+							</button>
+						</tr>
+						<tbody id="narratif-table-body">
+						</tbody>
+					</table> -->
+					<div class="narratif-table-container">
+						<table class="narratif-table">
+							<colgroup>
+							<col style="width: 20%;">
+							<col style="width: 80%;">
+							</colgroup>
+
+							<tbody>
+							<!-- <tr> -->
+								<!-- <td id="cell-storyline1-name">
+									<button id="button-storyline1-name" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif 1</span>
+									</button>
+								</td>
+								<td id="cell-storyline1">
+									<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif non défini</span>
+									</button>
+								</td> -->
+							<!-- </tr> -->
+							<!-- <tr>
+								<td id="cell-storyline2-name">
+									<button id="button-storyline2-name" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif 2</span></button>
+								</td>
+								<td id="cell-storyline2">
+									<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif non défini</span></button>
+								</td>
+							</tr>
+							<tr>
+								<td id="cell-storyline3-name">
+									<button id="button-storyline3-name" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif 3</span></button></td>
+								<td id="cell-storyline3">
+									<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif non défini</span></button>
+								</td>
+							</tr>
+							<tr>
+								<td id="cell-storyline4-name">
+									<button id="button-storyline4-name" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif 4</span></button></td>
+								<td id="cell-storyline4">
+									<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
+									<span>Narratif non défini</span></button>
+								</td>
+							</tr> -->
+							<tr>
+								<td colspan="2">
+									<button id="button-storyline1" class="row-button" disabled onclick="selectStorylineButton(this)">
+									<span id="cell-storyline1-name" class="col-left">Narratif 1</span>
+									<span id="cell-storyline1" class="col-right">Narratif non défini</span>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button id="button-storyline2" class="row-button" disabled onclick="selectStorylineButton(this)">
+									<span id="cell-storyline2-name" class="col-left">Narratif 2</span>
+									<span id="cell-storyline2" class="col-right">Narratif non défini</span>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button id="button-storyline3" class="row-button" disabled onclick="selectStorylineButton(this)">
+									<span id="cell-storyline3-name" class="col-left">Narratif 3</span>
+									<span id="cell-storyline3" class="col-right">Narratif non défini</span>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button id="button-storyline4" class="row-button" disabled onclick="selectStorylineButton(this)">
+									<span id="cell-storyline4-name" class="col-left">Narratif 4</span>
+									<span id="cell-storyline4" class="col-right">Narratif non défini</span>
+									</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- <div id="grid-chain_drawer-narratif" class="bunch column">
+						<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+						</button>
+						<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+						</button>
+						<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+						</button>
+						<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
+								<span>Narratif non défini</span>
+						</button>
+					</div> -->
 			</div>
 		</div>
 	</div>
 
 	<div class="sub-container-upper-info">
-		<div id="grid-chain_drawer-info" class="gallery-item fill">
+		<div id="grid-chain_drawer-info" class="gallery-item fill bunch column">
 			<span class="grid-chain_drawer"><i>Informations</i></span>
+			<table id="info-table" style="width:100%; table-layout:fixed;">
+				<colgroup>
+					<col style="width:20%;">
+					<col style="width:80%;">
+				</colgroup>
+				<tr>
+					<th>GCM</th>
+					<td class="text-gray">Non défini</td>
+				</tr>
+				<tr>
+					<th>RCM</th>
+					<td class="text-gray">Non défini</td>
+				</tr>
+				<tr>
+					<th>HM</th>
+					<td class="text-gray">Non défini</td>
+				</tr>
+				<tbody id="info-table-body">
+				</tbody>
+			</table>
 		</div>
 	</div>
 

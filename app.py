@@ -181,29 +181,7 @@ def narrative_post():
     Code = [x["code"] for x in data]
     nCode = len(Code)
 
-    # Delta = [x["value"] for x in data]
-    # if len(Delta) > 0:
-    #     q01Delta = np.quantile(Delta, 0.01)
-    #     q99Delta = np.quantile(Delta, 0.99)
-
-    #     res = color.compute_colorBin(q01Delta, q99Delta, len(Palette), center=0)
-    #     bin = res["bin"]
-    #     bin = [str(round_int(x)) for x in bin]
-
-    #     Fill = color.get_colors(Delta, res["upBin"], res["lowBin"], Palette)
-
-    #     color_to_find = np.array(["#F6E8C3", "#C7EAE5", "#EFE2E9", "#F5E4E2"])
-    #     color_to_switch = np.array(["#EFD695", "#A1DCD3", "#DBBECE", "#E7BDB8"])
-
-    #     for i, d in enumerate(data):
-    #         d["fill"] = Fill[i]
-    #         d["fill_text"] = color.switch_color(Fill[i], color_to_find, color_to_switch)
-    #     response = {"data": data, "bin": bin}
-    # else:
-    #     response = {"data": data}
-
     response = {"data": data}
-
     response.update(meta)
     response = jsonify(response)
     cache[hash] = response
@@ -213,7 +191,6 @@ def narrative_post():
 
 @app.route("/define_data_palette", methods=["POST"])
 def data_palette():
-    print("DATA PALETTE")
     data = request.json
     delta_variables = data.keys()
 

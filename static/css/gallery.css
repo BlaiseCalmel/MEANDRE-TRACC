@@ -296,19 +296,49 @@ p.warning {
 #grid-chain_drawer-RCP {
     max-width: 27rem;
 }
-#grid-chain_drawer-narratif {
-    max-width: 27rem;
+#grid-chain_drawer-narratif-container {
+    height: unset;
+    width: calc(100%);
+    /* max-width: 27rem; */
     /* width: calc(100%) */
 }
+
+#grid-chain_drawer-narratif {
+    flex-direction: column; 
+    justify-content: space-evenly;
+    flex: 1;                
+    padding: 1rem;
+    overflow-y: auto;         /* scroll vertical */
+    overflow-x: hidden;       /* pas de scroll horizontal */
+    word-wrap: break-word;    /* casse les mots trop longs */
+    white-space: normal;
+}
+
+
 #grid-chain_drawer-gwl {
     max-width: 27rem;
     /* width: calc(100vw) */
 }
 
 #grid-chain_drawer-info {
-    max-width: 16rem;
+    /* max-width: 27rem; */
     /* width: calc(100vw) */
 }
+
+.info-table {
+  width: 100%;
+  table-layout: fixed;  /* force le respect des largeurs */
+  border-collapse: collapse;
+}
+
+.col-20 {
+  width: 20%;
+}
+
+.col-80 {
+  width: 80%;
+}
+
 
 #grid-chain_drawer-chain {
     max-width: 27rem;

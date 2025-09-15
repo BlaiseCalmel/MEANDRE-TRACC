@@ -29,7 +29,7 @@ if (is_production) {
     default_n = 4;
 } else {
     api_base_url = "http://127.0.0.1:5000";
-    default_n = 7;
+    default_n = 1;
 }
 
 
@@ -138,15 +138,15 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
 
-        // update_data_point_debounce();
+        update_data_point_debounce();
         // Initialize top left for region selection
-        if (start) {
-            svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-                $('#map-region-loading').css('display', 'none');
-        }
-        svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
-        svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
-        svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
+        // if (start) {
+        //     svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+        //         $('#map-region-loading').css('display', 'none');
+        // }
+        // svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
+        // svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
+        // svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
         // svgFrance_region = update_map_region("#svg-france-region", svgFrance);
         
 	    });
@@ -271,10 +271,10 @@ function update_data_point() {
     var horizon = get_horizon();
     
     // // Initialize top left for region selection
-    // if (start) {
-    //     svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-    //         $('#map-region-loading').css('display', 'none');
-    // }
+    if (start) {
+        svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+            $('#map-region-loading').css('display', 'none');
+    }
 
     if (projection) {
         let data_all = {};
@@ -432,27 +432,49 @@ function updateStorylineButton(reset=false){
         getStorylines()
         .then((allStorylines) => {Object.entries(allStorylines).forEach(([key, val]) => {
             const button = document.getElementById(`button-${key}`);
+            // const button_name = document.getElementById(`button-${key}-name`);
+            const cell1 = document.getElementById(`cell-${key}-name`)
+            const cell2 = document.getElementById(`cell-${key}`)
             if (button) {
                 if (val) {
+                    // button_name.disabled = false;
+                    // button_name.replaceChildren();
+                    // button_name.style.color = val.narratif_couleur;
+                    // button_name.textContent = val.narratif_id;
+                    // button_name.value = key;
+
+
                     button.disabled = false;
-                    // const btn = document.querySelector('#monBouton');
-                    button.replaceChildren(); // vide le bouton
+                    button.classList.remove("selected");
+                    // button.replaceChildren(); // vide le bouton
+                    button.style.color = "black";
 
-                    const span = document.createElement('span');
-                    // <span class="id" style="color:blue;">C1</span> <span class="desc"><b>Débits annuels en hausse, crues et étiages légèrement plus sévères</b></span>
-                    span.style.color = val.narratif_couleur;
-                    span.textContent = val.narratif_id;
-                    span.class = "id"
+                    // const span = document.createElement('span');
+                    // span.style.color = val.narratif_couleur;
+                    // span.textContent = val.narratif_id;
+                    // span.class = "id"
 
-                    button.append(span, `: ${val.narratif_description}`);
+                    // button.append(span, `: ${val.narratif_description}`);
 
                     // button.textContent = `<span style="color: ${val.narratif_couleur};">${val.narratif_id}</span>: ${val.narratif_description}`;
-                    button.value = JSON.stringify(key);
+                    // button.value = JSON.stringify(key);
+                    // button.textContent = val.narratif_description;
+                    cell1.style.color = val.narratif_couleur;
+                    cell1.textContent = val.narratif_id;
+                    cell2.textContent = val.narratif_description;
+                    button.value = key;
                     
                     if (init_storyline_button) {
                         init_storyline_button = false;
                         selected_storyline = val;
-                        // button.style.backgroundColor = stroke_basin_selected
+
+                        // const cell1 = document.getElementById(`cell-storyline1-name`);
+                        // const cell2 = document.getElementById(`cell-storyline1`);
+                        // cell1.style.backgroundColor = stroke_basin_selected
+                        // cell2.style.backgroundColor = stroke_basin_selected
+
+                        // const cell = document.getElementById("cell1");
+                        // cell.style.backgroundColor = selected_storyline;
                         console.log("Selected storyline:", selected_storyline);
                     }
                 } else {
@@ -466,6 +488,9 @@ function updateStorylineButton(reset=false){
     const buttons = document.querySelectorAll("[id^='button-storyline']");
     buttons.forEach(btn => btn.classList.remove("selected"));
     if (buttons.length > 0) buttons[0].classList.add("selected");
+
+    updateTable();
+    update_data_point_debounce();
     });    
        
     }
@@ -475,16 +500,60 @@ function selectStorylineButton(selectedButton) {
 	// Update selected_storyline
     selected_storyline = allStorylines[selectedButton.value.replace(/"/g, '')]
     console.log(selected_storyline);
+
+
     // Change selected storyline button 
     if (selectedButton) {
-	var buttons = selectedButton.parentNode.querySelectorAll('button');
-	buttons.forEach(function (button) {
-	    button.classList.remove('selected');
-	});
-	selectedButton.classList.add('selected');
-	update_data_point_debounce();
+        Object.entries(allStorylines).forEach(([key, val]) =>{
+            const button = document.getElementById(`button-${key}`);
+            // const button_name = document.getElementById(`button-${key}-name`);
+            // const cell1 = document.getElementById(`cell-${key}-name`);
+            // const cell2 = document.getElementById(`cell-${key}`);
+            if (key !== selectedButton.value) {
+                button.classList.remove('selected')
+                // button_name.classList.remove('selected')
+                // cell1.style.backgroundColor = 'transparent'
+                // cell2.style.backgroundColor = 'transparent'
+            } else {
+                button.classList.add('selected')
+                // button_name.classList.add('selected')
+                // cell1.style.backgroundColor = stroke_basin_selected
+                // cell2.style.backgroundColor = stroke_basin_selected
+            }
+        });
+
+        // var buttons = selectedButton.parentNode.querySelectorAll('button');
+        // buttons.forEach(function (button) {
+        //     button.classList.remove('selected');
+        // });
+        // selectedButton.classList.add('selected');
+        updateTable();
+        update_data_point_debounce();
     }
 }
+
+function updateTable() {
+    const table_keys = ['gcm', 'rcm', 'hm']
+    const table = document.getElementById("info-table");
+    // on boucle sur les lignes à partir de la 2ᵉ (row[0] = en-têtes)
+    for (let i = 0; i < table.rows.length; i++) {
+        const key = table_keys[i]
+        if (selected_storyline [key] !== undefined) {
+            const cell = table.rows[i].cells[1];
+            cell.textContent = selected_storyline[key]; 
+            cell.classList.remove("text-gray");
+            cell.style.color = "black";
+            // table.rows[i].cells[1].textContent = selected_storyline[key]; // maj 2ᵉ colonne
+      }
+    }
+
+    // for (let i = 1; i < table.rows.length; i++) {
+    //   const key = table.rows[i].cells[0].textContent.trim(); // clé (GCM, RCM, HM)
+    //   if (data_table[key] !== undefined) {
+    //     table.rows[i].cells[1].textContent = data_table[key]; // maj 2ᵉ colonne
+    //   }
+    // }
+  }
 
 const update_data_point_debounce = debounce(update_data_point, 1000);
 // update_data_point_debounce();
@@ -1010,24 +1079,26 @@ function update_map_region(id_svg, svgElement) {
         .attr("stroke-miterlimit", 1)
         .attr("d", pathGenerator)
         .on("click", function(event, d) {
-            if (selectedRegionId === d.properties.name) {
-                selectedRegionId = null;  // désélection
-                document.getElementById("panel-hover-basin").style.display = "none";
-                updateStorylineButton(reset=true)
-            } else {
+            // if (selectedRegionId === d.properties.name) {
+            //     selectedRegionId = null;  // désélection
+            //     document.getElementById("panel-hover-basin").style.display = "none";
+            //     updateStorylineButton(reset=true)
+            // } else {
+            if (selectedRegionId !== d.properties.name) {
                 selectedRegionId = d.properties.name;  // sélection
                 document.getElementById("panel-hover-basin").style.display = "block";
                 document.getElementById("panel-hover_basin-id").innerHTML =
                     "<span style='font-weight: 900; color:" + selectedRegionId ? `Bassin sélectionné : ${selectedRegionId}` : "Aucun bassin sélectionné" + "'>" +
                     d.properties.TopoOH + "</span>"; 
+
+                // Met à jour le fill des polygones
+                layer_basin.selectAll("path.basinHydro")
+                    .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro);
+
                 updateStorylineButton();
+                updateMaps();
             }
 
-            // Met à jour le fill des polygones
-            layer_basin.selectAll("path.basinHydro")
-                .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro);
-
-            updateMaps()
             
         })
         .attr("cursor", "pointer")

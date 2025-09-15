@@ -209,6 +209,35 @@ button.chain_block_button:hover {
     color: #89898a;
 }
 
+.row-button {
+  display: flex;               /* simule deux colonnes */
+  width: 100%;                 /* bouton occupe toute la ligne */
+  text-align: left;            /* aligne le contenu */
+  border: none;                /* clean */
+  padding: 8px;
+  background: transparent;     /* neutre par défaut */
+  cursor: pointer;
+}
+
+.row-button .col-left {
+  width: 20%;
+  display: flex;
+  justify-content: center; /* centre horizontalement */
+  align-items: center;     /* centre verticalement */
+  text-align: center;      /* sécurité */
+}
+
+.row-button .col-right {
+  width: 80%;
+  text-align: justify;         /* ou left */
+}
+
+
+.text-gray {
+    color: #89898a;
+    opacity: 0.5;
+  }
+
 
 .reduce-space {
     margin-left: -0.15rem; /* Adjust the margin as needed to reduce the space */
@@ -353,7 +382,7 @@ h3 {
 
 .sub-container-upper-center {
     position: relative;
-    width: calc(100% / 4);
+    width: calc(100% / 3);
     height: calc(100% - 0.5rem);
     top: 0.5rem;
 }
@@ -370,10 +399,49 @@ h3 {
     height: calc(70%);
 }
 
+.narratif-table-container {
+  height: 90%;             /* occupe toute la hauteur du parent */
+  width: 100%;              /* occupe toute la largeur du parent */
+  overflow-y: auto;         /* scroll vertical global */
+  overflow-x: hidden;       /* pas de scroll horizontal */
+  /* border: 1px solid #ccc; */
+}
+
+.narratif-table {
+  width: 100%;              /* prend toute la largeur dispo */
+  height: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;      /* respecte les largeurs fixées par colgroup */
+  border: none; 
+}
+
+th, td {
+  /* border: 1px solid #ddd; */
+  border: none;
+  padding: 8px;
+}
+
+/* colonne 1 : 20%, centrée */
+.narratif-table td:first-child,
+.narratif-table th:first-child {
+  width: 20%;
+  text-align: center;
+}
+
+/* colonne 2 : 80%, alignée à gauche/justifiée */
+.narratif-table td:nth-child(2),
+.narratif-table th:nth-child(2) {
+  width: 80%;
+  text-align: justify;     /* ou left */
+  white-space: normal;     /* retour à la ligne si besoin */
+  word-wrap: break-word;   /* casse les mots longs */
+}
+
+
 
 .sub-container-upper-info {
     position: relative;
-    width: calc(100% / 3);
+    width: calc(100% * 3 / 8);
     height: calc(95% - 2.3rem);
     top: 0.25rem; 
     padding: 0.25rem 0.25rem;
