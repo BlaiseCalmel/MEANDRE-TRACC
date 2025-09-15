@@ -487,6 +487,17 @@ th, td {
     height: calc(100%);
 }
 
+.map-title-overlay {
+  position: absolute;
+  top: 10px;
+  left: 15%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.8); /* fond semi-transparent */
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 20; /* reste au-dessus du SVG */
+}
+
 
 #action-bar {
     position: absolute;
