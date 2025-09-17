@@ -24,17 +24,19 @@
 
 <div id="container-upper">
 
-	<div class="sub-container-upper-map">
-		<!-- TO DO ADD REAL MAP WITH REGIONS -->
-		<div id="map-region-loading" class="container-loading">
-		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-		</div>
-		<svg id="svg-france-region"></svg>
+	<div id="sub-container-upper-map">
+		<div id="grid-map" class="gallery-item">
+			<!-- TO DO ADD REAL MAP WITH REGIONS -->
+			<div id="map-region-loading" class="container-loading">
+			<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+			</div>
+			<svg id="svg-france-region"></svg>
 
-		<div id="panel-hover-basin">
-			<div class="bunch row column-small-gap center cross-center">
-				<div id="panel-hover_basin-id"></div>
-				<!-- <div id="panel-hover_value"></div> -->
+			<div id="panel-hover-basin">
+				<div class="bunch row column-small-gap center cross-center">
+					<div id="panel-hover_basin-id"></div>
+					<!-- <div id="panel-hover_value"></div> -->
+				</div>
 			</div>
 		</div>
 	<!-- <div id="panel-hover">
@@ -44,32 +46,33 @@
     </div> -->
 	</div>
 	
-	<div class="sub-container-upper-center bunch column column-small-gap row-small-gap">
+	<!-- <div class="sub-container-upper-center bunch column column-small-gap row-small-gap"> -->
 
-		<div class="sub-container-upper-horizons">
+		<div class="sub-container-upper-gwl">
 			<div id="grid-chain_drawer-gwl" class="gallery-item bunch column">
-				<span class="grid-chain_drawer">Niveau de réchauffement</span><br>
+				<span class="grid-gwl_drawer">Niveau de<br>réchauffement</span><br>
+				<span class="grid-gwl_text italique"> Vivre à...</span>
 				
-				<div id="bunch-horizon_futur" class="bunch row">
-					<button id="button-tracc20" value="gwl15"
+				<div id="bunch-gwl_futur" class="bunch column">
+					<button id="button-tracc20" value="gwl15" class="gwl15"
 						onclick="selectTraccButton(this);">
-					<span>Vivre à +2.0°C</span>
+					<span class="grid-gwl_gwl">+2.0°C</span>
 					</button>
-					<button id="button-tracc27" value="gwl20"
+					<button id="button-tracc27" value="gwl20" class="gwl20"
 						onclick="selectTraccButton(this);">
-					<span>Vivre à +2.7°C</span>
+					<span class="grid-gwl_gwl">+2.7°C</span>
 					</button>
-					<button id="button-tracc40" value="gwl30" class="selected"
+					<button id="button-tracc40" value="gwl30" class="selected gwl30"
 						onclick="selectTraccButton(this);">
-					<span>Vivre à +4.0°C</span>
+					<span class="grid-gwl_gwl">+4.0°C</span>
 					</button>
 				</div>
 			</div>
 		</div>
 
 		<div class="sub-container-upper-narratives">
-			<div id="grid-chain_drawer-narratif-container" class="gallery-item bunch row">
-					<span class="grid-chain_drawer">Chaînes de modélisation pour chaque narratif</span><br>
+			<div id="grid-chain_drawer-narratif" class="gallery-item bunch row">
+					<span class="grid-gwl_drawer">Chaînes de modélisation pour chaque narratif</span><br>
 					<!-- <table id="narratif-table" style="width:100%; table-layout:fixed;">
 						<colgroup>
 							<col style="width:20%;">
@@ -83,73 +86,19 @@
 								<span>Narratif non défini</span>
 							</button>
 						</tr>
-						<tr>
-							<button id="button-storyline2-name" disabled onclick="selectStorylineButton(this);">
-								<span>Narratif 2: </span>
-							</button>
-							<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
-								<span>Narratif non défini</span>
-							</button>
-						</tr>
-						<tr>
-							<button id="button-storyline3-name" disabled onclick="selectStorylineButton(this);">
-								<span>Narratif 3: </span>
-							</button>
-							<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
-								<span>Narratif non défini</span>
-							</button>
-						</tr>
-						<tr>
-							<button id="button-storyline4-name" disabled onclick="selectStorylineButton(this);">
-								<span>Narratif 4: </span>
-							</button>
-							<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
-								<span>Narratif non défini</span>
-							</button>
-						</tr>
 						<tbody id="narratif-table-body">
 						</tbody>
 					</table> -->
 					<div class="narratif-table-container">
 						<table class="narratif-table">
 							<colgroup>
-							<col style="width: 20%;">
+							<col style="width: 5%;">
+							<col style="width: 15%;">
 							<col style="width: 80%;">
 							</colgroup>
 
 							<tbody>
-							<!-- <tr> -->
-								<!-- <td id="cell-storyline1-name">
-									<button id="button-storyline1-name" disabled onclick="selectStorylineButton(this);">
-									<span>Narratif 1</span>
-									</button>
-								</td>
-								<td id="cell-storyline1">
-									<button id="button-storyline1" disabled onclick="selectStorylineButton(this);">
-									<span>Narratif non défini</span>
-									</button>
-								</td> -->
-							<!-- </tr> -->
 							<!-- <tr>
-								<td id="cell-storyline2-name">
-									<button id="button-storyline2-name" disabled onclick="selectStorylineButton(this);">
-									<span>Narratif 2</span></button>
-								</td>
-								<td id="cell-storyline2">
-									<button id="button-storyline2" disabled onclick="selectStorylineButton(this);">
-									<span>Narratif non défini</span></button>
-								</td>
-							</tr>
-							<tr>
-								<td id="cell-storyline3-name">
-									<button id="button-storyline3-name" disabled onclick="selectStorylineButton(this);">
-									<span>Narratif 3</span></button></td>
-								<td id="cell-storyline3">
-									<button id="button-storyline3" disabled onclick="selectStorylineButton(this);">
-									<span>Narratif non défini</span></button>
-								</td>
-							</tr>
-							<tr>
 								<td id="cell-storyline4-name">
 									<button id="button-storyline4-name" disabled onclick="selectStorylineButton(this);">
 									<span>Narratif 4</span></button></td>
@@ -157,36 +106,41 @@
 									<button id="button-storyline4" disabled onclick="selectStorylineButton(this);">
 									<span>Narratif non défini</span></button>
 								</td>
-							</tr> -->
+							</tr>  -->
 							<tr>
-								<td colspan="2">
+								<td colspan="3">
 									<button id="button-storyline1" class="row-button" disabled onclick="selectStorylineButton(this)">
-									<span id="cell-storyline1-name" class="col-left">Narratif 1</span>
-									<span id="cell-storyline1" class="col-right">Narratif non défini</span>
+										<!-- <span class="material-icons-outlined">arrow_forward_ios</span> -->
+										<span id="cell-storyline1-arrow" class="col-arrow material-icons-outlined">arrow_forward_ios</span>
+										<span id="cell-storyline1-name" class="col-left">Narratif 1</span>
+										<span id="cell-storyline1" class="col-right">Narratif non défini</span>
 									</button>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2">
+								<td colspan="3">
 									<button id="button-storyline2" class="row-button" disabled onclick="selectStorylineButton(this)">
-									<span id="cell-storyline2-name" class="col-left">Narratif 2</span>
-									<span id="cell-storyline2" class="col-right">Narratif non défini</span>
+										<span id="cell-storyline2-arrow" class="col-arrow material-icons-outlined">arrow_forward_ios</span>
+										<span id="cell-storyline2-name" class="col-left">Narratif 2</span>
+										<span id="cell-storyline2" class="col-right">Narratif non défini</span>
 									</button>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2">
+								<td colspan="3">
 									<button id="button-storyline3" class="row-button" disabled onclick="selectStorylineButton(this)">
-									<span id="cell-storyline3-name" class="col-left">Narratif 3</span>
-									<span id="cell-storyline3" class="col-right">Narratif non défini</span>
+										<span id="cell-storyline3-arrow" class="col-arrow material-icons-outlined">arrow_forward_ios</span>
+										<span id="cell-storyline3-name" class="col-left">Narratif 3</span>
+										<span id="cell-storyline3" class="col-right">Narratif non défini</span>
 									</button>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2">
+								<td colspan="3">
 									<button id="button-storyline4" class="row-button" disabled onclick="selectStorylineButton(this)">
-									<span id="cell-storyline4-name" class="col-left">Narratif 4</span>
-									<span id="cell-storyline4" class="col-right">Narratif non défini</span>
+										<span id="cell-storyline4-arrow" class="col-arrow material-icons-outlined">arrow_forward_ios</span>
+										<span id="cell-storyline4-name" class="col-left">Narratif 4</span>
+										<span id="cell-storyline4" class="col-right">Narratif non défini</span>
 									</button>
 								</td>
 							</tr>
@@ -209,9 +163,9 @@
 					</div> -->
 			</div>
 		</div>
-	</div>
+	<!-- </div> -->
 
-	<div class="sub-container-upper-info">
+	<!-- <div class="sub-container-upper-info">
 		<div id="grid-chain_drawer-info" class="gallery-item fill bunch column">
 			<span class="grid-chain_drawer"><i>Informations</i></span>
 			<table id="info-table" style="width:100%; table-layout:fixed;">
@@ -235,6 +189,13 @@
 				</tbody>
 			</table>
 		</div>
+	</div> -->
+
+	<div class="sub-container-upper-colorbar">
+		<div id="grid-colorbar" class="gallery-item">
+			<svg id="svg-colorbar"></svg>
+			<span class="vertical-label">Changements par rapport à la période 1991-2020</span>
+		</div>
 	</div>
 
 </div>
@@ -253,7 +214,7 @@
 	
 	
 	<div class="sub-container-lower-map">
-		<div class="map-title-overlay gallery h1">Changements QA</div>
+		<div class="map-title-overlay">ΔQA</div>
 		<div id="map-QA-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 		</div>
@@ -274,7 +235,7 @@
 	</div>
 	
 	<div class="sub-container-lower-map">
-		<div class="map-title-overlay gallery h1">Changements QJXA</div>
+		<div class="map-title-overlay">ΔQJXA</div>
 		<div id="map-QJXA-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 		</div>
@@ -282,15 +243,11 @@
 	</div>
 	
 	<div class="sub-container-lower-map">
-		<div class="map-title-overlay gallery h1">Changements VCN10</div>
+		<div class="map-title-overlay">ΔVCN10</div>
 		<div id="map-VCN10-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 		</div>
 		<svg id="svg-france-VCN10"></svg>
-	</div>
-
-	<div id="grid-colorbar" class="gallery-item">
-		<svg id="svg-colorbar"></svg>
 	</div>
 	
 

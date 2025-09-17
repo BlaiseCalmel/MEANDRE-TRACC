@@ -313,7 +313,7 @@ function get_variable() {
 }
 
 function get_horizon() {
-    var bunchHorizon = $('#bunch-horizon_futur');
+    var bunchHorizon = $('#bunch-gwl_futur');
     var buttonHorizon = bunchHorizon.find('.selected')[0];
     var H = buttonHorizon.getAttribute('value');
 	console.log(H)

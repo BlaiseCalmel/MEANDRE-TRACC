@@ -163,11 +163,12 @@ p.warning {
 
 
 #grid-colorbar {
-    width: 5rem;
+    /* width: 5rem; */
+    height: calc(100% - 4rem);
     display: flex;
     justify-content: center;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    /* padding-top: 1.5rem;
+    padding-bottom: 1.5rem; */
 }
 
 #grid-variable {
@@ -296,9 +297,19 @@ p.warning {
 #grid-chain_drawer-RCP {
     max-width: 27rem;
 }
+
+#grid-map {
+    height: calc(100% - 4rem);
+    width: calc(100% - 3rem);
+    top: 0.5rem;
+    bottom: 0.5rem;
+}
+
 #grid-chain_drawer-narratif-container {
-    height: unset;
-    width: calc(100%);
+    height: calc(100%);
+    width: calc(100% - 1rem);
+    top: 0.5rem;
+    bottom: 0.5rem;
     /* max-width: 27rem; */
     /* width: calc(100%) */
 }
@@ -312,12 +323,14 @@ p.warning {
     overflow-x: hidden;       /* pas de scroll horizontal */
     word-wrap: break-word;    /* casse les mots trop longs */
     white-space: normal;
+    height: calc(100% - 4rem);
 }
 
 
 #grid-chain_drawer-gwl {
     max-width: 27rem;
     /* width: calc(100vw) */
+    height: calc(100% - 4rem);
 }
 
 
@@ -340,22 +353,52 @@ p.warning {
     max-width: 27rem;
 }
 
-.grid-chain_drawer {
+.grid-gwl_drawer {
     font-family: "Raleway", sans-serif;
-    font-weight: 400;
+    font-weight: 600;
     font-size: 1.2rem;
     color: #3d3e3e;
     line-height: 1.5rem;
     margin-bottom: 0.2rem;
 }
-.grid-chain_text {
+.grid-gwl_text {
     font-family: 'Lato', sans-serif;
     font-weight: 400;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     color: #3d3e3e;
 }
 
 
+.italique {
+  font-style: italic;
+}
+
+.grid-gwl_gwl {
+    font-family: 'Lato', sans-serif;
+    /* font-weight: 400; */
+    font-size: 1.4rem;
+    text-align: center;
+    flex: 1;
+}
+
+.grid-narrative_drawer {
+    font-family: "Raleway", sans-serif;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #3d3e3e;
+    line-height: 1.5rem;
+    margin-bottom: 0.2rem;
+}
+
+
+.vertical-label {
+  writing-mode: vertical-rl;   /* texte vertical */
+  transform: rotate(180deg);   /* optionnel pour l'orienter correctement */
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 8px;           /* espace avec la colorbar */
+  text-align: center;
+}
 
 #grid-line-container {
     box-sizing: border-box;
