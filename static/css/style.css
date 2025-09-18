@@ -422,8 +422,9 @@ h3 {
 
 #sub-container-upper-map {
     position: relative;
-    width: calc(100% / 4);
+    /* width: calc(100% / 4); */
     height: calc(100%);
+    aspect-ratio: 1;
 }
 
 

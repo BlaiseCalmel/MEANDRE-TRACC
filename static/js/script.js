@@ -592,9 +592,9 @@ function update_data_serie() {
 const update_data_serie_debounce = debounce(update_data_serie, 1000);
 
 
-window.addEventListener('resize', function() {
-    plot_data_serie();
-});
+// window.addEventListener('resize', function() {
+//     plot_data_serie();
+// });
 
 // function plot_data_serie() {
 //     if (data_serie) {
@@ -1137,33 +1137,8 @@ function update_map_region(id_svg, svgElement) {
 	    .duration(1000);
     }
     const redrawMap_debounce = debounce(redrawMap, 100);
-    // const redrawMap_debounce = debounce(() => redrawMap(svgElement), 100);
 
-    function handleResize() {
-        const container = document.querySelector("#sub-container-upper-map")
-        // const path = d3.geoPath(projectionMap);
-        // const bounds = path.bounds(geoJSONdata_france);
-        if (container.clientWidth < container.clientHeight) {
-            var width = 0.95 * container.clientWidth ;
-            var height = 0.95 * container.clientWidth ;
-            // var scale = (bounds[0][0] + bounds[1][0]) / (2 * width)
-        } else {
-            var width = 0.95 * container.clientHeight
-            var height = 0.95 * container.clientHeight
-            // var scale = (bounds[0][1] + bounds[1][1]) / (2 * height) ;
-        }
-
-        zoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
-        // svgElement.attr("width", width).attr("height", height);
-        // projectionMap.scale([height*scale]).translate([width / 2, height / 2.3]);	 
-
-        redrawMap();
-        highlight_selected_point();
-    }
-
-    // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
-
-    
+   
     const zoom = d3.zoom()
 	  .scaleExtent([minZoom, maxZoom])
 	  .on("zoom", function (event) {
@@ -1176,56 +1151,53 @@ function update_map_region(id_svg, svgElement) {
 	      highlight_selected_point();
 	  });
     
-    projectionMap = d3.geoMercator()
-        .center(geoJSONdata_france.features[0].properties.centroid);
-
     const root = d3.select(id_svg)
-        .attr("width", "100%")
-        .attr("height", "100%");
+    .attr("width", "100%")
+    .attr("height", "100%");
 
     root.selectAll("*").remove();
 
     svgElement = root.append("g");
-
-    const zoomLayer = root.append("g").attr("id", "zoom-layer");
+    const layer_france = svgElement.append("g").attr("class", "layer-france");
     const layer_river = svgElement.append("g").attr("class", "layer-river");
     const layer_basin = svgElement.append("g").attr("class", "layer-basinHydro");
-    const layer_france = svgElement.append("g").attr("class", "layer-france");
 
-    // svgElement.call(zoom)
-    root.call(zoom); // zoom is attached to <svg>, transform affects zoomLayer
+    // Dimensions
+    const container = document.querySelector("#grid-map");
+    let width, height;
+    width = container.clientWidth
+    height = container.clientHeight
+    // if (container.clientWidth < container.clientHeight) {
+    // width = height = container.clientWidth;
+    // } else {
+    // width = height = container.clientHeight;
+    // }
 
-    // redrawMap();
-    // handleResize();
-    const container = document.querySelector("#sub-container-upper-map")
-    const path = d3.geoPath(projectionMap);
-    const bounds = path.bounds(geoJSONdata_france);
-    const dx = bounds[1][0] - bounds[0][0];
-    const dy = bounds[1][1] - bounds[0][1];
-    const x = (bounds[0][0] + bounds[1][0]) / 2;
-    const y = (bounds[0][1] + bounds[1][1]) / 2;
-    if (container.clientWidth < container.clientHeight) {
-        var width = 0.95 * container.clientWidth ;
-        var height = 0.95 * container.clientWidth ;
-        // var scale = (bounds[0][0] + bounds[1][0]) / (1.7 * width)
-    } else {
-        var width = 0.95 * container.clientHeight
-        var height = 0.95 * container.clientHeight
-        // var scale = (bounds[0][1] + bounds[1][1]) / (1.7 * height) ;
-    }
+    // Marge pour éviter que la carte touche les bords
+    const margin = 20;
+    const mapWidth = width - margin * 2;
+    const mapHeight = height - margin * 2;
 
-    root.call(
-        zoom.transform,
-        d3.zoomIdentity
-            .translate(-15, 0)  // exemple : centrer
-            .scale(0.68)               // ton facteur de zoom calculé
-        );
-    // root.call(
-    //     zoom.transform,
-    //     d3.zoomIdentity
-    //         .translate(25, -25)  // exemple : centrer
-    //         .scale(scale)               // ton facteur de zoom calculé
-    //     );
+    // Projection avec fitSize - calcule automatiquement scale et translate
+    const projectionMap = d3.geoMercator()
+    .fitExtent([[-margin, margin], [width - margin, height - 2*margin]], geoJSONdata_france);
+
+    // const projectionMap = d3.geoMercator()
+    // .fitSize([mapWidth, mapHeight], geoJSONdata_france);
+
+    // Ajuster pour centrer avec la marge
+    // const currentTranslate = projectionMap.translate();
+    // projectionMap.translate([
+    // currentTranslate[0] + margin/2,
+    // currentTranslate[1] + margin
+    // ]);
+    // const path = d3.geoPath(projectionMap);
+
+    // Application du zoom
+    root.call(zoom);
+    root.call(zoom.transform, d3.zoomIdentity);
+    console.log("Projection scale:", projectionMap.scale());
+    console.log("Projection translate:", projectionMap.translate());
 
     // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
     
