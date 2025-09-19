@@ -163,12 +163,10 @@ p.warning {
 
 
 #grid-colorbar {
-    /* width: 5rem; */
     height: calc(100% - 4rem);
+    width: 100%;
     display: flex;
     justify-content: center;
-    /* padding-top: 1.5rem;
-    padding-bottom: 1.5rem; */
 }
 
 #grid-variable {
@@ -315,8 +313,7 @@ p.warning {
 }
 
 #grid-chain_drawer-narratif {
-    flex-direction: column; 
-    justify-content: space-evenly;
+    display: inline;
     flex: 1;                
     padding: 1rem;
     overflow-y: auto;         /* scroll vertical */
@@ -331,6 +328,7 @@ p.warning {
     max-width: 27rem;
     /* width: calc(100vw) */
     height: calc(100% - 4rem);
+    display: inline;
 }
 
 

@@ -442,9 +442,9 @@ function updateStorylineButton(reset=false){
         .then((allStorylines) => {Object.entries(allStorylines).forEach(([key, val]) => {
             const button = document.getElementById(`button-${key}`);
             // const button_name = document.getElementById(`button-${key}-name`);
-            const cell1 = document.getElementById(`cell-${key}-name`)
-            const cell2 = document.getElementById(`cell-${key}`)
-            const arrow = document.getElementById(`cell-${key}-arrow`);
+            const cell_name = document.getElementById(`cell-${key}-name`)
+            const cell_description = document.getElementById(`cell-${key}`)
+            const cell_arrow = document.getElementById(`cell-${key}-arrow`);
             if (button) {
                 if (val) {
                     // button_name.disabled = false;
@@ -467,25 +467,32 @@ function updateStorylineButton(reset=false){
                     // button.append(span, `: ${val.narratif_description}`);
 
                     // button.textContent = `<span style="color: ${val.narratif_couleur};">${val.narratif_id}</span>: ${val.narratif_description}`;
-                    // button.value = JSON.stringify(key);
-                    // button.textContent = val.narratif_description;
-                    arrow.style.color = val.narratif_couleur;
-                    // arrow.classList.add("hide-arrow")
-                    cell1.style.color = val.narratif_couleur;
-                    cell1.textContent = val.narratif_id;
-                    cell2.textContent = val.narratif_description;
                     button.value = key;
+                    //  button.value = JSON.stringify(key);
+                    // button.textContent = val.narratif_description;
+                    cell_arrow.style.color = val.narratif_couleur;
+                    // cell_arrow.classList.add("hide-cell_arrow")
+                    cell_name.style.color = val.narratif_couleur;
+                    cell_name.textContent = val.narratif_id;
+                    // let span = cell_description.querySelector("span");
+                    // span.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
+                    cell_description.innerHTML = `
+                                                <span>${val.narratif_description}<br></span>
+                                                <span class="italique">GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}</span>
+                                                `;
+                    
+                    // cell_description.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
                     
                     if (init_storyline_button) {
                         init_storyline_button = false;
                         selected_storyline = val;
 
-                        // const cell1 = document.getElementById(`cell-storyline1-name`);
-                        // const cell2 = document.getElementById(`cell-storyline1`);
-                        // cell1.style.backgroundColor = stroke_basin_selected
-                        // cell2.style.backgroundColor = stroke_basin_selected
+                        // const cell_name = document.getElementById(`cell-storyline1-name`);
+                        // const cell_description = document.getElementById(`cell-storyline1`);
+                        // cell_name.style.backgroundColor = stroke_basin_selected
+                        // cell_description.style.backgroundColor = stroke_basin_selected
 
-                        // const cell = document.getElementById("cell1");
+                        // const cell = document.getElementById("cell_name");
                         // cell.style.backgroundColor = selected_storyline;
                         console.log("Selected storyline:", selected_storyline);
                     }
@@ -519,18 +526,18 @@ function selectStorylineButton(selectedButton) {
         Object.entries(allStorylines).forEach(([key, val]) =>{
             const button = document.getElementById(`button-${key}`);
             // const button_name = document.getElementById(`button-${key}-name`);
-            // const cell1 = document.getElementById(`cell-${key}-name`);
-            // const cell2 = document.getElementById(`cell-${key}`);
+            // const cell_name = document.getElementById(`cell-${key}-name`);
+            // const cell_description = document.getElementById(`cell-${key}`);
             if (key !== selectedButton.value) {
                 button.classList.remove('selected')
                 // button_name.classList.remove('selected')
-                // cell1.style.backgroundColor = 'transparent'
-                // cell2.style.backgroundColor = 'transparent'
+                // cell_name.style.backgroundColor = 'transparent'
+                // cell_description.style.backgroundColor = 'transparent'
             } else {
                 button.classList.add('selected')
                 // button_name.classList.add('selected')
-                // cell1.style.backgroundColor = stroke_basin_selected
-                // cell2.style.backgroundColor = stroke_basin_selected
+                // cell_name.style.backgroundColor = stroke_basin_selected
+                // cell_description.style.backgroundColor = stroke_basin_selected
             }
         });
 
@@ -880,7 +887,8 @@ function draw_colorbar(data_back) {
     svg.selectAll("*").remove();
 
     // Calculate and set initial SVG dimensions
-    svg.attr("height", (Palette.length - 1) * step + shift * 2);
+    // svg.attr("height", (Palette.length - 1) * step + shift * 2);
+    svg.attr("height", "100%");
     svg.attr("width", "100%");
 
     // Update tick lines
