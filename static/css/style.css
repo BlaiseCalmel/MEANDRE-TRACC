@@ -164,16 +164,20 @@ button.selected.gwl15 {
     color: #ffffff;
     font-weight: bold;
     background-color: #faa91a;
+    border-radius: 12px
 }
 button.selected.gwl20 {
     color: #ffffff;
     font-weight: bold;
     background-color: #f06426;
+    border-radius: 12px
 }
 button.selected.gwl30 {
     color: #ffffff;
     font-weight: bold;
     background-color: #732401;
+    border-radius: 12px
+    /* background: url("/resources/gwl30.png") center/cover no-repeat; */
 }
 
 button:hover {
@@ -257,7 +261,6 @@ button.chain_block_button:hover {
   visibility: visible;
 }
 
-
 .row-button .col-left {
   width: 15%;
   display: flex;
@@ -267,13 +270,12 @@ button.chain_block_button:hover {
 }
 
 .row-button .col-right {
-    width: 80%;
+    width: 60%;
     display: flex;
     text-align: justify;         /* ou left */
     align-items: center;
     /* justify-content: center; */
 }
-
 
 .text-gray {
     color: #89898a;
@@ -440,6 +442,8 @@ h3 {
     width: calc(45%);
     height: calc(100%);
     padding: 0.5rem;
+    flex: 1; /* Utilise tout l'espace disponible restant */
+    min-width: 0; /* Permet la réduction si nécessaire */
 }
 
 .sub-container-upper-colorbar {
@@ -447,6 +451,7 @@ h3 {
     width: calc(10%);
     height: calc(100%);
     padding: 0.5rem;
+    margin-left: auto;
 }
 
 
@@ -487,7 +492,6 @@ th, td {
   white-space: normal;     /* retour à la ligne si besoin */
   word-wrap: break-word;   /* casse les mots longs */
 }
-
 
 
 .sub-container-upper-info {
@@ -542,15 +546,15 @@ th, td {
 .map-title-overlay {
     position: absolute;
     top: 10px;
-    left: 20%;
+    left: 10%;
     transform: translateX(-50%);
-    background: rgba(255,255,255,0.8); 
+    background: rgba(255,255,255,1); 
     padding: 5px 10px;
     border-radius: 5px;
     z-index: 20; 
     font-family: "Raleway", sans-serif;
-    font-weight: 600;
-    font-size: 1.2rem;
+    font-weight: 500;
+    font-size: 1.4rem;
 }
 
 
