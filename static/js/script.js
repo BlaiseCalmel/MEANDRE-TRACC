@@ -28,17 +28,20 @@ if (is_production) {
     api_base_url = "https://meandre-tracc.explore2.inrae.fr";
     default_n = 4;
 } else {
-    api_base_url = "http://127.0.0.1:5000";
-    default_n = 1;
+    // api_base_url = "http://127.0.0.1:5000";
+    api_base_url = "http://10.69.66.253:5000";
+    default_n = 4;
 }
 
 
-let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river;//, geoJSONdata_entiteHydro;
+let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river, geoJSONdata_secteurHydro, geoJSONdata_cities;//, geoJSONdata_entiteHydro;
 
 const geoJSONfiles = [
     "/data/france.geo.json",
     "/data/regions.geo.json",
-    "/data/river.geo.json"
+    "/data/river.geo.json",
+    "/data/secteurHydro.geo.json",
+    "/data/villesFrance.geo.json"
     // "/data/entityHydro.geo.json"
 ];
 
@@ -86,6 +89,33 @@ function change_url(url, start=false, actualise=true) {
     }
     history.pushState({}, "", url);
     updateContent(start=start, actualise=actualise);
+}
+
+function initTitleOverlay() {
+    document.querySelectorAll('.map-title-overlay').forEach(element => {
+        const fullText = element.getAttribute('data-full');
+        const shortText = element.textContent;
+        let isExpanded = false;
+
+        element.addEventListener('mouseenter', function() {
+            if (!isExpanded) {
+                element.classList.add('expanded');
+                element.textContent = fullText;
+                const newWidth = element.scrollWidth;
+                element.style.width = newWidth + 'px';
+                isExpanded = true;
+            }
+        });
+
+        element.addEventListener('mouseleave', function() {
+            if (isExpanded) {
+                element.classList.remove('expanded');
+                element.style.width = '';
+                element.textContent = shortText;
+                isExpanded = false;
+            }
+        });
+    });
 }
 
 
@@ -138,7 +168,10 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_basinHydro = geoJSONdata[1];
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
+        geoJSONdata_secteurHydro= geoJSONdata[3]; 
+        geoJSONdata_cities= geoJSONdata[4];
 
+        initTitleOverlay()
         update_data_point_debounce();
         
 	    });
@@ -1016,7 +1049,7 @@ let selectedRegionId = null;
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
 
-const minZoom = 0.7;
+const minZoom = 1;
 const maxZoom = 10;
 const maxPan = 0.3;
 const scale = 3.5;
@@ -1231,6 +1264,8 @@ function update_map(id_svg, svgElement, data_back) {
     const layer_france = svgElement.append("g").attr("class", "layer-france");
     const layer_river = svgElement.append("g").attr("class", "layer-river");
     const layer_basin = svgElement.append("g").attr("class", "layer-basinHydro");
+    const layer_secteur = svgElement.append("g").attr("class", "layer-secteurHydro");
+    const layer_city = svgElement.append("g").attr("class", "layer-cityFrance");
 
     // Dimensions
     const indicator = id_svg.split("-").pop();
@@ -1251,6 +1286,8 @@ function update_map(id_svg, svgElement, data_back) {
         layer_france,
         layer_river,
         layer_basin,
+        layer_secteur,
+        layer_city,
         projectionMap,
         container,
         width,
@@ -1272,6 +1309,7 @@ function update_map(id_svg, svgElement, data_back) {
         };
         const simplifiedselectedGeoJSON_river = geotoolbox.simplify(selectedGeoJSON_river, { k: k_simplify, merge: false });
         const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
+        const simplifiedGeoJSON_secteurHydro = geotoolbox.simplify(geoJSONdata_secteurHydro, { k: k_simplify, merge: false });
         const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
 
         elements.layer_river.selectAll("path.river")
@@ -1301,19 +1339,101 @@ function update_map(id_svg, svgElement, data_back) {
             .transition()
             .duration(1000);
         
-        elements.layer_basin.selectAll("path.basinHydro")
-            .data(simplifiedGeoJSON_basinHydro.features)
-            .join("path")
-            .attr("class", "basinHydro")
-            .style("pointer-events", "visibleStroke")
-            .attr("fill", fill_basinHydro)
-            .attr("stroke", stroke_basinHydro)
-            .attr("stroke-width", strokeWith_basinHydro)
-            .attr("stroke-linejoin", "miter")
-            .attr("stroke-miterlimit", 1)
-            .attr("d", pathGenerator)
-            .transition()
-            .duration(1000);
+        // elements.layer_basin.selectAll("path.basinHydro")
+        //     .data(simplifiedGeoJSON_basinHydro.features)
+        //     .join("path")
+        //     .attr("class", "basinHydro")
+        //     .style("pointer-events", "visibleStroke")
+        //     .attr("fill", fill_basinHydro)
+        //     .attr("stroke", stroke_basinHydro)
+        //     .attr("stroke-width", strokeWith_basinHydro)
+        //     .attr("stroke-linejoin", "miter")
+        //     .attr("stroke-miterlimit", 1)
+        //     .attr("d", pathGenerator)
+        //     .transition()
+        //     .duration(1000);
+
+        // layer_basin.selectAll("path.basinHydro")
+        //     .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)  // clé unique
+        //     .join("path")
+        //     .attr("class", "basinHydro")
+        //     .style("pointer-events", "all")
+        //     .attr("fill", fill_basinHydro)
+        //     .attr("stroke", stroke_basinHydro)
+        //     .attr("stroke-width", strokeWith_basinHydro)
+        //     .attr("stroke-linejoin", "miter")
+        //     .attr("stroke-miterlimit", 1)
+        //     .attr("d", pathGenerator)
+        //     .each(function() {
+        //         // stocke la couleur originale dans l'élément lui-même
+        //         d3.select(this).attr("data-original-fill", d3.select(this).attr("fill"));
+        //     })
+        //     .on("mouseover", function(event, d) {
+        //         d3.select(this).attr("fill", stroke_basin_selected); // couleur au survol
+        //     })
+        //     .on("mouseout", function(event, d) {
+        //         const original = d3.select(this).attr("data-original-fill");
+        //         d3.select(this).attr("fill", original); // restaure la couleur originale
+        //     })
+        //     .transition()
+        //     .duration(1000); 
+
+        // const layer_secteurs = svg.append("g").attr("class", "secteursHydro");
+
+        layer_basin.selectAll("path.basinHydro")
+        .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)
+        .join("path")
+        .attr("class", "basinHydro")
+        .style("pointer-events", "all")
+        .attr("fill", fill_basinHydro)
+        .attr("stroke", stroke_basinHydro)
+        .attr("stroke-width", strokeWith_basinHydro)
+        .attr("stroke-linejoin", "miter")
+        .attr("stroke-miterlimit", 1)
+        .attr("d", pathGenerator)
+        .on("mouseover", function(event, d) {
+            // Affiche les secteurs hydrologiques pour ce bassin
+            showSecteurs(d);
+        })
+        .on("mouseout", function(event, d) {
+            // Cache les secteurs hydrologiques
+            hideSecteurs();
+        })
+        .transition()
+        .duration(1000);
+                
+        // Fonction pour afficher les secteurs
+        function showSecteurs(basinData) {
+            // Filtre les secteurs qui appartiennent à ce bassin
+            // Ajustez la propriété selon votre structure de données
+            const secteursInBasin = simplifiedGeoJSON_secteurHydro.features.filter(
+                secteur => secteur.properties.basinName === basinData.properties.name
+                // ou une autre logique de filtrage selon vos données
+            );
+
+            // Crée ou met à jour la couche des secteurs
+            layer_secteur.selectAll("path.secteurHydro")
+                .data(secteursInBasin, d => d.properties.name)
+                .join("path")
+                .attr("class", "secteurHydro")
+                .attr("d", pathGenerator)
+                .attr("fill", "none")
+                .attr("stroke", "#333")
+                .attr("stroke-width", 1)
+                .style("opacity", 0)
+                .transition()
+                .duration(300)
+                .style("opacity", 1);
+        }
+
+        // Fonction pour cacher les secteurs
+        function hideSecteurs() {
+            layer_secteur.selectAll("path.secteurHydro")
+                .transition()
+                .duration(300)
+                .style("opacity", 0)
+                .remove();
+        }
         
         elements.layer_france.selectAll("path.france")
             .data(simplifiedGeoJSON_france.features)
@@ -1392,17 +1512,10 @@ function update_map(id_svg, svgElement, data_back) {
 function zoomToRegion(selectedRegionId, svgId) {
     if (!selectedRegionId) return;
     
-    console.log("Attempting to zoom to region:", selectedRegionId, "on SVG:", svgId);
-    
     // Récupérer l'indicateur et le conteneur
     const indicator = svgId.replace("#", "").split("-").pop();
     const container = document.querySelector(`#map-${indicator}`);
     const root = d3.select(svgId);
-    
-    console.log("Indicator:", indicator);
-    console.log("Container:", container);
-    console.log("Root selection:", root);
-    console.log("Root node:", root.node());
     
     if (!container) {
         console.error(`Container not found for: #map-${indicator}`);
@@ -1448,7 +1561,7 @@ function zoomToRegion(selectedRegionId, svgId) {
 
     // Appliquer la transformation avec animation fluide
     root.transition()
-        .duration(750)
+        .duration(2000)
         .ease(d3.easeQuadInOut)
         .call(sharedZoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
 }

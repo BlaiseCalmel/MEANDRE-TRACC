@@ -262,7 +262,7 @@ button.chain_block_button:hover {
 }
 
 .row-button .col-left {
-  width: 15%;
+  width: 5%;
   display: inline-flex;
   justify-content: center; /* centre horizontalement */
   align-items: center;     /* centre verticalement */
@@ -270,7 +270,7 @@ button.chain_block_button:hover {
 }
 
 .row-button .col-right {
-    width: 80%;
+    width: 90%;
     display: flex;
     display: inline-block;
     text-align: justify;        
@@ -522,6 +522,8 @@ th, td {
     /* height: calc(100vh - 3rem - 1rem); */
     height: calc(60vh - 3rem - 1rem);
     width: calc(100vw);
+    align-items: center; 
+    justify-content: center;
     /* flex: 1;
     overflow-y: auto; */
     /* margin-top: 1rem; */
@@ -539,15 +541,22 @@ th, td {
 
 .sub-container-lower-map {
     position: relative;
-    width: calc(33vw - 1rem);
+    width: calc(30vw - 1rem);
     height: calc(100%);
 }
 
-.map-title-overlay {
+.separator {
+  width: 5px;
+  height: 80%;                 /* occupe 75% de la hauteur du parent */
+  background-color: #8d8d8d;      /* gris foncé */
+  border-radius: 9999px;       /* extrémités parfaitement arrondies */
+  align-self: center;          /* centre verticalement dans la ligne */
+}
+
+/* .map-title-overlay {
     position: absolute;
     top: 10px;
-    left: 10%;
-    transform: translateX(-50%);
+    left: 3%;
     background: rgba(255,255,255,1); 
     padding: 5px 10px;
     border-radius: 5px;
@@ -557,6 +566,31 @@ th, td {
     font-size: 1.4rem;
 }
 
+.map-title-overlay.expanded {
+  padding-right: 16px;
+} */
+
+.map-title-overlay {
+    position: absolute;
+    top: 10px;
+    left: 3%;
+    background: rgba(255, 255, 255, 1);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 20;
+    font-family: "Raleway", sans-serif;
+    font-weight: 500;
+    font-size: 1.4rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: width 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+}
+
+.map-title-overlay:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
 
 #action-bar {
     position: absolute;

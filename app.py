@@ -17,6 +17,7 @@ from scipy.interpolate import UnivariateSpline
 # import rpy2.robjects as robjects
 import os
 from dotenv import load_dotenv
+import time
 
 # import static.py.color
 from static.py import color
@@ -74,6 +75,20 @@ def index():
 
 
 cache = {}
+
+# import geopandas as gpd
+
+# gdf = gpd.read_file(f'/home/bcalmel/Téléchargements/secteurHydro/secteurHydro.shp')
+
+# # --- Simplifier la géométrie ---
+# # tolérance = distance de simplification (en unités du système de coordonnées, ex: mètres)
+# gdf_simplified = gdf.simplify(tolerance=100, preserve_topology=True)
+
+# # --- Remplacer la géométrie par la version simplifiée ---
+# gdf["geometry"] = gdf_simplified
+
+# # --- Exporter vers GeoJSON ---
+# gdf.to_file("/home/bcalmel/Téléchargements/secteurHydro/secteurHydro.geo.json", driver="GeoJSON")
 
 
 def get_hash(chr):
@@ -135,7 +150,7 @@ def narrative_post():
         JOIN (
             SELECT *
             FROM delta_{exp}_{variable}_{horizon}
-            WHERE chain = :chain AND region_id = :region_id AND n >= {n}
+            WHERE chain = :chain AND region_id = :region_id AND n >= {n} AND is_valid = TRUE
         ) d ON s.code = d.code
     """
     )
@@ -192,38 +207,47 @@ def narrative_post():
 @app.route("/define_data_palette", methods=["POST"])
 def data_palette():
     data = request.json
-    delta_variables = data.keys()
+    delta_variables = list(data.keys())
 
-    Delta_all = []
-    for variable in delta_variables:
-        values = [x["value"] for x in data[variable]["data"]]
-        Delta_all.extend(values)
-    q01Delta, q99Delta = np.quantile(Delta_all, [0.01, 0.99])
+    # Extraction vectorisée de toutes les valeurs
+    all_values = np.concatenate(
+        [
+            np.array([d["value"] for d in data[var]["data"]], dtype=float)
+            for var in delta_variables
+        ]
+    )
+    q01Delta, q99Delta = np.quantile(all_values, [0.01, 0.99])
 
-    for variable in delta_variables:
-        Delta = [x["value"] for x in data[variable]["data"]]
+    # Préparer les couleurs de remplacement une fois pour toutes
+    color_to_find = np.array(["#F6E8C3", "#C7EAE5", "#EFE2E9", "#F5E4E2"])
+    color_to_switch = np.array(["#EFD695", "#A1DCD3", "#DBBECE", "#E7BDB8"])
+
+    # Boucle principale (minimale)
+    for var in delta_variables:
+        values = np.array([d["value"] for d in data[var]["data"]], dtype=float)
+
         res = color.compute_colorBin(
-            q01Delta, q99Delta, len(data[variable]["palette"]), center=0
+            q01Delta, q99Delta, len(data[var]["palette"]), center=0
         )
-
-        bin = res["bin"]
-        bin = [str(round_int(x)) for x in bin]
+        bin_edges = [str(round_int(x)) for x in res["bin"]]
 
         Fill = color.get_colors(
-            Delta, res["upBin"], res["lowBin"], data[variable]["palette"]
+            values, res["upBin"], res["lowBin"], data[var]["palette"]
         )
 
-        color_to_find = np.array(["#F6E8C3", "#C7EAE5", "#EFE2E9", "#F5E4E2"])
-        color_to_switch = np.array(["#EFD695", "#A1DCD3", "#DBBECE", "#E7BDB8"])
+        # Transformation vectorisée des couleurs
+        fill_switched = [
+            color.switch_color(f, color_to_find, color_to_switch) for f in Fill
+        ]
 
-        for i, d in enumerate(data[variable]["data"]):
-            d["fill"] = Fill[i]
-            d["fill_text"] = color.switch_color(Fill[i], color_to_find, color_to_switch)
+        # Insertion rapide dans le JSON
+        for d, fill, fill_text in zip(data[var]["data"], Fill, fill_switched):
+            d["fill"] = fill
+            d["fill_text"] = fill_text
 
-        data[variable]["bin"] = bin
+        data[var]["bin"] = bin_edges
 
-    response = jsonify(data)
-    return response
+    return jsonify(data)
 
 
 @app.route("/get_delta_on_horizon", methods=["POST"])
