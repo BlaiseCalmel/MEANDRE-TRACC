@@ -447,10 +447,10 @@ h3 {
     min-width: 0; /* Permet la réduction si nécessaire */
 }
 
-.sub-container-upper-colorbar {
+.sub-container-lower-colorbar {
     display: flex;
-    width: calc(10%);
-    height: calc(100%);
+    width: calc(8%);
+    height: calc(60%);
     padding: 0.5rem;
     margin-left: auto;
 }
@@ -644,7 +644,53 @@ th, td {
 }
 
 
-#panel-hover {
+#panel-hover_code {
+    display: none;
+    position: absolute;
+    bottom: 4.5rem;
+    right: 1rem;
+    color: #060508;
+    font-size: 1rem;
+    border: 3px solid #ffffff;
+    background-color: #ffffff;
+    padding: 0.2rem 0.3rem;
+    overflow: hidden;
+    border-radius: 8px;
+    width: fit-content;
+    height: fit-content;
+}
+#panel-hover_code-id {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: #89898a;
+    margin-bottom: 0.1rem;
+}
+
+#panel-hover_description {
+    display: none;
+    position: absolute;
+    bottom: 2.5rem;
+    right: 1rem;
+    color: #060508;
+    font-size: 1rem;
+    border: 3px solid #ffffff;
+    background-color: #ffffff;
+    padding: 0.2rem 0.3rem;
+    overflow: hidden;
+    border-radius: 8px;
+    width: fit-content;
+    height: fit-content;
+}
+#panel-hover_description-text {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: #89898a;
+    margin-bottom: 0.1rem;
+}
+
+#panel-hover_secteur {
     display: none;
     position: absolute;
     bottom: 0.5rem;
@@ -659,7 +705,7 @@ th, td {
     width: fit-content;
     height: fit-content;
 }
-#panel-hover_code {
+#panel-hover_secteur-id {
     font-family: 'Lato', sans-serif;
     font-weight: 400;
     font-size: 0.8rem;
@@ -681,6 +727,7 @@ th, td {
     border-radius: 8px;
     width: fit-content;
     height: fit-content;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 #panel-hover_basin-id {
     font-family: 'Lato', sans-serif;
