@@ -34,14 +34,14 @@ if (is_production) {
 }
 
 
-let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river, geoJSONdata_secteurHydro, geoJSONdata_cities;//, geoJSONdata_entiteHydro;
+let geoJSONdata_france, geoJSONdata_basinHydro, geoJSONdata_river, geoJSONdata_secteurHydro; // geoJSONdata_cities;//, geoJSONdata_entiteHydro;
 
 const geoJSONfiles = [
     "/data/france.geo.json",
     "/data/regions.geo.json",
     "/data/river.geo.json",
     "/data/secteurHydro.geo.json",
-    "/data/villesFrance.geo.json"
+    // "/data/villesFrance.geo.json"
     // "/data/entityHydro.geo.json"
 ];
 
@@ -171,7 +171,7 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
         geoJSONdata_secteurHydro= geoJSONdata[3]; 
-        geoJSONdata_cities= geoJSONdata[4];
+        // geoJSONdata_cities= geoJSONdata[4];
 
         initTitleOverlay()
         update_data_point_debounce();
@@ -344,9 +344,9 @@ function update_data_point() {
         })
         .then(response => response.json())
         .then(data_back => {
-            let data_point_QA   = data_back.data_point_QA;
-            let data_point_QJXA = data_back.data_point_QJXA;
-            let data_point_VCN10 = data_back.data_point_VCN10;
+            data_point_QA   = data_back.data_point_QA;
+            data_point_QJXA = data_back.data_point_QJXA;
+            data_point_VCN10 = data_back.data_point_VCN10;
             
             zoomToRegion(selectedRegionId, "#svg-france-QA");
 
@@ -1145,7 +1145,7 @@ function update_map_region(id_svg, svgElement) {
                     selectedRegionId = d.properties.name;  // sélection
                     document.getElementById("panel-hover-basin").style.display = "block";
                     document.getElementById("panel-hover_basin-id").innerHTML =
-                        "<span style='font-weight: 900; color:" + selectedRegionId ? `Bassin sélectionné : ${selectedRegionId}` : "Aucun bassin sélectionné" + "'>" +
+                        "<span style='font-weight: 900; color:" + selectedRegionId ? `${ d.properties.description}` : "Aucun bassin sélectionné" + "'>" +
                         d.properties.TopoOH + "</span>"; 
 
                     // Met à jour le fill des polygones
@@ -1726,6 +1726,7 @@ function update_map(id_svg, svgElement, data_back) {
             .attr("stroke-linejoin", "miter")
             .attr("stroke-miterlimit", 1)
             .attr("d", pathGenerator)
+            
             .transition()
             .duration(1000);
             
@@ -2057,6 +2058,8 @@ function show_serie(data_back, code, toggle=true) {
 }
 
 
+let show_point = false
+
 function redrawPoint(svgElement, data_back, projectionMap) {
     
     if (data_back) {
@@ -2077,42 +2080,52 @@ function redrawPoint(svgElement, data_back, projectionMap) {
 	    })
 
 	    .on("mouseover", function(event, d) {
-		if (!d3.select(this).classed("clicked")) {
-		    d3.select(this).attr("stroke", "#060508").raise();
-		}
+            if (!show_point){
+                if (!d3.select(this).classed("clicked")) {
+                    d3.select(this).attr("stroke", "#060508").raise();
+                }
 
-        document.getElementById("panel-hover_description").style.display = "block";
-		document.getElementById("panel-hover_description-text").innerHTML =
-		    "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-		    d.name + "</span>";
+                document.getElementById("panel-hover_description").style.display = "block";
+                document.getElementById("panel-hover_description-text").innerHTML =
+                    "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
+                    d.name + "</span>";
 
-		document.getElementById("panel-hover_code").style.display = "block";
-		document.getElementById("panel-hover_code-id").innerHTML =
-		    "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-		    d.code + " [" + d.value.toFixed(0) + "%]"  + "</span>";
-		// const value = d.value.toFixed(2);
-		// document.getElementById("panel-hover_value").innerHTML =
-		// "<span style='color:" + d.fill_text + ";'>" +
-		// "<span style='font-weight: 900;'>" +
-		// (value > 0 ? "+" : "") + value + " </span>%</span>";
-		
+                document.getElementById("panel-hover_code").style.display = "block";
+                document.getElementById("panel-hover_code-id").innerHTML =
+                    "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
+                    d.code + " [" + d.value.toFixed(0) + "%]"  + "</span>";
+                // const value = d.value.toFixed(2);
+                // document.getElementById("panel-hover_value").innerHTML =
+                // "<span style='color:" + d.fill_text + ";'>" +
+                // "<span style='font-weight: 900;'>" +
+                // (value > 0 ? "+" : "") + value + " </span>%</span>";
+            }
 	    })
 	    .on("mouseout", function(event, d) {
-		if (!d3.select(this).classed("clicked")) {
-		    d3.select(this).attr("stroke", "none");
-		}
-		document.getElementById("panel-hover_description").style.display = "none";
-        document.getElementById("panel-hover_code").style.display = "none";
+            if (!show_point){
+                if (!d3.select(this).classed("clicked")) {
+                    d3.select(this).attr("stroke", "none");
+                }
+                document.getElementById("panel-hover_description").style.display = "none";
+                document.getElementById("panel-hover_code").style.display = "none";
+            }
 	    })
 	    // .on("click", function(d, point) {
-		// show_serie(data_back, point.code);
+		// // show_serie(data_back, point.code);
+        //     show_point = !show_point
+        //     if (!d3.select(this).classed("clicked")) {
+        //         d3.select(this).attr("stroke", "#060508").raise();
+        //     }
+
+        //     document.getElementById("panel-hover_description").style.display = "block";
+        //     document.getElementById("panel-hover_description-text").innerHTML =
+        //         "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
+        //         d.name + "</span>";
 	    // });
     }
     
     return svgElement
 }
-
-
 
 
 
@@ -2161,13 +2174,6 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
     const france_left = 2;
     const france_top = 250;
 
-    // combinedSVG.append(() => clonedSvgFrance)
-	// .attr("transform", `translate(${france_left}, ${france_top}) scale(${france_scale})`);
-    
-    // const franceGroup = combinedSVG.append("g")
-	  // .attr("transform", `translate(${france_left}, ${france_top}) scale(${france_scale})`);
-    // franceGroup.node().appendChild(clonedSvgFrance);
-
     clonedSvgFrance.setAttribute("viewBox", `0 0 ${franceWidth} ${franceHeight}`);
     clonedSvgFrance.setAttribute("width", france_scale * franceWidth);
     clonedSvgFrance.setAttribute("height", france_scale * franceHeight);
@@ -2177,7 +2183,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
     var colorbar_right;
     
     if (isMapZoomed()) {
-	colorbar_right = 340;
+	colorbar_right = 440;
 	combinedSVG.append("rect")
             .attr("x", 0)
             .attr("y", 0)
@@ -2213,15 +2219,8 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
     const colorbar_scale = colorbar_height/colorbarHeight;
     
     const colorbar_top = 670;
-    const colorbar_width_shift = 12;
+    const colorbar_width_shift = 14;
     const colorbar_height_shift = 0;
-    
-    // combinedSVG.append(() => clonedSvgColorbar)
-        // .attr("transform", `translate(${Width-colorbar_right}, ${colorbar_top}) scale(${colorbar_scale})`);
-
-    // const colorbarGroup = combinedSVG.append("g")
-	  // .attr("transform", `translate(${Width-colorbar_right}, ${colorbar_top}) scale(${colorbar_scale})`);
-    // colorbarGroup.node().appendChild(clonedSvgColorbar);
 
     clonedSvgColorbar.setAttribute("viewBox", `0 0 ${colorbarWidth + colorbar_width_shift} ${colorbarHeight + colorbar_height_shift}`);
     clonedSvgColorbar.setAttribute("width", colorbar_scale * colorbarWidth);
@@ -2230,7 +2229,8 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	.attr("transform", `translate(${Width-colorbar_right}, ${colorbar_top})`);
 
     
-    var title = data_point.name_fr;
+    // Main title text
+    var title = data_point_QA.name_fr; //TO UPDATE
     const width_max_title = 42;
     let title_wrap = wrapTextByCharacterLimit(title, width_max_title);
 
@@ -2244,25 +2244,42 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	title_text_add_top = 90;
     }
 
+    // Subtitle text
+    var horizon = get_horizon();
+    var relatif = data_point_QA.to_normalise ? "relatifs " : ""; //TO UPDATE
+    var subtitle = "Narratif "+ selected_storyline.narratif_id +": " + selected_storyline.narratif_description
+    const width_max_subtitle = 85;
+    let subtitle_wrap = wrapTextByCharacterLimit(subtitle, width_max_subtitle);
+
+    if (subtitle_wrap.length == 1) {
+	subtitle_text_shift_top = 5;
+	subtitle_text_add_top = 0;
+    } else {
+	subtitle_text_shift_top = 0;
+	subtitle_text_add_top = 50;
+    }
+
+    // Left vertical bar
     const header_line_left1 = 64;
-    const header_line_top1 = 30 + title_text_shift_top;
+    const header_line_top1 = 30 + title_text_shift_top + subtitle_text_shift_top;
     const header_line_left2 = 64;
-    const header_line_top2 = 230 + title_text_shift_top + title_text_add_top;
+    const header_line_top2 = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
     combinedSVG.append("line")
 	.attr("x1", header_line_left1)
 	.attr("y1", header_line_top1) 
 	.attr("x2", header_line_left2)
 	.attr("y2", header_line_top2) 
-	.attr("stroke", "#C5E7E7")
+	.attr("stroke", selected_storyline.narratif_couleur)
 	.attr("stroke-width", "35px");
     
+    // Text
     const title_text_left = 120;
     const title_text_top = 90 + title_text_shift_top;    
     combinedSVG.append("text")
         .attr("x", title_text_left)
         .attr("y", title_text_top)
         .attr("text-anchor", "start")
-        .attr("font-size", "76px")
+        .attr("font-size", "60px")
 	.attr("font-family", "Raleway, sans-serif")
 	.attr("font-weight", "800")
         .attr("fill", "#16171f")
@@ -2273,12 +2290,8 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
 
+    // SUBTITLE
     
-    var horizon = get_horizon();
-    var relatif = data_point.to_normalise ? "relatifs " : "";
-    var subtitle = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1976-2005";
-    const width_max_subtitle = 60;
-    let subtitle_wrap = wrapTextByCharacterLimit(subtitle, width_max_subtitle);
     
     const subtitle_text_left = 120;
     const subtitle_text_top = 160 + title_text_shift_top + title_text_add_top;
@@ -2297,47 +2310,50 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
 
+    // Selected chain information
+    var subtitle_chain = selected_storyline.chain 
+    let subtitle_chain_wrap = wrapTextByCharacterLimit(subtitle_chain, width_max_subtitle);
+    const subtitle_chain_text_left = 120;
+    const subtitle_chain_text_top = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
+    combinedSVG.append("text")
+        .attr("x", subtitle_chain_text_left)
+        .attr("y", subtitle_chain_text_top)
+        .attr("text-anchor", "start")
+        .attr("font-size", "50px")
+	.attr("font-family", "Lato, sans-serif")
+	.attr("font-weight", "400")
+        .attr("fill", "#16171f")
+        .selectAll("tspan")
+        .data(subtitle_chain_wrap)
+        .enter().append("tspan")
+        .attr("x", subtitle_chain_text_left)
+        .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
+        .text(d => d);
 
     
     let top_text = "";
     let top_text_color = "transparent";
 
-    let width_max_chain_text = 56;
-    let chain_text_shift = 0;
+    let width_max_chain_text = 90;
+    let chain_text_shift = 80;
     let chain_text;
     var projection = get_projection();
     // if (drawer_mode === 'drawer-narratif') {
-	chain_text = "Chaînes de modélisation par narratif sous le";
+	chain_text = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020 sous le";
 	top_text = narratif_text;
 	top_text_color = narratif_color;
-    // } else if (drawer_mode === 'drawer-RCP') {
-	// chain_text = "Ensemble des chaînes de modélisation pour le";
-	// if (projection.RCP === "RCP 2.6") {
-	//     top_text = "Scénario où des efforts importants sont fait pour réduire les émissions.";
-	//     top_text_color = "#003466";
-	// } else if (projection.RCP === "RCP 4.5") {
-	//     top_text = "Scénario où des efforts modérés sont fait pour réduire les émissions.";
-	//     top_text_color = "#70A0CD";
-	// } else if (projection.RCP === "RCP 8.5") {
-	//     top_text = "Scénario où l'augmentation des émissions continue selon la tendance actuelle.";
-	//     top_text_color = "#990002";
-	// }
-    // } else if (drawer_mode === 'drawer-chain') {
-	// // /!\ PB : le nombre de HM dépend de la sélection
-	// const nChain = 0;
-	// chain_text = "Sélection de " + projection.chain.length + " chaînes de modélisation sous le";
-    // }
+
     const RCP_text = projection.RCP;
     const model_text = "avec au moins " + get_n() + " modèles hydrologiques par point";
     chain_text = chain_text + " " + RCP_text + " " + model_text;
 
-    const width_max_top_text = 34;
+    const width_max_top_text = 100;
     const top_text_wrap = wrapTextByCharacterLimit(top_text, width_max_top_text);
     // const top_text_right = 800;
-    const top_text_right = 150;
+    const top_text_right = 200;
     const top_text_top = 450;
     combinedSVG.append("text")
-        .attr("x", Width - top_text_right)
+        .attr("x", top_text_right - chain_text_shift)
         .attr("y", top_text_top)
         .attr("text-anchor", "end")
         .attr("font-size", "40px")
@@ -2347,7 +2363,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .selectAll("tspan")
         .data(top_text_wrap)
         .enter().append("tspan")
-        .attr("x", Width - top_text_right)
+        .attr("x", top_text_right)
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
 
@@ -2363,9 +2379,9 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	.attr("stroke", top_text_color)
 	.attr("stroke-width", "6px");
     
-
-    const i_text_left = 280 - chain_text_shift;
-    const i_text_bottom = 195;
+    // Grey i for information
+    const i_text_left = 140 - chain_text_shift;
+    const i_text_bottom = 165;
     combinedSVG.append("text")
         .attr("x", i_text_left)
         .attr("y", Height - i_text_bottom)
@@ -2376,8 +2392,9 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	.attr("fill", "#89898A")
         .text("i");
 
-    const circle_left = 280 - chain_text_shift;
-    const circle_bottom = 210;
+    // Grey circle around i
+    const circle_left = 140 - chain_text_shift;
+    const circle_bottom = 180;
     const circle_radius = 22;
     combinedSVG.append("circle")
 	.attr("cx", circle_left)
@@ -2387,15 +2404,15 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	.attr("stroke", "#89898A")
 	.attr("stroke-width", "5px");
     
-    
+    // Grey commentary on data
     const chain_text_wrap = wrapTextByCharacterLimit(chain_text, width_max_chain_text);
-    const chain_text_left = 340 - chain_text_shift;
-    const chain_text_bottom = 220;
+    const chain_text_left = 120;
+    const chain_text_bottom = 190;
     combinedSVG.append("text")
         .attr("x", chain_text_left)
         .attr("y", Height - chain_text_bottom)
         .attr("text-anchor", "start")
-        .attr("font-size", "40px")
+        .attr("font-size", "35px")
 	.attr("font-family", "Raleway, sans-serif")
 	.attr("font-weight", "500")
         .attr("fill", "#89898A")
@@ -2407,19 +2424,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .text(d => d);
     
 
-    // const footer_sep_line_left1 = 0;
-    // const footer_sep_line_bottom1 = 130;
-    // const footer_sep_line_right2 = 0;
-    // const footer_sep_line_bottom2 = 130;
-    // combinedSVG.append("line")
-    // 	.attr("x1", footer_sep_line_left1)
-    // 	.attr("y1", Height - footer_sep_line_bottom1) 
-    // 	.attr("x2", Width - footer_sep_line_right2)
-    // 	.attr("y2", Height - footer_sep_line_bottom2) 
-    // 	.attr("stroke", "#89898A")
-    // 	.attr("stroke-width", "1px");
-
-    
+    // Meandre-Tracc name on bottom left
     const meandre_text_left = 240;
     const meandre_text_bottom = 50;
     combinedSVG.append("text")
@@ -2430,8 +2435,9 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	.attr("font-family", "Raleway, sans-serif")
         .attr("font-weight", "900")
 	.attr("fill", "#16171f")
-        .text("MEANDRE");
+        .text("MEANDRE-TRACC");
 
+    // url below meandre-tracc
     const url_text_left = 246;
     const url_text_bottom = 25;
     combinedSVG.append("text")
@@ -2442,35 +2448,35 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 	.attr("font-family", "Raleway, sans-serif")
         .attr("font-weight", "500")
 	.attr("fill", "#16171f")
-        .text("meandre.explore2.inrae.fr");
+        .text("meandre-tracc.explore2.inrae.fr");
 
-
-    const footer_line_left1 = 620;
+    // Separator 
+    const footer_line_left1 = 880;
     const footer_line_bottom1 = 100;
-    const footer_line_left2 = 620;
+    const footer_line_left2 = 880;
     const footer_line_bottom2 = 20;
     combinedSVG.append("line")
 	.attr("x1", footer_line_left1)
 	.attr("y1", Height - footer_line_bottom1) 
 	.attr("x2", footer_line_left2)
 	.attr("y2", Height - footer_line_bottom2) 
-	.attr("stroke", "#C5E7E7")
+	.attr("stroke", selected_storyline.narratif_couleur)
 	.attr("stroke-width", "10px");
 
-    const footer_text_left = 645;
+    const footer_text_left = 900;
     const footer_text_bottom = 80;
     combinedSVG.append("text")
         .attr("x", footer_text_left)
         .attr("y", Height - footer_text_bottom)
         .attr("text-anchor", "start")
-        .attr("font-size", "25px")
+        .attr("font-size", "20px")
 	.attr("font-family", "Lato, sans-serif")
 	.attr("font-weight", "400")
         .attr("fill", "#060508")
         .selectAll("tspan")
         .data([
 	    "Ces résultats sont issus de projections hydrologiques réalisées sur la France. La mise à jour",
-	    "de ces projections a été réalisé entre 2022 et 2024 dans le cadre du projet national Explore2.",
+	    "de ces projections a été réalisé entre 2022 et 2025 dans le cadre du projet national Explore2.",
 	    "Ces résultats sont un aperçu de quelques futures possibles pour la ressource en eau."
         ])
         .enter().append("tspan")
@@ -2502,48 +2508,6 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 
     return combinedSVG;
 }
-
-
-
-function exportSVG() {
-    const Height = 2000;
-    const Width = 2000;
-    const zip = new JSZip(); // Create a ZIP archive
-    let pngPromises = [];
-
-    // if (drawer_mode === 'drawer-narratif') {
-    const svgDataArray = [
-        { id: "#svg-france-QA", name: "france-vert",
-        narratif: "Réchauffement marqué et augmentation des précipitations", color: "#569A71"},
-        { id: "#svg-france-QJXA", name: "france-jaune",
-        narratif: "Changements futurs relativement peu marqués", color: "#EECC66"},
-        { id: "#svg-france-VCN10", name: "france-orange",
-        narratif: "Fort réchauffement et fort assèchement en été (et en annuel)", color: "#E09B2F"},
-        // { id: "#svg-france-violet", name: "france-violet",
-        // narratif: "Fort réchauffement et forts contrastes saisonniers en précipitations", color: "#791F5D"}
-    ];
-
-    pngPromises = svgDataArray.map(({id, name, narratif, color}) => {
-        return convertSVGToPNG(id, name, zip, Height, Width, narratif, color);
-    });
-
-    // } else {
-    //     pngPromises.push(convertSVGToPNG("#svg-france", "france", zip, Height, Width));
-    // }
-
-    // Wait for all PNG conversions to complete, then generate the ZIP
-    Promise.all(pngPromises).then(() => {
-        zip.generateAsync({ type: "blob" }).then((content) => {
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(content);
-            link.download = "exported_maps.zip";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-    });
-}
-
 
 
 function convertSVGToPNG(svgSelector, filename, zip, Height, Width, narratif="", color="") {
@@ -2603,9 +2567,6 @@ function convertSVGToPNG(svgSelector, filename, zip, Height, Width, narratif="",
 }
 
 
-
-
-
 function wrapTextByCharacterLimit(text, maxChars) {
     let words = text.split(' '); // Split the text into words
     let lines = [];
@@ -2633,306 +2594,380 @@ function wrapTextByCharacterLimit(text, maxChars) {
 }
 
 
-function getFormattedDateTime() {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const hours = String(currentDate.getHours()).padStart(2, '0');
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
+function drawSVG_for_export_combined(Height, Width) {
+    // Créer le SVG combiné
+    const combinedSVGNode = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const combinedSVG = d3.select(combinedSVGNode)
+        .attr("width", Width)
+        .attr("height", Height)
+        .attr("viewBox", `0 0 ${Width} ${Height}`)
+        .attr("xmlns", "http://www.w3.org/2000/svg");
 
-function slugify(str) {
-    return str
-        .normalize('NFD') // Decompose accents
-        .replace(/[\u0300-\u036f]/g, '') // Remove accents
-        .replace(/\s+/g, '_')
-        .toLowerCase();
-}
+    // Ajouter les styles de police
+    const fontStyle = `
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@500;600;800;900&display=swap');
+    `;
+    combinedSVG.append("style")
+        .attr("type", "text/css")
+        .text(fontStyle);
 
+    // Fond gris
+    combinedSVG.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", Width)
+        .attr("height", Height)
+        .attr("fill", "#F5F5F5");
 
-const Storylines_map = {
-    "vert": {
-	chain: "historical-rcp85_HadGEM2-ES_ALADIN63_ADAMONT",
-	info: "Réchauffement marqué et augmentation des précipitations",
-	info_readme: "Narratif vert, réchauffement marqué et augmentation\ndes précipitations.",
-	color: "#569A71"
-    },
-    "jaune": {
-	chain: "historical-rcp85_CNRM-CM5_ALADIN63_ADAMONT",
-	info: "Changements futurs relativement peu marqués",
-	info_readme: "Narratif jaune, changements futurs relativement peu marqués.",
-	color: "#EECC66"
-    },
-    "orange": {
-	chain: "historical-rcp85_EC-EARTH_HadREM3-GA7_ADAMONT",
-	info: "Fort réchauffement et fort assèchement en été (et en annuel)",
-	info_readme: "Narratif orange, fort réchauffement et fort assèchement en été\n(et en annuel).",
-	color: "#E09B2F"
-    },
-    // "violet": {
-	// chain: "historical-rcp85_HadGEM2-ES_CCLM4-8-17_ADAMONT",
-	// info: "Fort réchauffement et forts contrastes saisonniers en précipitations",
-	// info_readme: "Narratif violet, fort réchauffement et forts contrastes saisonniers\nen précipitations",
-	// color: "#791F5D"
-    // }
-};
-
-
-function get_files (data, variable, chain) {
-    const csvData_meta_projection = [];
-    chain.forEach(item => {
-        const components = item.split('_');
-	let storyline_name = '';
-	let storyline_info = '';
-	let storyline_color = '';
-	for (const [key, value] of Object.entries(Storylines_map)) {
-	    if (item.includes(value.chain)) {
-                storyline_name = key;
-		storyline_info = value.info;
-                storyline_color = value.color;
-                break;
-	    }
-        }
-        const row = {
-	    chain: item,
-	    RCP: components[0],
-	    GCM: components[1],
-	    RCM: components[2],
-	    BC: components[3],
-	    HM: components[4],
-	    storyline_name: storyline_name,
-	    storyline_info: storyline_info,
-	    storyline_color: storyline_color
-        };
-        csvData_meta_projection.push(row);
-    });
-    const csv_meta_projection = Papa.unparse(csvData_meta_projection, {
-        columns: ["chain", "RCP", "GCM", "RCM", "BC", "HM",
-		  "storyline_name", "storyline_info", "storyline_color"]
-    });
+    // Dimensions et positions
+    const mapAreaWidth = 550;  // Largeur de chaque carte
+    const mapAreaHeight = 1700;
+    const mapScale = mapAreaHeight / 1200; // Ajuster selon votre hauteur SVG
     
-    // meta_variable
-    const csvData_meta_variable = [];
-    const row = {};
-    Object.entries(data).forEach(([key, value]) => {
-        if (key === 'data') {
-	    return;
-        }
-        if (Array.isArray(value)) {
-	    row[key] = value.join(", ");
-        } else {
-	    row[key] = value;
-        }
-    });
-    csvData_meta_variable.push(row);
-
-    let fieldOrder
-    fieldOrder = [
-	"variable_en",
-	"unit_en",
-	"name_en",
-	"description_en",
-	"method_en",
-	"sampling_period_en",
-	"topic_en",
-        "variable_fr",
-        "unit_fr",
-	"name_fr",
-	"description_fr",
-	"method_fr",
-	"sampling_period_fr",
-	"topic_fr",
-        "is_date",
-        "to_normalise",
-        "palette",
-        "bin"
+    const maps = [
+        { id: '#svg-france-QA', storyline: 'QA', x: 80 },
+        { id: '#svg-france-QJXA', storyline: 'QJXA', x: 700 },
+        { id: '#svg-france-VCN10', storyline: 'VCN10', x: 1320 }
     ];
-    const csv_meta_variable = Papa.unparse(csvData_meta_variable, {
-        columns: fieldOrder
+
+    const mapTopPosition = 300;
+    const colorbarRightMargin = 100;
+    const colorbarTopPosition = 500;
+
+    // Ajouter les 3 cartes
+    maps.forEach(map => {
+        const svgElement = document.querySelector(map.id);
+        if (svgElement) {
+            const clonedSvg = svgElement.cloneNode(true);
+            const bbox = svgElement.getBoundingClientRect();
+            
+            clonedSvg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
+            clonedSvg.setAttribute("width", mapAreaWidth);
+            clonedSvg.setAttribute("height", mapAreaHeight);
+            
+            combinedSVG.append(() => clonedSvg)
+                .attr("transform", `translate(${map.x}, ${mapTopPosition})`);
+        }
     });
 
-    // data meta_point
-    const csvData_data = [];
-    const csvData_meta_point = [];
+    // Ajouter la colorbar
+    const svgColorbar = document.querySelector("#svg-colorbar");
+    if (svgColorbar) {
+        const clonedColorbar = svgColorbar.cloneNode(true);
+        const bboxColorbar = svgColorbar.getBBox();
+        
+        const colorbarHeight = 900;
+        const colorbarWidth = (bboxColorbar.width / bboxColorbar.height) * colorbarHeight;
+        
+        clonedColorbar.setAttribute("viewBox", `${bboxColorbar.x} ${bboxColorbar.y} ${bboxColorbar.width} ${bboxColorbar.height}`);
+        clonedColorbar.setAttribute("width", colorbarWidth);
+        clonedColorbar.setAttribute("height", colorbarHeight);
+        
+        combinedSVG.append(() => clonedColorbar)
+            .attr("transform", `translate(${Width - colorbarRightMargin - colorbarWidth}, ${colorbarTopPosition})`);
+    }
 
-    data.data.forEach(item => {
-	csvData_data.push({
-            code: item.code,
-            [variable]: item.value,
-            fill: item.fill
-	});
+    // TITRE
+    const title = data_point_QA.name_fr;
+    const titleText = combinedSVG.append("text")
+        .attr("x", 100)
+        .attr("y", 100)
+        .attr("font-size", "72px")
+        .attr("font-family", "Raleway, sans-serif")
+        .attr("font-weight", "800")
+        .attr("fill", "#16171f")
+        .text(title);
 
-	const { fill, fill_text, value, ...otherFields } = item;
-	csvData_meta_point.push(otherFields);
-    });
+    // SOUS-TITRE
+    const horizon = get_horizon();
+    const relatif = data_point_QA.to_normalise ? "relatifs " : "";
+    const subtitle = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020";
+    
+    combinedSVG.append("text")
+        .attr("x", 100)
+        .attr("y", 180)
+        .attr("font-size", "40px")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-weight", "400")
+        .attr("fill", "#16171f")
+        .text(subtitle);
 
-    // Convert data to CSV format
-    const csv_data = Papa.unparse(csvData_data);
+    // Logos
+    fetch('/resources/logo/MEANDRE/MEANDRE-TRACC_logo.svg')
+        .then(response => response.text())
+        .then(svgData => {
+            const base64Logo1 = btoa(svgData);
+            combinedSVG.append("image")
+                .attr("href", "data:image/svg+xml;base64," + base64Logo1)
+                .attr("x", 80)
+                .attr("y", Height - 120)
+                .attr("width", 150)
+                .attr("preserveAspectRatio", "xMidYMid meet");
 
-    fieldOrder = [
-	"code",
-	"code_hydro2",
-	"is_reference",
-	"name",
-	"hydrological_region",
-	"lat_deg",
-	"lon_deg",
-	"xl93_m",
-	"yl93_m",
-	"n_rcp26",
-	"n_rcp45",
-	"n_rcp85",
-	"surface_km2",
-	"surface_ctrip_km2",
-	"surface_eros_km2",
-	"surface_grsd_km2",
-	"surface_j2000_km2",	    
-	"surface_mordor_sd_km2",
-	"surface_mordor_ts_km2",
-	"surface_orchidee_km2",
-	"surface_sim2_km2",
-	"surface_smash_km2"
-    ];
-    const csv_meta_point = Papa.unparse(csvData_meta_point, {
-        columns: fieldOrder
-    });
+            return fetch('/resources/licence_ouverte/Logo-licence-ouverte2_grey.svg');
+        })
+        .then(response => response.text())
+        .then(svgData2 => {
+            const base64Logo2 = btoa(svgData2);
+            combinedSVG.append("image")
+                .attr("href", "data:image/svg+xml;base64," + base64Logo2)
+                .attr("x", Width - 200)
+                .attr("y", Height - 110)
+                .attr("height", 80)
+                .attr("preserveAspectRatio", "xMidYMid meet");
+        });
 
-    const files = {
-	"data.csv": csv_data,
-	"meta_point.csv": csv_meta_point,
-	"meta_variable.csv": csv_meta_variable,
-	"meta_projection.csv": csv_meta_projection
-    };
+    // FOOTER TEXT
+    combinedSVG.append("text")
+        .attr("x", 300)
+        .attr("y", Height - 60)
+        .attr("font-size", "22px")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-weight", "400")
+        .attr("fill", "#060508")
+        .text("MEANDRE - meandre.explore2.inrae.fr");
 
-    return files;
+    return combinedSVG;
 }
 
+
+function convertSVGsToPNG_Combined(filename, zip, Height, Width) {
+    return new Promise((resolve) => {
+        const combinedSVG = drawSVG_for_export_combined(Height, Width);
+
+        // Attendre que les images soient chargées (logos)
+        setTimeout(() => {
+            const combinedSVGNode = combinedSVG.node();
+            const svgString = new XMLSerializer().serializeToString(combinedSVGNode);
+            const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+            const img = new Image();
+            const svgUrl = URL.createObjectURL(svgBlob);
+
+            img.onload = function () {
+                const canvas = document.createElement("canvas");
+                canvas.width = Width;
+                canvas.height = Height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+
+                canvas.toBlob((pngBlob) => {
+                    zip.file(`${filename}.png`, pngBlob);
+                    URL.revokeObjectURL(svgUrl);
+                    combinedSVG.remove();
+                    resolve();
+                }, "image/png");
+            };
+
+            img.src = svgUrl;
+        }, 500);
+    });
+}
+
+
+async function exportDataToCSV() {
+
+    // Créer un Map avec les codes comme clé pour fusionner les données
+    const mergedData = new Map();
+
+    // Ajouter les données QA
+    data_point_QA.data.forEach(item => {
+        if (!mergedData.has(item.code)) {
+            mergedData.set(item.code, { code: item.code });
+        }
+        mergedData.get(item.code).value_QA = item.value;
+    });
+
+    // Ajouter les données QJXA
+    data_point_QJXA.data.forEach(item => {
+        if (!mergedData.has(item.code)) {
+            mergedData.set(item.code, { code: item.code });
+        }
+        mergedData.get(item.code).value_QJXA = item.value;
+    });
+
+    // Ajouter les données VCN10
+    data_point_VCN10.data.forEach(item => {
+        if (!mergedData.has(item.code)) {
+            mergedData.set(item.code, { code: item.code });
+        }
+        mergedData.get(item.code).value_VCN10 = item.value;
+    });
+
+    // Convertir en tableau et créer le CSV
+    const rows = Array.from(mergedData.values());
+    
+    // En-têtes
+    const headers = ['code', 'value_QA', 'value_QJXA', 'value_VCN10'];
+    let csv = headers.join(',') + '\n';
+
+    // Ajouter les lignes (gérer les virgules dans les valeurs)
+    rows.forEach(row => {
+        const values = headers.map(header => {
+            const value = row[header] ?? '';
+            // Échapper les valeurs contenant des virgules, guillemets ou retours à la ligne
+            if (typeof value === 'string' && (value.includes(',') || value.includes('"') || value.includes('\n'))) {
+                return `"${value.replace(/"/g, '""')}"`;
+            }
+            return value;
+        });
+        csv += values.join(',') + '\n';
+    });
+
+    return csv
+}
 
 async function exportData() {
-    var n = get_n();
-    var variable = get_variable();
-    var projection = get_projection();
-    var horizon = get_horizon();
+    let zip;  
+    zip = new JSZip();
+    csv = exportDataToCSV();
+    zip.file("name-csv.csv", csv)
 
-    var title = data_point.name_fr;
-    var relatif = data_point.to_normalise ? "relatifs " : "";
-    var subtitle = "Changements " + relatif + horizon.text +
-        "\n             par rapport à la période de référence 1976-2005";
-
-    var filename =
-        "MEANDRE-export+" +
-        "var-" + variable + "+" +
-        "H-" + horizon.period.replace(/ - /g, '_') + "+" +
-        "n-" + n + "+" +
-        "chain-" + slugify(projection.type) +
-        ".zip";
-
-    let chain_info;
-    // if (drawer_mode === 'drawer-RCP') {
-    //     chain_info = "Moyenne multi-modèles par niveau d'émissions.\n";
-    //     if (projection.RCP === "RCP 2.6") {
-    //         chain_info = chain_info + "Le RCP 2.6 est un scénario compatible avec les objectifs\ndes accords de Paris.";
-    //     } else if (projection.RCP === "RCP 4.5") {
-    //         chain_info = chain_info + "Le RCP 4.5 est un scénario où des efforts modérés sont fait pour\nréduire les émissions.";
-    //     } else if (projection.RCP === "RCP 8.5") {
-    //         chain_info = chain_info + "Le RCP 8.5 est un scénario où l'augmentation des émissions\ncontinue selon la tendance actuelle.";
-    //     }
-    // } else if (drawer_mode === 'drawer-chain') {
-    //     chain_info = "Attention : Chaînes de modélisation spécifiques, l'approche\n" +
-    //         "multi-modèle doit être privilégiée. Le détail des chaînes de\n" +
-    //         "modélisation sélectionnées est disponible dans le fichier\n" +
-    //         "meta_projection.csv"
-    // }
-
-    // README
-    let README = await fetch('/resources/README.txt');
-    README = await README.text();
-    var time = getFormattedDateTime();
-    let param =
-        "Titre : " + title + "\n" +
-        "Sous-titre : " + subtitle + "\n\n" +
-        "Variable : " + variable + "\n" +
-        "Unité : " + data_point.unit_fr + "\n" +
-        "Horizon : " + horizon.period + "\n" +
-        "Nombre de point : Il y a au moins " + n + " modèles hydrologiques par point\n" +
-        "Scénario d'émission : " + projection.RCP + "\n" +
-        "Chaînes de modélisations : " + projection.type + "\n\n";
-
-    // licence fr
-    const pdfResponse_LO_fr = await fetch('/resources/licence_ouverte/ETALAB-Licence-Ouverte-v2.0.pdf');
-    const pdf_LO_fr = await pdfResponse_LO_fr.blob();
-    // licence en
-    const pdfResponse_LO_en = await fetch('/resources/licence_ouverte/ETALAB-Open-Licence-v2.0.pdf');
-    const pdf_LO_en = await pdfResponse_LO_en.blob();
+    const folder = zip.folder("folder")
+    folder.file("other-csv.csv", csv)
 
     // figure
     const Height = 2000;
     const Width = 2000;
-
-    let zip;
-
-    // if (drawer_mode === 'drawer-narratif') {
-        const data_point_storyline = {
-        "vert": data_point_QA,
-        "jaune": data_point_QJXA,
-        "orange": data_point_VCN10,
-        // "violet": data_point_violet
-    }
-    zip = new JSZip();
-    for (const storyline of Object.keys(data_point_storyline)) {
-        const folder = zip.folder(storyline);
-        const files = get_files(data_point_storyline[storyline],
-            variable,
-            projection["chain_" + storyline]);
-        for (const [fileName, content] of Object.entries(files)) {
-            folder.file(fileName, content);
-        }
-
-        var param_tmp = param + Storylines_map[storyline].info_readme;
-        README_tmp = README
-            .replace(/\[DATE\]/g, time)
-            .replace(/\[PARAM\]/g, param_tmp);
-        folder.file("README.txt", README_tmp);
-
-        folder.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
-        folder.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
-
-        // Await the PNG conversion
-        await convertSVGToPNG("#svg-france-" + storyline, "map-" + storyline,
-            folder, Height, Width,
-            Storylines_map[storyline].info,
-            Storylines_map[storyline].color);
-    }
-
-    // } else {
-    //     zip = new JSZip();
-    //     const files = get_files(data_point, variable,
-    //         projection.chain);
-    //     for (const [fileName, content] of Object.entries(files)) {
-    //         zip.file(fileName, content);
-    //     }
-
-    //     var param_tmp = param + chain_info;
-    //     README_tmp = README
-    //         .replace(/\[DATE\]/g, time)
-    //         .replace(/\[PARAM\]/g, param_tmp);
-    //     zip.file("README.txt", README_tmp);
-
-    //     zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
-    //     zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
-
-    //     // Await the PNG conversion
-    //     await convertSVGToPNG("#svg-france", "map", zip, Height, Width);
-    // }
+    await convertSVGToPNG("#svg-france-QA", "map", zip, Height, Width);
 
     zip.generateAsync({ type: "blob" })
         .then(function (content) {
             const link = document.createElement("a");
             link.href = URL.createObjectURL(content);
-            link.download = filename;
+            link.download = "export-test.zip";
             link.click();
         });
+
+    // var n = get_n();
+    // // var variable = get_variable();
+    // var projection = get_projection();
+    // var horizon = get_horizon();
+
+    // var title = data_point.name_fr;
+    // var relatif = data_point.to_normalise ? "relatifs " : "";
+    // var subtitle = "Changements " + relatif + horizon.text +
+    //     "\n             par rapport à la période de référence 1991-2020";
+
+    // var filename =
+    //     "MEANDRE-export+" +
+    //     "var-" + variable + "+" +
+    //     "H-" + horizon.period.replace(/ - /g, '_') + "+" +
+    //     "n-" + n + "+" +
+    //     "chain-" + slugify(projection.type) +
+    //     ".zip";
+    
+    // // let data_point_QA;
+    // // let data_point_QJXA;
+    // // let data_point_VCN10;
+    // // let data_serie;
+
+    // // let svgFrance_region;
+    // // let svgFrance_QA;
+    // // let svgFrance_QJXA;
+    // // let svgFrance_VCN10;
+
+    // let chain_info;
+    // // if (drawer_mode === 'drawer-RCP') {
+    // //     chain_info = "Moyenne multi-modèles par niveau d'émissions.\n";
+    // //     if (projection.RCP === "RCP 2.6") {
+    // //         chain_info = chain_info + "Le RCP 2.6 est un scénario compatible avec les objectifs\ndes accords de Paris.";
+    // //     } else if (projection.RCP === "RCP 4.5") {
+    // //         chain_info = chain_info + "Le RCP 4.5 est un scénario où des efforts modérés sont fait pour\nréduire les émissions.";
+    // //     } else if (projection.RCP === "RCP 8.5") {
+    // //         chain_info = chain_info + "Le RCP 8.5 est un scénario où l'augmentation des émissions\ncontinue selon la tendance actuelle.";
+    // //     }
+    // // } else if (drawer_mode === 'drawer-chain') {
+    // //     chain_info = "Attention : Chaînes de modélisation spécifiques, l'approche\n" +
+    // //         "multi-modèle doit être privilégiée. Le détail des chaînes de\n" +
+    // //         "modélisation sélectionnées est disponible dans le fichier\n" +
+    // //         "meta_projection.csv"
+    // // }
+
+    // // README
+    // let README = await fetch('/resources/README.txt');
+    // README = await README.text();
+    // var time = getFormattedDateTime();
+    // let param =
+    //     "Titre : " + title + "\n" +
+    //     "Sous-titre : " + subtitle + "\n\n" +
+    //     "Variable : " + variable + "\n" +
+    //     "Unité : " + data_point.unit_fr + "\n" +
+    //     "Horizon : " + horizon.period + "\n" +
+    //     "Nombre de point : Il y a au moins " + n + " modèles hydrologiques par point\n" +
+    //     "Scénario d'émission : " + projection.RCP + "\n" +
+    //     "Chaînes de modélisations : " + projection.type + "\n\n";
+
+    // // licence fr
+    // const pdfResponse_LO_fr = await fetch('/resources/licence_ouverte/ETALAB-Licence-Ouverte-v2.0.pdf');
+    // const pdf_LO_fr = await pdfResponse_LO_fr.blob();
+    // // licence en
+    // const pdfResponse_LO_en = await fetch('/resources/licence_ouverte/ETALAB-Open-Licence-v2.0.pdf');
+    // const pdf_LO_en = await pdfResponse_LO_en.blob();
+
+    // // figure
+    // const Height = 2000;
+    // const Width = 2000;
+
+    // let zip;
+
+    // const data_point_storyline = {
+    //     "QA": data_point_QA,
+    //     "QJXA": data_point_QJXA,
+    //     "VCN10": data_point_VCN10,
+    // }
+    
+    // zip = new JSZip();
+    // for (const storyline of Object.keys(data_point_storyline)) {
+    //     const folder = zip.folder(storyline);
+    //     const files = get_files(data_point_storyline[storyline],
+    //         variable,
+    //         projection["chain_" + storyline]);
+    //     for (const [fileName, content] of Object.entries(files)) {
+    //         folder.file(fileName, content);
+    //     }
+
+    //     var param_tmp = param + Storylines_map[storyline].info_readme;
+    //     README_tmp = README
+    //         .replace(/\[DATE\]/g, time)
+    //         .replace(/\[PARAM\]/g, param_tmp);
+    //     folder.file("README.txt", README_tmp);
+
+    //     folder.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
+    //     folder.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
+
+    //     // Await the PNG conversion
+    //     await convertSVGToPNG("#svg-france-" + storyline, "map-" + storyline,
+    //         folder, Height, Width,
+    //         Storylines_map[storyline].info,
+    //         Storylines_map[storyline].color);
+    // }
+
+    // // } else {
+    // //     zip = new JSZip();
+    // //     const files = get_files(data_point, variable,
+    // //         projection.chain);
+    // //     for (const [fileName, content] of Object.entries(files)) {
+    // //         zip.file(fileName, content);
+    // //     }
+
+    // //     var param_tmp = param + chain_info;
+    // //     README_tmp = README
+    // //         .replace(/\[DATE\]/g, time)
+    // //         .replace(/\[PARAM\]/g, param_tmp);
+    // //     zip.file("README.txt", README_tmp);
+
+    // //     zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
+    // //     zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
+
+    // //     // Await the PNG conversion
+    // //     await convertSVGToPNG("#svg-france", "map", zip, Height, Width);
+    // // }
+
+    // zip.generateAsync({ type: "blob" })
+    //     .then(function (content) {
+    //         const link = document.createElement("a");
+    //         link.href = URL.createObjectURL(content);
+    //         link.download = filename;
+    //         link.click();
+    //     });
 }
