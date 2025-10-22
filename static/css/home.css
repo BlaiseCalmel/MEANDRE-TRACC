@@ -41,8 +41,8 @@
 #home {
     width: 70%;
     margin-bottom: 2rem;
-}
-#home p {
+/* } */
+/* #home p { */
     font-size: 1.4rem;
     font-family: "Raleway", sans-serif;
     font-weight: 700;
@@ -51,8 +51,12 @@
 
 .maintenance {
     margin-bottom: 1rem;
+    font-family: "Lato", sans-serif;
+    font-size: 1.2rem;
 }
-.maintenance .material-icons-outlined {
+
+.maintenance .material-icons-outlined,
+.maintenance .material-icons-round {
     color: white;
 }
 
@@ -144,7 +148,7 @@
 	padding-bottom: 3rem;
 	padding-left: 2rem;
 	padding-right: 2rem;
-    }
+    }<
     .home-phone {
 	display: flex;
 	padding-bottom: 0rem;
