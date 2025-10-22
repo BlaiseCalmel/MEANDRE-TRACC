@@ -377,6 +377,8 @@ function update_data_point() {
         
     } else {
         // Empty maps
+        svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+        $('#map-region-loading').css('display', 'none');
         svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
         $('#map-QA-loading').css('display', 'none');
         svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
@@ -493,6 +495,7 @@ function updateStorylineButton(reset=false){
                     button.classList.remove("selected");
                     // button.replaceChildren(); // vide le bouton
                     button.style.color = "black";
+                    button.style.display = ""
 
                     // const span = document.createElement('span');
                     // span.style.color = val.narratif_couleur;
@@ -532,9 +535,11 @@ function updateStorylineButton(reset=false){
                         console.log("Selected storyline:", selected_storyline);
                     }
                 } else {
-                    button.textContent = " ";
+                    // button.textContent = " ";
                     button.value = null;
                     button.disabled = true;
+                    button.style.display = "none";
+                    // button.style.visibility = "hidden";
                 }
             }
         });
@@ -2131,7 +2136,7 @@ function redrawPoint(svgElement, data_back, projectionMap) {
 
 
 
-function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_color="") {
+function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narratif_color="") {
     // Select the existing SVG element
     const svgFrance = d3.select(id_svg);
     const clonedSvgFrance = svgFrance.node().cloneNode(true);
@@ -2183,7 +2188,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
     var colorbar_right;
     
     if (isMapZoomed()) {
-	colorbar_right = 440;
+	colorbar_right = 340;
 	combinedSVG.append("rect")
             .attr("x", 0)
             .attr("y", 0)
@@ -2230,29 +2235,29 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 
     
     // Main title text
-    var title = data_point_QA.name_fr; //TO UPDATE
+    var title = data.name_fr;
     const width_max_title = 42;
     let title_wrap = wrapTextByCharacterLimit(title, width_max_title);
 
     let title_text_shift_top;
     let title_text_add_top;
     if (title_wrap.length == 1) {
-	title_text_shift_top = 25;
+	title_text_shift_top = 20;
 	title_text_add_top = 0;
     } else {
 	title_text_shift_top = 0;
-	title_text_add_top = 90;
+	title_text_add_top = 65;
     }
 
     // Subtitle text
     var horizon = get_horizon();
-    var relatif = data_point_QA.to_normalise ? "relatifs " : ""; //TO UPDATE
+    var relatif = data.to_normalise ? "relatifs " : ""; 
     var subtitle = "Narratif "+ selected_storyline.narratif_id +": " + selected_storyline.narratif_description
     const width_max_subtitle = 85;
     let subtitle_wrap = wrapTextByCharacterLimit(subtitle, width_max_subtitle);
 
     if (subtitle_wrap.length == 1) {
-	subtitle_text_shift_top = 5;
+	subtitle_text_shift_top = 25;
 	subtitle_text_add_top = 0;
     } else {
 	subtitle_text_shift_top = 0;
@@ -2290,9 +2295,7 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
 
-    // SUBTITLE
-    
-    
+    // SUBTITLE  
     const subtitle_text_left = 120;
     const subtitle_text_top = 160 + title_text_shift_top + title_text_add_top;
     combinedSVG.append("text")
@@ -2484,7 +2487,6 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
     
-
     
     const lo_text_right = 140;
     const lo_text_bottom = 70;
@@ -2510,9 +2512,9 @@ function drawSVG_for_export(id_svg, Height, Width, narratif_text="", narratif_co
 }
 
 
-function convertSVGToPNG(svgSelector, filename, zip, Height, Width, narratif="", color="") {
+function convertSVGToPNG(svgSelector, data, filename, zip, Height, Width, narratif="", color="") {
     return new Promise((resolve) => {
-        const combinedSVG = drawSVG_for_export(svgSelector, Height, Width, narratif, color);
+        const combinedSVG = drawSVG_for_export(svgSelector, data, Height, Width, narratif, color);
 
         // Fetch the first logo (MEANDRE)
         fetch('/resources/logo/MEANDRE/MEANDRE-TRACC_logo.svg')
@@ -2594,176 +2596,6 @@ function wrapTextByCharacterLimit(text, maxChars) {
 }
 
 
-function drawSVG_for_export_combined(Height, Width) {
-    // Créer le SVG combiné
-    const combinedSVGNode = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    const combinedSVG = d3.select(combinedSVGNode)
-        .attr("width", Width)
-        .attr("height", Height)
-        .attr("viewBox", `0 0 ${Width} ${Height}`)
-        .attr("xmlns", "http://www.w3.org/2000/svg");
-
-    // Ajouter les styles de police
-    const fontStyle = `
-        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@500;600;800;900&display=swap');
-    `;
-    combinedSVG.append("style")
-        .attr("type", "text/css")
-        .text(fontStyle);
-
-    // Fond gris
-    combinedSVG.append("rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", Width)
-        .attr("height", Height)
-        .attr("fill", "#F5F5F5");
-
-    // Dimensions et positions
-    const mapAreaWidth = 550;  // Largeur de chaque carte
-    const mapAreaHeight = 1700;
-    const mapScale = mapAreaHeight / 1200; // Ajuster selon votre hauteur SVG
-    
-    const maps = [
-        { id: '#svg-france-QA', storyline: 'QA', x: 80 },
-        { id: '#svg-france-QJXA', storyline: 'QJXA', x: 700 },
-        { id: '#svg-france-VCN10', storyline: 'VCN10', x: 1320 }
-    ];
-
-    const mapTopPosition = 300;
-    const colorbarRightMargin = 100;
-    const colorbarTopPosition = 500;
-
-    // Ajouter les 3 cartes
-    maps.forEach(map => {
-        const svgElement = document.querySelector(map.id);
-        if (svgElement) {
-            const clonedSvg = svgElement.cloneNode(true);
-            const bbox = svgElement.getBoundingClientRect();
-            
-            clonedSvg.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
-            clonedSvg.setAttribute("width", mapAreaWidth);
-            clonedSvg.setAttribute("height", mapAreaHeight);
-            
-            combinedSVG.append(() => clonedSvg)
-                .attr("transform", `translate(${map.x}, ${mapTopPosition})`);
-        }
-    });
-
-    // Ajouter la colorbar
-    const svgColorbar = document.querySelector("#svg-colorbar");
-    if (svgColorbar) {
-        const clonedColorbar = svgColorbar.cloneNode(true);
-        const bboxColorbar = svgColorbar.getBBox();
-        
-        const colorbarHeight = 900;
-        const colorbarWidth = (bboxColorbar.width / bboxColorbar.height) * colorbarHeight;
-        
-        clonedColorbar.setAttribute("viewBox", `${bboxColorbar.x} ${bboxColorbar.y} ${bboxColorbar.width} ${bboxColorbar.height}`);
-        clonedColorbar.setAttribute("width", colorbarWidth);
-        clonedColorbar.setAttribute("height", colorbarHeight);
-        
-        combinedSVG.append(() => clonedColorbar)
-            .attr("transform", `translate(${Width - colorbarRightMargin - colorbarWidth}, ${colorbarTopPosition})`);
-    }
-
-    // TITRE
-    const title = data_point_QA.name_fr;
-    const titleText = combinedSVG.append("text")
-        .attr("x", 100)
-        .attr("y", 100)
-        .attr("font-size", "72px")
-        .attr("font-family", "Raleway, sans-serif")
-        .attr("font-weight", "800")
-        .attr("fill", "#16171f")
-        .text(title);
-
-    // SOUS-TITRE
-    const horizon = get_horizon();
-    const relatif = data_point_QA.to_normalise ? "relatifs " : "";
-    const subtitle = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020";
-    
-    combinedSVG.append("text")
-        .attr("x", 100)
-        .attr("y", 180)
-        .attr("font-size", "40px")
-        .attr("font-family", "Lato, sans-serif")
-        .attr("font-weight", "400")
-        .attr("fill", "#16171f")
-        .text(subtitle);
-
-    // Logos
-    fetch('/resources/logo/MEANDRE/MEANDRE-TRACC_logo.svg')
-        .then(response => response.text())
-        .then(svgData => {
-            const base64Logo1 = btoa(svgData);
-            combinedSVG.append("image")
-                .attr("href", "data:image/svg+xml;base64," + base64Logo1)
-                .attr("x", 80)
-                .attr("y", Height - 120)
-                .attr("width", 150)
-                .attr("preserveAspectRatio", "xMidYMid meet");
-
-            return fetch('/resources/licence_ouverte/Logo-licence-ouverte2_grey.svg');
-        })
-        .then(response => response.text())
-        .then(svgData2 => {
-            const base64Logo2 = btoa(svgData2);
-            combinedSVG.append("image")
-                .attr("href", "data:image/svg+xml;base64," + base64Logo2)
-                .attr("x", Width - 200)
-                .attr("y", Height - 110)
-                .attr("height", 80)
-                .attr("preserveAspectRatio", "xMidYMid meet");
-        });
-
-    // FOOTER TEXT
-    combinedSVG.append("text")
-        .attr("x", 300)
-        .attr("y", Height - 60)
-        .attr("font-size", "22px")
-        .attr("font-family", "Lato, sans-serif")
-        .attr("font-weight", "400")
-        .attr("fill", "#060508")
-        .text("MEANDRE - meandre.explore2.inrae.fr");
-
-    return combinedSVG;
-}
-
-
-function convertSVGsToPNG_Combined(filename, zip, Height, Width) {
-    return new Promise((resolve) => {
-        const combinedSVG = drawSVG_for_export_combined(Height, Width);
-
-        // Attendre que les images soient chargées (logos)
-        setTimeout(() => {
-            const combinedSVGNode = combinedSVG.node();
-            const svgString = new XMLSerializer().serializeToString(combinedSVGNode);
-            const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-            const img = new Image();
-            const svgUrl = URL.createObjectURL(svgBlob);
-
-            img.onload = function () {
-                const canvas = document.createElement("canvas");
-                canvas.width = Width;
-                canvas.height = Height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0);
-
-                canvas.toBlob((pngBlob) => {
-                    zip.file(`${filename}.png`, pngBlob);
-                    URL.revokeObjectURL(svgUrl);
-                    combinedSVG.remove();
-                    resolve();
-                }, "image/png");
-            };
-
-            img.src = svgUrl;
-        }, 500);
-    });
-}
-
-
 async function exportDataToCSV() {
 
     // Créer un Map avec les codes comme clé pour fusionner les données
@@ -2817,24 +2649,38 @@ async function exportDataToCSV() {
 }
 
 async function exportData() {
+    const extended_name = selected_storyline.gwl+"_region-"+selected_storyline.region_id+"_"+selected_storyline.narratif_id
     let zip;  
     zip = new JSZip();
+    // data
     csv = exportDataToCSV();
-    zip.file("name-csv.csv", csv)
+    zip.file("data_"+extended_name+".csv", csv)
 
-    const folder = zip.folder("folder")
-    folder.file("other-csv.csv", csv)
+    // const folder = zip.folder("folder")
+    // folder.file("other-csv.csv", csv)
 
-    // figure
+    // figures
     const Height = 2000;
-    const Width = 2000;
-    await convertSVGToPNG("#svg-france-QA", "map", zip, Height, Width);
+    const Width = 2000;  
+    
+    await convertSVGToPNG("#svg-france-QA", data_point_QA, "map_QA_"+extended_name, zip, Height, Width);
+    await convertSVGToPNG("#svg-france-QJXA", data_point_QJXA, "map_QJXA_"+extended_name, zip, Height, Width);
+    await convertSVGToPNG("#svg-france-VCN10", data_point_VCN10, "map_VCN10_"+extended_name, zip, Height, Width);
+
+    // licence fr
+    const pdfResponse_LO_fr = await fetch('/resources/licence_ouverte/ETALAB-Licence-Ouverte-v2.0.pdf');
+    const pdf_LO_fr = await pdfResponse_LO_fr.blob();
+    // licence en
+    const pdfResponse_LO_en = await fetch('/resources/licence_ouverte/ETALAB-Open-Licence-v2.0.pdf');
+    const pdf_LO_en = await pdfResponse_LO_en.blo
+    zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
+    zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
 
     zip.generateAsync({ type: "blob" })
         .then(function (content) {
             const link = document.createElement("a");
             link.href = URL.createObjectURL(content);
-            link.download = "export-test.zip";
+            link.download = "MEANDRE-TRACC-export_"+extended_name+".zip";
             link.click();
         });
 
