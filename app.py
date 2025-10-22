@@ -62,6 +62,7 @@ engine = create_engine(db_url, poolclass=QueuePool)
 
 
 @app.route("/")
+@app.route("/tracc-context")
 @app.route("/tracc-explore")
 @app.route("/a-propos")
 def index():

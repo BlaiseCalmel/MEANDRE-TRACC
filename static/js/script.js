@@ -46,7 +46,7 @@ const geoJSONfiles = [
 ];
 
 
-let URL_QA = ["/", "/tracc-explore"];
+let URL_QA = ["/","/tracc-context", "/tracc-explore"];
 
 let URL_narratifs = ["/", 
 		     "/tracc-explore",]; 
@@ -181,7 +181,7 @@ function updateContent(start=false, actualise=true) {
 
     // if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-upper-lower").load("/html" + "/tracc-explore" + ".html", function() {
+	    $("#container-upper-lower").load("/html" + "/tracc-context" + ".html", function() {
 		check_url();
 	    });
 	    // update_data_point_debounce();
@@ -1056,6 +1056,7 @@ const stroke_basin_selected = "#7BBFBA80";
 let selectedRegionId = null;
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
+const stroke_secteur_selected = "#636363ff"
 
 const minZoom = 1;
 const maxZoom = 10;
@@ -1838,11 +1839,11 @@ function update_map(id_svg, svgElement, data_back) {
                     }
                     
                     hoverState.hoveredSecteur = this;
-                    d3.select(this).attr("stroke", "#353535ff").raise();
+                    d3.select(this).attr("stroke", stroke_secteur_selected).raise();
                     document.getElementById("panel-hover_secteur").style.display = "block";
                     document.getElementById("panel-hover_secteur-id").innerHTML =
-                        "<span style='font-weight: 900; color:#353535ff'>" +
-                        secteurData.properties.LbSecteurH + "</span>";
+                        "<span style='font-weight: 900; color:"+stroke_secteur_selected+"'>" +
+                        secteurData.properties.secteur_name + "</span>";
                 }
                 secteurFound = true;
             }
