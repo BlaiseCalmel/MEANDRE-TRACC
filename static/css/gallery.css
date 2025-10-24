@@ -21,13 +21,26 @@
 /* If not, see <https://www.gnu.org/licenses/>.                       */
 
 
-.gallery {
+/* .gallery { */
+/*     display: flex; */
+/*     height: auto; */
+/*     transition: all 0.3s ease; */
+/*     /\* overflow-y: auto; *\/ */
+/*     display: flex; */
+/*     flex-direction: row; */
+/*     flex-wrap: wrap; */
+/*     gap: 1rem; */
+/*     align-items: flex-end; */
+/* } */
+
+
+#container-gallery {
+    flex: 1;
+    padding-left: 1rem;
+    padding-right: 1rem;
     display: flex;
     height: auto;
     transition: all 0.3s ease;
-    overflow-y: auto;
-    /* margin-bottom: 1rem; */
-    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 1rem;
@@ -164,10 +177,11 @@ p.warning {
 
 
 #grid-colorbar {
-    height: calc(100% - 4rem);
-    width: 100%;
+    width: 5rem;
     display: flex;
     justify-content: center;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;    
 }
 
 #grid-variable {
@@ -297,7 +311,7 @@ p.warning {
     max-width: 27rem;
 }
 
-/* #grid-map { */
+/* #grid-mini-map { */
 /*     /\* aspect-ratio: 1; *\/ */
 /*     /\* height: calc(100% - 4rem); *\/ */
 /*     /\* width: calc(100% - 3rem); *\/ */
@@ -317,7 +331,7 @@ p.warning {
 }
 
 
-#grid-map_map {
+#grid-mini-map_map {
     height: 16rem;
     width: 16rem;
     overflow: hidden;
@@ -505,6 +519,8 @@ p.warning {
 .gallery-item.source:hover {
     color: #70757A;
 }
+
+
 
 
 @media (max-width: 768px) {

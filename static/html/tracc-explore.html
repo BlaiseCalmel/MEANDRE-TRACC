@@ -22,29 +22,29 @@
      If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div id="container-map-gallery">
-
+<div id="gallery-map">
+    
     <div id="container-gallery">
-	<div class="gallery">
+	<!-- <div class="gallery"> -->
 	    
 	    <!-- <div id="sub-container-gallery-map"> -->
-	    <div id="grid-map" class="gallery-item bunch column">
+	    <div id="grid-mini-map" class="gallery-item bunch column">
 		<span class="grid-element_title">Sélectionnez un territoire</span>
 		
 		<!-- TO DO ADD REAL MAP WITH REGIONS -->
-		<div id="grid-map_map">
+		<div id="grid-mini-map_map">
 		    <div id="map-region-loading" class="container-loading">
 			<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 		    </div>
 		    
 		    <svg id="svg-france-region"></svg>
 
-		    <div id="panel-hover-basin">
+		    <div id="panel-hover_basin" class="panel-hover">
 			<div class="bunch row column-small-gap center cross-center">
-			    <div id="panel-hover_basin-id"></div>
+			    <div id="panel-hover-content_basin" class="panel-hover-content"></div>
 			    <!-- <div id="panel-hover_value"></div> -->
 			</div>
-		    </div>
+		    </div>		    
 		</div>
 	    </div>
 	    <!-- <div id="panel-hover">
@@ -63,15 +63,15 @@
 		
 		<div id="bunch-gwl" class="bunch row column-small-gap row-small-gap">
 		    <button id="button-tracc40" value="gwl30" class="button-gwl gwl30 selected"
-			    onclick="selectTraccButton(this);">
+				onclick="selectTraccButton(this);">
 			<span class="button-gwl_text">+4.0°C</span>
 		    </button>
 		    <button id="button-tracc27" value="gwl20" class="button-gwl gwl20"
-			    onclick="selectTraccButton(this);">
+				onclick="selectTraccButton(this);">
 			<span class="button-gwl_text">+2.7°C</span>
 		    </button>
 		    <button id="button-tracc20" value="gwl15" class="button-gwl gwl15"
-			    onclick="selectTraccButton(this);">
+				onclick="selectTraccButton(this);">
 			<span class="button-gwl_text">+2.0°C</span>
 		    </button>
 		</div>
@@ -109,6 +109,12 @@
 		    </button>
 		</div>
 	    </div>
+
+
+	    <div id="grid-colorbar" class="gallery-item">
+		<svg id="svg-colorbar"></svg>
+	    </div>
+	
 	    <!-- </div> -->
 	    <!-- </div> -->
 
@@ -138,10 +144,10 @@
 		 </div>
 		 </div> -->
 
-	</div>
+	    <!-- </div> -->
     </div>
 
-    <div class="container-lower bunch column">
+    <div id="container-map">
 	<!-- <div class="bunch column column-small-gap row-small-gap">
 	     <div id="grid-chain" class="gallery-item">
 	     <span class="gallery-item small-text">infos ?</span>
@@ -152,7 +158,7 @@
 	     </div> -->
 	<!-- </div> -->
 	
-	<div id="map-VCN10" class="sub-container-lower-map">
+	<div id="map-VCN10" class="map">
 	    <!-- <div class="map-title-overlay">&#x2206;VCN10</div> -->
 	    <div class="map-title-overlay" data-full="Étiages - &#x2206;VCN10 [référence 1991-2020]">Étiages</div>
 	    <div id="map-VCN10-loading" class="container-loading">
@@ -160,16 +166,20 @@
 	    </div>
 	    <svg id="svg-france-VCN10"></svg>
 	</div>
+	
 	<div class="separator"></div>
-	<div id="map-QA" class="sub-container-lower-map">
+
+	<div id="map-QA" class="map">
 	    <div class="map-title-overlay" data-full="Moyennes eaux - &#x2206;QA [référence 1991-2020]">Moyennes eaux</div>
 	    <div id="map-QA-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
 	    </div>
 	    <svg id="svg-france-QA"></svg>		
 	</div>
+
 	<div class="separator"></div>
-	<div id="map-QJXA" class="sub-container-lower-map">
+
+	<div id="map-QJXA" class="map">
 	    <div class="map-title-overlay" data-full="Hautes eaux - &#x2206;QJXA [référence 1991-2020]">Hautes eaux</div>
 	    <div id="map-QJXA-loading" class="container-loading">
 		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
@@ -177,39 +187,30 @@
 	    <svg id="svg-france-QJXA"></svg>
 	</div>
 
-	<div id="panel-hover_code">
+
+	<div id="panel-hover_code" class="panel-hover">
 	    <div class="bunch row column-small-gap center cross-center">
-		<div id="panel-hover_code-id"></div>
+		<div id="panel-hover-content_code" class="panel-hover-content"></div>
 	    </div>
 	</div>
 
-	<div id="panel-hover_description">
+	<div id="panel-hover_description" class="panel-hover">
 	    <div class="bunch row column-small-gap center cross-center">
-		<div id="panel-hover_description-text"></div>
+		<div id="panel-hover-content_description" class="panel-hover-content"></div>
 	    </div>
 	</div>
 	
-	<div id="panel-hover_secteur">
+	<div id="panel-hover_secteur" class="panel-hover">
 	    <div class="bunch row column-small-gap center cross-center">
-		<div id="panel-hover_secteur-id"></div>
+		<div id="panel-hover-content_secteur" class="panel-hover-content"></div>
 	    </div>
 	</div>
-
-
+	
 
 	<div id="action-bar" class="bunch row">
 	    <button id="export" class="material-icons-outlined"
-		    onclick="exportData()">file_download</button>
+			onclick="exportData()">file_download</button>
 	</div>
-
-
-	<div class="sub-container-lower-colorbar">
-	    <div id="grid-colorbar" class="gallery-item">
-		<svg id="svg-colorbar"></svg>
-		<!-- <span class="vertical-label">Changements par rapport à la période 1991-2020</span> -->
-	    </div>
-	</div>
-
+	
     </div>
-
 </div>

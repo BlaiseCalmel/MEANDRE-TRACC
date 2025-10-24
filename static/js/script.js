@@ -181,20 +181,20 @@ function updateContent(start=false, actualise=true) {
 
     // if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-gallery-lower").load("/html" + "/tracc-context" + ".html", function() {
+	    $("#container-gallery-map").load("/html" + "/tracc-context" + ".html", function() {
 		check_url();
 	    });
 	    // update_data_point_debounce();
 	    
 	} else if (actualise && url !== "/") {
-	    $("#container-gallery-lower").load("/html" + url + ".html", function() {
+	    $("#container-gallery-map").load("/html" + url + ".html", function() {
 		check_url();
 	    });
 	    // update_data_point_debounce();
 	}
 	
     // } else {
-	// $("#container-gallery-lower").load("/html" + url + ".html");
+	// $("#container-gallery-map").load("/html" + url + ".html");
     // }
 }
 
@@ -1140,13 +1140,13 @@ function update_map_region(id_svg, svgElement) {
             .on("click", function(event, d) {
                 // if (selectedRegionId === d.properties.name) {
                 //     selectedRegionId = null;  // désélection
-                //     document.getElementById("panel-hover-basin").style.display = "none";
+                //     document.getElementById("panel-hover_basin").style.display = "none";
                 //     updateStorylineButton(reset=true)
                 // } else {
                 if (selectedRegionId !== d.properties.name) {
                     selectedRegionId = d.properties.name;  // sélection
-                    document.getElementById("panel-hover-basin").style.display = "block";
-                    document.getElementById("panel-hover_basin-id").innerHTML =
+                    document.getElementById("panel-hover_basin").style.display = "block";
+                    document.getElementById("panel-hover-content_basin").innerHTML =
                         "<span style='font-weight: 900; color:" + selectedRegionId ? `${ d.properties.description}` : "Aucun bassin sélectionné" + "'>" +
                         d.properties.TopoOH + "</span>"; 
 
@@ -1214,7 +1214,7 @@ function update_map_region(id_svg, svgElement) {
 
     
     // Dimensions
-    const container = document.querySelector("#grid-map_map");
+    const container = document.querySelector("#grid-mini-map_map");
     let width, height;
     width = container.clientWidth
     height = container.clientHeight
@@ -1325,14 +1325,14 @@ const mapElements = {};
 //             .attr("d", pathGenerator)
 //             .on("mouseover", function(event, d) {
 //                 d3.select(this).attr("stroke", stroke_river_selected);
-//                 document.getElementById("panel-hover").style.display = "block";
-//                 document.getElementById("panel-hover_code").innerHTML =
+//                 document.getElementById("panel-hover_").style.display = "block";
+//                 document.getElementById("panel-hover-content_code").innerHTML =
 //                     "<span style='font-weight: 900; color:" + stroke_river_selected + "'>" +
 //                     d.properties.TopoOH + "</span>";
 //             })
 //             .on("mouseout", function(event, d) {
 //                 d3.select(this).attr("stroke", stroke_river);
-//                 document.getElementById("panel-hover").style.display = "none";
+//                 document.getElementById("panel-hover_").style.display = "none";
 //             })
 //             .transition()
 //             .duration(1000);
@@ -1382,7 +1382,7 @@ const mapElements = {};
 //         //     .on("mouseover", function(event, d) {
 //         //         d3.select(this).attr("stroke", "#000000ff");
 //         //         document.getElementById("panel-hover_secteur").style.display = "block";
-//         //         document.getElementById("panel-hover_secteur-id").innerHTML =
+//         //         document.getElementById("panel-hover-content_secteur").innerHTML =
 //         //             "<span style='font-weight: 900; color:" + "#000000ff" + "'>" +
 //         //             d.properties.LbSecteurH + "</span>";
 //         //     })
@@ -1793,7 +1793,7 @@ function update_map(id_svg, svgElement, data_back) {
                     hoverState.hoveredRiver = this;
                     d3.select(this).attr("stroke", stroke_river_selected);
                     document.getElementById("panel-hover_description").style.display = "block";
-                    document.getElementById("panel-hover_description-text").innerHTML =
+                    document.getElementById("panel-hover-content_description").innerHTML =
                         "<span style='font-weight: 900; color:" + stroke_river_selected + "'>" +
                         riverData.properties.TopoOH + "</span>";
                 }
@@ -1823,7 +1823,7 @@ function update_map(id_svg, svgElement, data_back) {
                     hoverState.hoveredSecteur = this;
                     d3.select(this).attr("stroke", stroke_secteur_selected).raise();
                     document.getElementById("panel-hover_secteur").style.display = "block";
-                    document.getElementById("panel-hover_secteur-id").innerHTML =
+                    document.getElementById("panel-hover-content_secteur").innerHTML =
                         "<span style='font-weight: 900; color:"+stroke_secteur_selected+"'>" +
                         secteurData.properties.secteur_name + "</span>";
                 }
@@ -2074,16 +2074,16 @@ function redrawPoint(svgElement, data_back, projectionMap) {
                 }
 
                 document.getElementById("panel-hover_description").style.display = "block";
-                document.getElementById("panel-hover_description-text").innerHTML =
+                document.getElementById("panel-hover-content_description").innerHTML =
                     "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
                     d.name + "</span>";
 
                 document.getElementById("panel-hover_code").style.display = "block";
-                document.getElementById("panel-hover_code-id").innerHTML =
+                document.getElementById("panel-hover-content_code").innerHTML =
                     "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
                     d.code + " [" + d.value.toFixed(0) + "%]"  + "</span>";
                 // const value = d.value.toFixed(2);
-                // document.getElementById("panel-hover_value").innerHTML =
+                // document.getElementById("panel-hover-content_value").innerHTML =
                 // "<span style='color:" + d.fill_text + ";'>" +
                 // "<span style='font-weight: 900;'>" +
                 // (value > 0 ? "+" : "") + value + " </span>%</span>";
@@ -2106,7 +2106,7 @@ function redrawPoint(svgElement, data_back, projectionMap) {
         //     }
 
         //     document.getElementById("panel-hover_description").style.display = "block";
-        //     document.getElementById("panel-hover_description-text").innerHTML =
+        //     document.getElementById("panel-hover-content_description").innerHTML =
         //         "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
         //         d.name + "</span>";
 	    // });
