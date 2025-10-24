@@ -1,4 +1,4 @@
-## INSTALL MEANDRE
+## INSTALL MEANDRE-TRACC
 
 ### 1. Prepare your server
 #### Connection
@@ -41,38 +41,38 @@ sudo resize2fs /dev/vg1/var
 ```
 
 
-### 2. Download MEANDRE
-Clone MEANDRE git
+### 2. Download MEANDRE-TRACC
+Clone MEANDRE-TRACC git
 ``` sh
-git clone https://github.com/super-lou/MEANDRE.git
+git clone https://github.com/BlaiseCalmel/MEANDRE-TRACC.git
 ```
 
 Copy the env file from the default one and secure it
 ``` sh
-cp MEANDRE/install.env MEANDRE/.env
+cp MEANDRE-TRACC/env.dist MEANDRE-TRACC/.env
 ```
 Edit this env file with your info.\\
 **WARNING : KEEP THE .ENV FILE FOR YOU. DO NOT EXPOSE IT.**
 
 Load environment variables and move this dir in the right location
 ``` sh
-source MEANDRE/.env
-sudo mv -rv MEANDRE/ $SERVER_DIR
+source MEANDRE-TRACC/.env
+sudo mv -rv MEANDRE-TRACC/ $SERVER_DIR
 ```
 
 Secure this dir
 ``` sh
-sudo chown -R root:root $SERVER_DIR/MEANDRE
-sudo chmod -R 755 $SERVER_DIR/MEANDRE
+sudo chown -R root:root $SERVER_DIR/MEANDRE-TRACC
+sudo chmod -R 755 $SERVER_DIR/MEANDRE-TRACC
 
-sudo chown root:www-data $SERVER_DIR/MEANDRE/app.py
-sudo chmod 750 $SERVER_DIR/MEANDRE/app.py
+sudo chown root:www-data $SERVER_DIR/MEANDRE-TRACC/app.py
+sudo chmod 750 $SERVER_DIR/MEANDRE-TRACC/app.py
 
-sudo chown root:www-data $SERVER_DIR/MEANDRE/app.wsgi
-sudo chmod 750 $SERVER_DIR/MEANDRE/app.wsgi
+sudo chown root:www-data $SERVER_DIR/MEANDRE-TRACC/app.wsgi
+sudo chmod 750 $SERVER_DIR/MEANDRE-TRACC/app.wsgi
 
-sudo chown root:www-data $SERVER_DIR/MEANDRE/.env
-sudo chmod 440 $SERVER_DIR/MEANDRE/.env
+sudo chown root:www-data $SERVER_DIR/MEANDRE-TRACC/.env
+sudo chmod 440 $SERVER_DIR/MEANDRE-TRACC/.env
 ```
 
 
@@ -86,7 +86,7 @@ sudo systemctl start apache2
 
 ### 3. Install postgresql
 #### On local computer
-Save the database from MEANDRE local dir and export it to server
+Save the database from MEANDRE-TRACC local dir and export it to server
 ``` sh
 source .env
 sudo -u postgres pg_dump -U postgres -d $DB_NAME -Fc -b -v -f /home/louis/.postgresql/$DB_NAME.backup
@@ -124,14 +124,7 @@ sudo apt install python3-flask python3-sqlalchemy python3-flask-cors python3-psy
 ```
 
 
-### 5. Install R
-``` sh
-sudo apt install -y r-base
-sudo Rscript -e 'install.packages(c("argparse", "jsonlite", "remotes", "lubridate", "dplyr", "digest", "dotenv", "stringr")); remotes::install_github("super-lou/dataSHEEP")'
-```
-
-
-### 6. Configure flask app
+### 5. Configure flask app
 Source info and install dependency
 ``` sh
 sudo apt install libapache2-mod-wsgi-py3
@@ -140,21 +133,21 @@ sudo apt install libapache2-mod-wsgi-py3
 Create the Apache configuration file
 ``` sh
 source .env
-sudo bash -c "cat > /etc/apache2/sites-available/MEANDRE.conf <<EOF
+sudo bash -c "cat > /etc/apache2/sites-available/MEANDRE-TRACC.conf <<EOF
 <VirtualHost *:80>
     ServerName $SERVER_NAME
     ServerAdmin $SERVER_EMAIL
 
     <IfDefine !wsgi_init>
-        WSGIDaemonProcess MEANDRE processes=4 threads=5 python-path=/usr/lib/python3/dist-packages
-        WSGIProcessGroup MEANDRE
+        WSGIDaemonProcess MEANDRE-TRACC processes=4 threads=5 python-path=/usr/lib/python3/dist-packages
+        WSGIProcessGroup MEANDRE-TRACC
         Define wsgi_init 1
     </IfDefine>
 
-    WSGIScriptAlias / $SERVER_DIR/MEANDRE/app.wsgi
+    WSGIScriptAlias / $SERVER_DIR/MEANDRE-TRACC/app.wsgi
 
-    <Directory $SERVER_DIR/MEANDRE>
-        WSGIProcessGroup MEANDRE
+    <Directory $SERVER_DIR/MEANDRE-TRACC>
+        WSGIProcessGroup MEANDRE-TRACC
         WSGIApplicationGroup %{GLOBAL}
         Require all granted
 
@@ -164,15 +157,15 @@ sudo bash -c "cat > /etc/apache2/sites-available/MEANDRE.conf <<EOF
         #AuthUserFile /path/to/.htpasswd
     </Directory>
 
-    ErrorLog /var/log/apache2/MEANDRE_error.log
-    CustomLog /var/log/apache2/MEANDRE_access.log combined
+    ErrorLog /var/log/apache2/MEANDRE-TRACC_error.log
+    CustomLog /var/log/apache2/MEANDRE-TRACC_access.log combined
 </VirtualHost>
 EOF"
 ```
 
 Enable the new site and mod_wsgi module
 ``` sh
-sudo a2ensite MEANDRE
+sudo a2ensite MEANDRE-TRACC
 sudo a2enmod wsgi
 ```
 
