@@ -50,7 +50,7 @@ a {
 
 
 p {
-  margin: 0rem;
+    margin: 0rem;
 }
 p.top-space {
     margin-top: 0.4rem;
@@ -160,26 +160,6 @@ button.selected {
     background-color: #7BBFBA80;
 }
 
-button.selected.gwl15 {
-    color: #ffffff;
-    font-weight: bold;
-    background-color: #faa91a;
-    border-radius: 12px
-}
-button.selected.gwl20 {
-    color: #ffffff;
-    font-weight: bold;
-    background-color: #f06426;
-    border-radius: 12px
-}
-button.selected.gwl30 {
-    color: #ffffff;
-    font-weight: bold;
-    background-color: #732401;
-    border-radius: 12px
-    /* background: url("/resources/gwl30.png") center/cover no-repeat; */
-}
-
 button:hover {
     font-weight: normal;
     color: #060508;
@@ -230,26 +210,26 @@ button.chain_block_button:hover {
 }
 
 .row-button {
-  display: flex;               /* simule deux colonnes */
-  width: 100%;                 /* bouton occupe toute la ligne */
-  text-align: left;            /* aligne le contenu */
-  border: none;                /* clean */
-  padding: 8px;
-  background: transparent;     /* neutre par défaut */
-  cursor: pointer;
+    display: flex;               /* simule deux colonnes */
+    width: 100%;                 /* bouton occupe toute la ligne */
+    text-align: left;            /* aligne le contenu */
+    border: none;                /* clean */
+    padding: 8px;
+    background: transparent;     /* neutre par défaut */
+    cursor: pointer;
 }
 
 .row-button .col-arrow {
-  width: 5%;
-  display: flex;
-  justify-content: center; /* centre horizontalement */
-  align-items: center;     /* centre verticalement */
-  text-align: center;      /* sécurité */
-  visibility: hidden;
+    width: 5%;
+    display: flex;
+    justify-content: center; /* centre horizontalement */
+    align-items: center;     /* centre verticalement */
+    text-align: center;      /* sécurité */
+    visibility: hidden;
 }
 
 .row-button.selected .col-arrow {
-  visibility: visible;
+    visibility: visible;
 }
 
 .row-button:hover {
@@ -258,15 +238,15 @@ button.chain_block_button:hover {
 }
 
 .row-button:hover .col-arrow {
-  visibility: visible;
+    visibility: visible;
 }
 
 .row-button .col-left {
-  width: 5%;
-  display: inline-flex;
-  justify-content: center; /* centre horizontalement */
-  align-items: center;     /* centre verticalement */
-  text-align: center;      /* sécurité */
+    width: 5%;
+    display: inline-flex;
+    justify-content: center; /* centre horizontalement */
+    align-items: center;     /* centre verticalement */
+    text-align: center;      /* sécurité */
 }
 
 .row-button .col-right {
@@ -281,7 +261,7 @@ button.chain_block_button:hover {
 .text-gray {
     color: #89898a;
     opacity: 0.5;
-  }
+}
 
 
 .reduce-space {
@@ -309,7 +289,7 @@ button.chain_block_button:hover {
 }
 
 .material-icons-outlined.hide_arrow {
-  color: transparent;  /* couleur fixe */
+    color: transparent;  /* couleur fixe */
 }
 
 
@@ -367,7 +347,7 @@ button:hover .material-icons-outlined {
 
 
 .top-section {
-   margin-top: 0rem; 
+    margin-top: 0rem; 
 }
 
 h1 {
@@ -399,53 +379,79 @@ h3 {
 
 
 
-#container-upper-lower {
+
+
+#container-map-gallery {
+    margin-top: 1rem;
     height: calc(100vh - 3rem);
     display: flex;
-    /* flex-direction: row; */
+    flex-direction: row;
     flex-grow: 1;
     overflow-y: auto;
     flex-wrap: wrap;
 }
 
+/* #container-gallery-lower { */
+/*     height: calc(100vh - 3rem); */
+/*     display: flex; */
+/*     /\* flex-direction: row; *\/ */
+/*     flex-grow: 1; */
+/*     overflow-y: auto; */
+/*     flex-wrap: wrap; */
+/* } */
 
-#container-upper {
-    position: relative;
-    /* width: calc(100vw - 50px); */
-    height: calc(40vh);
-    width: calc(100vw);
-    overflow: hidden;
-    display: flex;
+
+/* #container-gallery { */
+/*     position: relative; */
+/*     /\* width: calc(100vw - 50px); *\/ */
+/*     height: calc(40vh); */
+/*     width: calc(100vw); */
+/*     overflow: hidden; */
+/*     display: flex; */
+/* } */
+
+#container-gallery {
+    /* height: calc(100vh - 3rem - 1rem); */
+    flex: 1;
+    overflow-y: auto;
+    /* margin-top: 1rem; */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
 }
+
+
+
+
 #svg-france-narratif {
     width: 100%;
     height: 100%;
 }
 
 
-#sub-container-upper-map {
-    position: relative;
-    /* width: calc(100% / 4); */
-    height: calc(100%);
-    aspect-ratio: 1;
-}
+/* #sub-container-gallery-map { */
+/*     position: relative; */
+/*     /\* width: calc(100% / 4); *\/ */
+/*     height: calc(100%); */
+/*     aspect-ratio: 1; */
+/* } */
 
 
-.sub-container-upper-gwl {
-    display: flex;
-    /* width: calc(15%); */
-    height: calc(100%);
-    padding: 0.5rem;
-}
+/* .sub-container-gallery-gwl { */
+/*     display: flex; */
+/*     /\* width: calc(15%); *\/ */
+/*     height: calc(100%); */
+/*     padding: 0.5rem; */
+/* } */
 
-.sub-container-upper-narratives {
-    display: flex;
-    width: calc(45%);
-    height: calc(100%);
-    padding: 0.5rem;
-    flex: 1; /* Utilise tout l'espace disponible restant */
-    min-width: 0; /* Permet la réduction si nécessaire */
-}
+/* .sub-container-gallery-narratives { */
+/*     display: flex; */
+/*     width: calc(45%); */
+/*     height: calc(100%); */
+/*     padding: 0.5rem; */
+/*     flex: 1; /\* Utilise tout l'espace disponible restant *\/ */
+/*     min-width: 0; /\* Permet la réduction si nécessaire *\/ */
+/* } */
 
 .sub-container-lower-colorbar {
     display: flex;
@@ -457,25 +463,25 @@ h3 {
 
 
 .narratif-table-container {
-  height: 90%;             /* occupe toute la hauteur du parent */
-  width: 100%;              /* occupe toute la largeur du parent */
-  overflow-y: auto;         /* scroll vertical global */
-  overflow-x: hidden;       /* pas de scroll horizontal */
-  /* border: 1px solid #ccc; */
+    height: 90%;             /* occupe toute la hauteur du parent */
+    width: 100%;              /* occupe toute la largeur du parent */
+    overflow-y: auto;         /* scroll vertical global */
+    overflow-x: hidden;       /* pas de scroll horizontal */
+    /* border: 1px solid #ccc; */
 }
 
 .narratif-table {
-  width: 100%;              /* prend toute la largeur dispo */
-  height: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;      /* respecte les largeurs fixées par colgroup */
-  border: none; 
+    width: 100%;              /* prend toute la largeur dispo */
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;      /* respecte les largeurs fixées par colgroup */
+    border: none; 
 }
 
 th, td {
-  /* border: 1px solid #ddd; */
-  border: none;
-  padding: 8px;
+    /* border: 1px solid #ddd; */
+    border: none;
+    padding: 8px;
 }
 
 /* colonne 1 : 20%, centrée */
@@ -495,7 +501,7 @@ th, td {
 } */
 
 
-.sub-container-upper-info {
+.sub-container-gallery-info {
     position: relative;
     width: calc(100% * 3 / 8);
     height: calc(95% - 2.3rem);
@@ -509,13 +515,6 @@ th, td {
     left: 1rem;   
 }
 
-#bunch-gwl_futur {
-  display: flex;
-  justify-content: space-between;  /* centre les boutons */
-  gap: 10px; /* espace horizontal entre les boutons */
-  margin-top: 1.6rem; /* espace sous le titre */
-  height: 60%;   
-}
 
 
 .container-lower {
@@ -546,11 +545,11 @@ th, td {
 }
 
 .separator {
-  width: 5px;
-  height: 80%;                 /* occupe 75% de la hauteur du parent */
-  background-color: #8d8d8d;      /* gris foncé */
-  border-radius: 9999px;       /* extrémités parfaitement arrondies */
-  align-self: center;          /* centre verticalement dans la ligne */
+    width: 5px;
+    height: 80%;                 /* occupe 75% de la hauteur du parent */
+    background-color: #8d8d8d;      /* gris foncé */
+    border-radius: 9999px;       /* extrémités parfaitement arrondies */
+    align-self: center;          /* centre verticalement dans la ligne */
 }
 
 /* .map-title-overlay {
@@ -746,11 +745,11 @@ th, td {
     /* align-items: stretch; */
     /* }  */
 
-    #container-upper-lower {
+    #container-gallery-lower {
 	height: calc(100vh - 6rem);
     }
     
-    #container-upper {
+    #container-gallery {
 	position: relative;
 	width: 100vw;
 	height: 100vw;

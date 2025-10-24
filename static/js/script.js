@@ -181,20 +181,20 @@ function updateContent(start=false, actualise=true) {
 
     // if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-upper-lower").load("/html" + "/tracc-context" + ".html", function() {
+	    $("#container-gallery-lower").load("/html" + "/tracc-context" + ".html", function() {
 		check_url();
 	    });
 	    // update_data_point_debounce();
 	    
 	} else if (actualise && url !== "/") {
-	    $("#container-upper-lower").load("/html" + url + ".html", function() {
+	    $("#container-gallery-lower").load("/html" + url + ".html", function() {
 		check_url();
 	    });
 	    // update_data_point_debounce();
 	}
 	
     // } else {
-	// $("#container-upper-lower").load("/html" + url + ".html");
+	// $("#container-gallery-lower").load("/html" + url + ".html");
     // }
 }
 
@@ -1093,11 +1093,7 @@ function update_map_region(id_svg, svgElement) {
     
     d3.select(id_svg).selectAll("*").remove();
 
-    // if (drawer_mode === 'drawer-narratif') {
-	var fact = 2;
-    // } else {
-	// var fact = 1;
-    // }
+    var fact = 2;
 
     function redrawMap() {
         const pathGenerator = d3.geoPath(projectionMap);
@@ -1203,19 +1199,6 @@ function update_map_region(id_svg, svgElement) {
     const redrawMap_debounce = debounce(redrawMap, 100);
 
     // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
-
-    const zoom = d3.zoom()
-	  .scaleExtent([minZoom, maxZoom])
-	  .on("zoom", function (event) {
-            riverLength = riverLength_max - (event.transform.k - minZoom)/(maxZoom-minZoom)*(riverLength_max-riverLength_min);
-            k_simplify = k_simplify_ref + (event.transform.k - minZoom)/(maxZoom-minZoom)*(1-k_simplify_ref);
-            svgElement.attr("transform", event.transform);
-            svgElement.style("width", width * event.transform.k + "px");
-            svgElement.style("height", height * event.transform.k + "px");
-            redrawMap_debounce();
-            highlight_selected_point();
-	  });
-      
     
     const root = d3.select(id_svg)
     .attr("width", "100%")
@@ -1228,14 +1211,16 @@ function update_map_region(id_svg, svgElement) {
     const layer_river = svgElement.append("g").attr("class", "layer-river");
     const layer_basin = svgElement.append("g").attr("class", "layer-basinHydro");
 
+
+    
     // Dimensions
-    const container = document.querySelector("#grid-map");
+    const container = document.querySelector("#grid-map_map");
     let width, height;
     width = container.clientWidth
     height = container.clientHeight
 
     // Marge pour éviter que la carte touche les bords
-    const margin = 20;
+    const margin = 5;
     const mapWidth = width - margin * 2;
     const mapHeight = height - margin * 2;
 
@@ -1243,12 +1228,9 @@ function update_map_region(id_svg, svgElement) {
     const projectionMap = d3.geoMercator()
     .fitExtent([[-margin, margin], [width - margin, height - 2*margin]], geoJSONdata_france);
 
-    // Application du zoom
-    root.call(zoom);
-    root.call(zoom.transform, d3.zoomIdentity);
-    // console.log("Projection scale:", projectionMap.scale());
-    // console.log("Projection translate:", projectionMap.translate());
 
+    redrawMap_debounce();
+    
     // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
     
     return svgElement
