@@ -251,6 +251,10 @@ button.chain_block_button:hover {
     text-align: center;      
 }
 
+.italic {
+    font-style: italic;
+}
+
 .row-button .col-right {
     width: 80%;
     display: inline-block;
@@ -577,8 +581,8 @@ h3 {
 }
 
 #action-bar {
-    position: absolute;
-    bottom: 2.5rem;
+    position: fixed;
+    bottom: 0.5rem;
     left: 1rem;
     z-index: 1;
 }
@@ -659,15 +663,18 @@ h3 {
 }
    
 #panel-hover_code {
-    bottom: 6.5rem;
+    position: fixed;
+    bottom: 4.5rem;
     left: 1rem;
 }
 #panel-hover_description {
-    bottom: 2.5rem;
+    position: fixed;
+    bottom: 0.5rem;
     left: 3.5rem;
 }
 #panel-hover_secteur {
-    bottom: 4.5rem;
+    position: fixed;
+    bottom: 2.5rem;
     left: 1rem;
 }
 

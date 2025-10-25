@@ -441,7 +441,7 @@ function getStorylines() {
         //     a.narratif_id.localeCompare(b.narratif_id)
         //     );
 
-        let order = { X: 1, E: 2, C: 3, M: 4 };
+        let family_order = { X: 1, E: 2, C: 3, M: 4 };
 
         let storylines = data.sort((a, b) => {
         // Extraire la lettre et le chiffre
@@ -449,8 +449,8 @@ function getStorylines() {
         const [letterB, numB] = [b.narratif_id[0], parseInt(b.narratif_id.slice(1))];
 
         // Comparer selon l’ordre de la lettre
-        if (order[letterA] !== order[letterB]) {
-            return order[letterA] - order[letterB];
+        if (family_order[letterA] !== family_order[letterB]) {
+            return family_order[letterA] - family_order[letterB];
         }
 
         // Si les lettres sont identiques, comparer par le nombre
@@ -473,7 +473,12 @@ function getStorylines() {
     });
 }
 
-
+let families = {
+            X: "eXtrêmes",
+            E: "Étiages",
+            C: "Crues",
+            M: "Modérés"
+        };
 function updateStorylineButton(reset=false){
     if (reset){
         // Reset storyline buttons and disable them
@@ -491,12 +496,7 @@ function updateStorylineButton(reset=false){
         buttons.forEach(btn => btn.classList.remove("selected"));
     } else {
         var init_storyline_button = true
-        let families = {
-            X: "Extrêmes",
-            E: "Étiages",
-            C: "Crues",
-            M: "Modérés"
-            };
+        
         getStorylines()
         .then((allStorylines) => {Object.entries(allStorylines).forEach(([key, val]) => {
             const button = document.getElementById(`button-${key}`);
@@ -506,40 +506,19 @@ function updateStorylineButton(reset=false){
             const cell_arrow = document.getElementById(`cell-${key}-arrow`);
             if (button) {
                 if (val) {
-                    // button_name.disabled = false;
-                    // button_name.replaceChildren();
-                    // button_name.style.color = val.narratif_couleur;
-                    // button_name.textContent = val.narratif_id;
-                    // button_name.value = key;
-
-
                     button.disabled = false;
                     button.classList.remove("selected");
-                    // button.replaceChildren(); // vide le bouton
                     button.style.color = "black";
                     button.style.display = ""
-
-                    // const span = document.createElement('span');
-                    // span.style.color = val.narratif_couleur;
-                    // span.textContent = val.narratif_id;
-                    // span.class = "id"
-
-                    // button.append(span, `: ${val.narratif_description}`);
-
-                    // button.textContent = `<span style="color: ${val.narratif_couleur};">${val.narratif_id}</span>: ${val.narratif_description}`;
                     button.value = key;
-                    //  button.value = JSON.stringify(key);
-                    // button.textContent = val.narratif_description;
+
                     cell_arrow.style.color = val.narratif_couleur;
-                    // cell_arrow.classList.add("hide-cell_arrow")
                     cell_name.style.color = val.narratif_couleur;
                     cell_name.innerHTML = `<span>${val.narratif_id}</span><br>
-                                                <span class="italique">${families[val.famille_id]}</span>`;
-                    // let span = cell_description.querySelector("span");
-                    // span.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
+                                            <span class="italic">${families[val.famille_id]}</span>`;
                     cell_description.innerHTML = `
                                                 <span>${val.narratif_description}<br></span>
-                                                <span class="italique">GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}</span>
+                                                <span>GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}</span>
                                                 `;
                     
                     // cell_description.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
@@ -1267,330 +1246,6 @@ let isSyncingZoom = false; // Flag pour éviter les boucles
 // Stockage des éléments de chaque carte
 const mapElements = {};
 
-// function update_map(id_svg, svgElement, data_back) {
-//     riverLength = riverLength_max;
-    
-//     d3.select(id_svg).selectAll("*").remove();
-
-//     var fact = 2;
-
-//     const root = d3.select(id_svg)
-//         .attr("width", "100%")
-//         .attr("height", "100%");
-
-//     root.selectAll("*").remove();
-
-//     svgElement = root.append("g");
-//     const layer_france = svgElement.append("g").attr("class", "layer-france");
-//     const layer_river = svgElement.append("g").attr("class", "layer-river");
-//     const layer_basin = svgElement.append("g").attr("class", "layer-basinHydro");
-//     const layer_secteur = svgElement.append("g").attr("class", "layer-secteurHydro");
-//     const layer_city = svgElement.append("g").attr("class", "layer-cityFrance");
-
-//     // Dimensions
-//     const indicator = id_svg.split("-").pop();
-//     const container = document.querySelector(`#map-${indicator}`);
-//     let width = container.clientWidth;
-//     let height = container.clientHeight;
-
-//     // Marge pour éviter que la carte touche les bords
-//     const margin = 10;
-
-//     // Projection avec fitExtent
-//     const projectionMap = d3.geoMercator()
-//         .fitExtent([[margin, margin], [width - margin, height - margin]], geoJSONdata_france);
-
-//     // Stocker les éléments de cette carte
-//     mapElements[id_svg] = {
-//         svgElement,
-//         layer_france,
-//         layer_river,
-//         layer_basin,
-//         layer_secteur,
-//         layer_city,
-//         projectionMap,
-//         container,
-//         width,
-//         height,
-//         data_back
-//     };
-
-//     // Fonction redrawMap spécifique à cette carte
-//     function redrawMap(mapId) {
-//         const elements = mapElements[mapId];
-//         if (!elements) return;
-
-//         const pathGenerator = d3.geoPath(elements.projectionMap);
-//         const selectedGeoJSON_river = {
-//             type: "FeatureCollection",
-//             features: geoJSONdata_river.features.filter((d) => {
-//                 return d.properties.norm >= riverLength;
-//             })
-//         };
-//         const simplifiedselectedGeoJSON_river = geotoolbox.simplify(selectedGeoJSON_river, { k: k_simplify, merge: false });
-//         const simplifiedGeoJSON_basinHydro = geotoolbox.simplify(geoJSONdata_basinHydro, { k: k_simplify, merge: false });
-//         const simplifiedGeoJSON_secteurHydro = geotoolbox.simplify(geoJSONdata_secteurHydro, { k: k_simplify, merge: false });
-//         const simplifiedGeoJSON_france = geotoolbox.simplify(geoJSONdata_france, { k: k_simplify, merge: false });
-
-//         elements.layer_river.selectAll("path.river")
-//             .data(simplifiedselectedGeoJSON_river.features)
-//             .join("path")
-//             .attr("class", "river")
-//             .style("pointer-events", "all")
-//             .attr("fill", "transparent")
-//             .attr("stroke", stroke_river)
-//             .attr("stroke-width", function(d) {
-//                 return strokeWith_river_max - (1 - d.properties.norm) * (strokeWith_river_max - strokeWith_river_min);
-//             })
-//             .attr("stroke-linejoin", "miter")
-//             .attr("stroke-linecap", "round")
-//             .attr("stroke-miterlimit", 1)
-//             .attr("d", pathGenerator)
-//             .on("mouseover", function(event, d) {
-//                 d3.select(this).attr("stroke", stroke_river_selected);
-//                 document.getElementById("panel-hover_").style.display = "block";
-//                 document.getElementById("panel-hover-content_code").innerHTML =
-//                     "<span style='font-weight: 900; color:" + stroke_river_selected + "'>" +
-//                     d.properties.TopoOH + "</span>";
-//             })
-//             .on("mouseout", function(event, d) {
-//                 d3.select(this).attr("stroke", stroke_river);
-//                 document.getElementById("panel-hover_").style.display = "none";
-//             })
-//             .transition()
-//             .duration(1000);
-
-//         // elements.layer_basin.selectAll("path.basinHydro")
-//         //     .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)
-//         //     .join("path")
-//         //     .attr("class", "basinHydro")
-//         //     .style("pointer-events", "none")
-//         //     .attr("fill", fill_basinHydro)
-//         //     .attr("stroke", stroke_basinHydro)
-//         //     .attr("stroke-width", strokeWith_basinHydro)
-//         //     .attr("stroke-linejoin", "miter")
-//         //     .attr("stroke-miterlimit", 1)
-//         //     .attr("d", pathGenerator)
-//         //     // .on("mouseover", function(event, d) {
-//         //     //     // Affiche les secteurs hydrologiques pour ce bassin
-//         //     //     showSecteurs(d);
-//         //     // })
-//         //     // .on("mouseout", function(event, d) {
-//         //     //     // Cache les secteurs hydrologiques
-//         //     //     hideSecteurs();
-//         //     // })
-//         //     .transition()
-//         //     .duration(1000);
-        
-//         // const secteursInBasin = {
-//         //     type: "FeatureCollection",
-//         //     name: simplifiedGeoJSON_secteurHydro.name,
-//         //     features: simplifiedGeoJSON_secteurHydro.features.filter(
-//         //     feature => feature.properties.region_id === selectedRegionId
-//         //     )
-//         // };
-        
-//         // elements.layer_secteur.selectAll("path.secteurHydro")
-//         //     .data(secteursInBasin.features, d => d.properties.name)
-//         //     .join("path")
-//         //     .attr("class", "secteurHydro") 
-//         //     .style("pointer-events", "all")
-//         //     .attr("fill", fill_basinHydro)
-//         //     .attr("stroke", stroke_secteurHydro)
-//         //     .attr("stroke-width", strokeWith_secteurHydro)
-//         //     .attr("stroke-linejoin", "miter")
-//         //     .attr("stroke-miterlimit", 1)
-//         //     .style("opacity", 0.5)
-//         //     .attr("d", pathGenerator)
-//         //     .on("mouseover", function(event, d) {
-//         //         d3.select(this).attr("stroke", "#000000ff");
-//         //         document.getElementById("panel-hover_secteur").style.display = "block";
-//         //         document.getElementById("panel-hover-content_secteur").innerHTML =
-//         //             "<span style='font-weight: 900; color:" + "#000000ff" + "'>" +
-//         //             d.properties.LbSecteurH + "</span>";
-//         //     })
-//         //     .on("mouseout", function(event, d) {
-//         //         d3.select(this).attr("stroke", stroke_secteurHydro);
-//         //         document.getElementById("panel-hover_secteur").style.display = "none";
-//         //     })
-//         //     .transition();
-//         //     .duration(1000);
-                
-//         // Fonction pour afficher les secteurs
-//         // function showSecteurs(basinData) {
-//         //     console.log(basinData.properties.name)
-//         //     const secteursInBasin = {
-//         //         type: "FeatureCollection",
-//         //         name: simplifiedGeoJSON_secteurHydro.name,
-//         //         features: simplifiedGeoJSON_secteurHydro.features.filter(
-//         //         feature => feature.properties.region_id === basinData.properties.name
-//         //         )
-//         //     };
-            
-//         //     layer_secteur.selectAll("path.secteurHydro")
-//         //         .data(secteursInBasin.features, d => d.properties.name)
-//         //         .join("path")
-//         //         .attr("class", "secteurHydro")  // ✅ Changé de "basinHydro" à "secteurHydro"
-//         //         .style("pointer-events", "all")
-//         //         .attr("fill", fill_basinHydro)
-//         //         .attr("stroke", "#ff1717ff")
-//         //         .attr("stroke-width", strokeWith_basinHydro)
-//         //         .attr("stroke-linejoin", "miter")
-//         //         .attr("stroke-miterlimit", 1)
-//         //         .attr("d", pathGenerator)
-//         //         .transition();
-//         //         // .duration(1000);
-//         //     }
-
-//         // // Fonction pour cacher les secteurs
-//         // function hideSecteurs() {
-//         //     layer_secteur.selectAll("path.secteurHydro")
-//         //         .transition()
-//         //         .duration(300)
-//         //         .style("opacity", 0)
-//         //         .remove();
-//         // }
-
-//         // Initialiser les couches avec pointer-events: none pour ne pas bloquer
-//         elements.layer_river.selectAll("path.river")
-//         .data(simplifiedselectedGeoJSON_river.features)
-//         .join("path")
-//         .attr("class", "river")
-//         .attr("fill", "transparent")
-//         .attr("stroke", stroke_river)
-//         .attr("stroke-width", function(d) {
-//             return strokeWith_river_max - (1 - d.properties.norm) * (strokeWith_river_max - strokeWith_river_min);
-//         })
-//         .attr("stroke-linejoin", "miter")
-//         .attr("stroke-linecap", "round")
-//         .attr("stroke-miterlimit", 1)
-//         .style("pointer-events", "none")  // Important: laisser passer les événements
-//         .attr("d", pathGenerator);
-
-//         elements.layer_basin.selectAll("path.basinHydro")
-//         .data(simplifiedGeoJSON_basinHydro.features, d => d.properties.name)
-//         .join("path")
-//         .attr("class", "basinHydro")
-//         .style("pointer-events", "none")
-//         .attr("fill", fill_basinHydro)
-//         .attr("stroke", stroke_basinHydro)
-//         .attr("stroke-width", strokeWith_basinHydro)
-//         .attr("stroke-linejoin", "miter")
-//         .attr("stroke-miterlimit", 1)
-//         .attr("d", pathGenerator);
-
-//         const secteursInBasin = {
-//         type: "FeatureCollection",
-//         name: simplifiedGeoJSON_secteurHydro.name,
-//         features: simplifiedGeoJSON_secteurHydro.features.filter(
-//             feature => feature.properties.region_id === selectedRegionId
-//         )
-//         };
-
-//         elements.layer_secteur.selectAll("path.secteurHydro")
-//         .data(secteursInBasin.features, d => d.properties.name)
-//         .join("path")
-//         .attr("class", "secteurHydro")
-//         .style("pointer-events", "none")  // Important: laisser passer les événements
-//         .attr("fill", fill_basinHydro)
-//         .attr("stroke", stroke_secteurHydro)
-//         .attr("stroke-width", strokeWith_secteurHydro)
-//         .attr("stroke-linejoin", "miter")
-//         .attr("stroke-miterlimit", 1)
-//         .style("opacity", 0.5)
-//         .attr("d", pathGenerator);
-        
-//         elements.layer_france.selectAll("path.france")
-//             .data(simplifiedGeoJSON_france.features)
-//             .join("path")
-//             .attr("class", "france")
-//             .style("pointer-events", "none")
-//             .attr("fill", fill_france)
-//             .attr("stroke", stroke_france)
-//             .attr("stroke-width", strokeWith_france)
-//             .attr("stroke-linejoin", "miter")
-//             .attr("stroke-miterlimit", 1)
-//             .attr("d", pathGenerator)
-//             .transition()
-//             .duration(1000);
-            
-//         if (elements.data_back) {
-//             redrawPoint(elements.svgElement, elements.data_back, elements.projectionMap);
-//             highlight_selected_point();
-//         }
-//     }
-
-//     // function handleResize(id_svg) {
-//     //     if (window.innerWidth < window.innerHeight) {
-//     //         var width = window.innerWidth / fact;
-//     //         var height = window.innerWidth / fact;
-//     //     } else {
-//     //         var width = (window.innerHeight - 50 ) / fact;
-//     //         var height = (window.innerHeight - 50) / fact;
-//     //     }
-//     //     sharedZoom.translateExtent([[-width*maxPan, -height*maxPan], [width*(1+maxPan), height*(1+maxPan)]]);
-//     //     svgElement.attr("width", width).attr("height", height);
-//     //     projectionMap.scale([height*scale]).translate([width / 2, height / 2]);	    
-
-//     //     mapIds.forEach(mapId => {redrawMap(mapId)});
-//     //     redrawMap(id_svg);
-//     //     highlight_selected_point();
-//     // }
-//     // window.addEventListener("resize", handleResize.bind(null, k_simplify, riverLength));
-        
-//     // Créer ou réutiliser le zoom partagé
-//     if (!sharedZoom) {
-//         const redrawMap_debounce = debounce((mapIds) => {
-//             mapIds.forEach(mapId => redrawMap(mapId));
-//         }, 100);
-
-//         sharedZoom = d3.zoom()
-//             .scaleExtent([minZoom, maxZoom])
-//             .translateExtent([[-width * maxPan, -height * maxPan], [width * (1 + maxPan), height * (1 + maxPan)]])
-//             .on("zoom", function (event) {
-//                 if (isSyncingZoom) return;
-
-//                 // Logique métier du zoom
-//                 riverLength = riverLength_max - (event.transform.k - minZoom)/(maxZoom-minZoom)*(riverLength_max-riverLength_min);
-//                 k_simplify = k_simplify_ref + (event.transform.k - minZoom)/(maxZoom-minZoom)*(1-k_simplify_ref);
-                
-//                 const mapIds = ["#svg-france-QA", "#svg-france-QJXA", "#svg-france-VCN10"];
-                
-//                 isSyncingZoom = true;
-                
-//                 // Appliquer la transformation à toutes les cartes
-//                 mapIds.forEach(mapId => {
-//                     const mapRoot = d3.select(mapId);
-//                     const mapSvgElement = mapRoot.select("g");
-//                     const mapData = mapElements[mapId];
-                    
-//                     if (!mapSvgElement.empty() && mapData) {
-//                         mapSvgElement.attr("transform", event.transform);
-//                         mapSvgElement.style("width", mapData.width * event.transform.k + "px");
-//                         mapSvgElement.style("height", mapData.height * event.transform.k + "px");
-                        
-//                         // Mettre à jour l'état du zoom
-//                         mapRoot.property("__zoom", event.transform);
-//                     }
-//                 });
-                
-//                 isSyncingZoom = false;
-                
-//                 // Redessiner toutes les cartes
-//                 redrawMap_debounce(mapIds);
-//                 highlight_selected_point();
-//             });
-//     }
-
-//     // Application du zoom
-//     root.call(sharedZoom);
-    
-//     // Dessiner la carte initiale
-//     redrawMap(id_svg);
-//     // handleResize(id_svg);
-
-//     return svgElement;
-// }
 
 function update_map(id_svg, svgElement, data_back) {
     riverLength = riverLength_max;
@@ -2181,9 +1836,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     
     // Append France to combined SVG
-    const france_scale = 1700/franceHeight;
+    const france_scale = 1450/franceHeight;
     const france_left = 2;
-    const france_top = 250;
+    const france_top = 430;
 
     clonedSvgFrance.setAttribute("viewBox", `0 0 ${franceWidth} ${franceHeight}`);
     clonedSvgFrance.setAttribute("width", france_scale * franceWidth);
@@ -2194,17 +1849,17 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     var colorbar_right;
     
     if (isMapZoomed()) {
-	colorbar_right = 340;
+	colorbar_right = 400;
 	combinedSVG.append("rect")
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", 2000)
-            .attr("height", 350)
+            .attr("height", 470)
             .attr("fill", "#F5F5F5");
 
 	combinedSVG.append("rect")
             .attr("x", 0)
-            .attr("y", 1710)
+            .attr("y", 1790)
             .attr("width", 2000)
             .attr("height", 290)
             .attr("fill", "#F5F5F5");
@@ -2216,12 +1871,12 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
             .attr("height", 2000)
             .attr("fill", "#F5F5F5");
 
-	combinedSVG.append("rect")
-            .attr("x", 1620)
-            .attr("y", 0)
-            .attr("width", 380)
-            .attr("height", 2000)
-            .attr("fill", "#F5F5F5");
+	// combinedSVG.append("rect")
+    //         .attr("x", 1620)
+    //         .attr("y", 0)
+    //         .attr("width", 380)
+    //         .attr("height", 2000)
+    //         .attr("fill", "#F5F5F5");
     } else {
 	colorbar_right = 440;
     }
@@ -2258,7 +1913,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     // Subtitle text
     var horizon = get_horizon();
     var relatif = data.to_normalise ? "relatifs " : ""; 
-    var subtitle = "Narratif "+ selected_storyline.narratif_id +": " + selected_storyline.narratif_description
+    var subtitle = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020";
     const width_max_subtitle = 85;
     let subtitle_wrap = wrapTextByCharacterLimit(subtitle, width_max_subtitle);
 
@@ -2270,17 +1925,29 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 	subtitle_text_add_top = 50;
     }
 
+    // Storyline subtitle
+    
+    var subtitle_storyline = "Narratif " + selected_storyline.narratif_id + " ("+ families[selected_storyline.famille_id] + ") : " + selected_storyline.narratif_description
+    let subtitle_storyline_wrap = wrapTextByCharacterLimit(subtitle_storyline, width_max_subtitle-5);
+    if (subtitle_wrap.length == 1) {
+	subtitle_storyline_shift_top = 25;
+	subtitle_storyline_add_top = 0;
+    } else {
+	subtitle_storyline_shift_top = 0;
+	subtitle_storyline_add_top = 50;
+    }
+
     // Left vertical bar
     const header_line_left1 = 64;
     const header_line_top1 = 30 + title_text_shift_top + subtitle_text_shift_top;
     const header_line_left2 = 64;
-    const header_line_top2 = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
+    const header_line_top2 = 180 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
     combinedSVG.append("line")
 	.attr("x1", header_line_left1)
 	.attr("y1", header_line_top1) 
 	.attr("x2", header_line_left2)
 	.attr("y2", header_line_top2) 
-	.attr("stroke", selected_storyline.narratif_couleur)
+	.attr("stroke", "#C5E7E7") 
 	.attr("stroke-width", "35px");
     
     // Text
@@ -2291,9 +1958,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .attr("y", title_text_top)
         .attr("text-anchor", "start")
         .attr("font-size", "60px")
-	.attr("font-family", "Raleway, sans-serif")
-	.attr("font-weight", "800")
-        .attr("fill", "#16171f")
+        .attr("font-family", "Raleway, sans-serif")
+        .attr("font-weight", "800")
+        .attr("fill", "#16171f") 
         .selectAll("tspan")
         .data(title_wrap)
         .enter().append("tspan")
@@ -2309,8 +1976,8 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .attr("y", subtitle_text_top)
         .attr("text-anchor", "start")
         .attr("font-size", "50px")
-	.attr("font-family", "Lato, sans-serif")
-	.attr("font-weight", "400")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-weight", "400")
         .attr("fill", "#16171f")
         .selectAll("tspan")
         .data(subtitle_wrap)
@@ -2319,19 +1986,53 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
 
+    // Selected storyline information
+    const subtitle_storyline_text_left = 50;
+    const subtitle_storyline_text_top = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
+
+    const bar_width = 80;
+    const bar_height = 12; 
+    const bar_radius = 4;
+
+    combinedSVG.append("rect")
+        .attr("x", subtitle_storyline_text_left)
+        .attr("y", subtitle_storyline_text_top - 22)
+        .attr("width", bar_width)
+        .attr("height", bar_height)
+        .attr("rx", bar_radius)  // Rayon horizontal pour coins arrondis
+        .attr("ry", bar_radius)  // Rayon vertical pour coins arrondis
+        .attr("fill", selected_storyline.narratif_couleur); // Couleur (à adapter)
+
+    combinedSVG.append("text")
+        .attr("x", subtitle_storyline_text_left)
+        .attr("y", subtitle_storyline_text_top)
+        .attr("text-anchor", "start")
+        .attr("font-size", "50px")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-weight", "600")
+        .attr("fill", selected_storyline.narratif_couleur)
+        .selectAll("tspan")
+        .data(subtitle_storyline_wrap)
+        .enter().append("tspan")
+        // .attr("x", subtitle_storyline_text_left)
+        .attr("x", (d, i) => i === 0 ? subtitle_storyline_text_left+100 : subtitle_storyline_text_left)
+        .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
+        .text(d => d);
+
     // Selected chain information
-    var subtitle_chain = selected_storyline.chain 
+    var subtitle_chain = "GCM : " + selected_storyline.gcm + ", RCM : " + selected_storyline.rcm + ", BC : " + selected_storyline.bc + ", HM : " + selected_storyline.hm
+    
     let subtitle_chain_wrap = wrapTextByCharacterLimit(subtitle_chain, width_max_subtitle);
-    const subtitle_chain_text_left = 120;
-    const subtitle_chain_text_top = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
+    const subtitle_chain_text_left = 50;
+    const subtitle_chain_text_top = 300 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top + subtitle_storyline_shift_top + subtitle_storyline_add_top;
     combinedSVG.append("text")
         .attr("x", subtitle_chain_text_left)
         .attr("y", subtitle_chain_text_top)
         .attr("text-anchor", "start")
-        .attr("font-size", "50px")
+        .attr("font-size", "40px")
 	.attr("font-family", "Lato, sans-serif")
 	.attr("font-weight", "400")
-        .attr("fill", "#16171f")
+        .attr("fill", "#89898A")
         .selectAll("tspan")
         .data(subtitle_chain_wrap)
         .enter().append("tspan")
@@ -2345,16 +2046,13 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     let width_max_chain_text = 90;
     let chain_text_shift = 80;
-    let chain_text;
-    var projection = get_projection();
-    // if (drawer_mode === 'drawer-narratif') {
-	chain_text = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020 sous le";
+    // let chain_text;
+	// chain_text = "";
 	top_text = narratif_text;
 	top_text_color = narratif_color;
 
-    const RCP_text = projection.RCP;
-    const model_text = "avec au moins " + get_n() + " modèles hydrologiques par point";
-    chain_text = chain_text + " " + RCP_text + " " + model_text;
+    const chain_text = "Points de simulation avec au moins " + get_n() + " modèles hydrologiques";
+    // chain_text = chain_text + " " + RCP_text + " " + model_text;
 
     const width_max_top_text = 100;
     const top_text_wrap = wrapTextByCharacterLimit(top_text, width_max_top_text);
@@ -2390,7 +2088,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     
     // Grey i for information
     const i_text_left = 140 - chain_text_shift;
-    const i_text_bottom = 165;
+    const i_text_bottom = 150;
     combinedSVG.append("text")
         .attr("x", i_text_left)
         .attr("y", Height - i_text_bottom)
@@ -2403,7 +2101,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     // Grey circle around i
     const circle_left = 140 - chain_text_shift;
-    const circle_bottom = 180;
+    const circle_bottom = 165;
     const circle_radius = 22;
     combinedSVG.append("circle")
 	.attr("cx", circle_left)
@@ -2416,7 +2114,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     // Grey commentary on data
     const chain_text_wrap = wrapTextByCharacterLimit(chain_text, width_max_chain_text);
     const chain_text_left = 120;
-    const chain_text_bottom = 190;
+    const chain_text_bottom = 150;
     combinedSVG.append("text")
         .attr("x", chain_text_left)
         .attr("y", Height - chain_text_bottom)
@@ -2469,7 +2167,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 	.attr("y1", Height - footer_line_bottom1) 
 	.attr("x2", footer_line_left2)
 	.attr("y2", Height - footer_line_bottom2) 
-	.attr("stroke", selected_storyline.narratif_couleur)
+	.attr("stroke", "#C5E7E7")
 	.attr("stroke-width", "10px");
 
     const footer_text_left = 900;
@@ -2486,7 +2184,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .data([
 	    "Ces résultats sont issus de projections hydrologiques réalisées sur la France. La mise à jour",
 	    "de ces projections a été réalisé entre 2022 et 2025 dans le cadre du projet national Explore2.",
-	    "Ces résultats sont un aperçu de quelques futures possibles pour la ressource en eau."
+	    "Ces résultats sont un aperçu de quelques futurs possibles pour la ressource en eau."
         ])
         .enter().append("tspan")
         .attr("x", footer_text_left)
@@ -2655,7 +2353,7 @@ async function exportDataToCSV() {
 }
 
 async function exportData() {
-    const extended_name = selected_storyline.gwl+"_region-"+selected_storyline.region_id+"_"+selected_storyline.narratif_id
+    const extended_name = selected_storyline.gwl+"+n-4+region-"+selected_storyline.region_id+"+"+selected_storyline.narratif_id
     let zip;  
     zip = new JSZip();
     // data
@@ -2669,9 +2367,9 @@ async function exportData() {
     const Height = 2000;
     const Width = 2000;  
     
-    await convertSVGToPNG("#svg-france-QA", data_point_QA, "map_QA_"+extended_name, zip, Height, Width);
-    await convertSVGToPNG("#svg-france-QJXA", data_point_QJXA, "map_QJXA_"+extended_name, zip, Height, Width);
-    await convertSVGToPNG("#svg-france-VCN10", data_point_VCN10, "map_VCN10_"+extended_name, zip, Height, Width);
+    await convertSVGToPNG("#svg-france-QA", data_point_QA, "map_QA", zip, Height, Width);
+    await convertSVGToPNG("#svg-france-QJXA", data_point_QJXA, "map_QJXA", zip, Height, Width);
+    await convertSVGToPNG("#svg-france-VCN10", data_point_VCN10, "map_VCN10_summer", zip, Height, Width);
 
     // licence fr
     const pdfResponse_LO_fr = await fetch('/resources/licence_ouverte/ETALAB-Licence-Ouverte-v2.0.pdf');
@@ -2686,7 +2384,7 @@ async function exportData() {
         .then(function (content) {
             const link = document.createElement("a");
             link.href = URL.createObjectURL(content);
-            link.download = "MEANDRE-TRACC-export_"+extended_name+".zip";
+            link.download = "MEANDRE-TRACC-export+"+extended_name+".zip";
             link.click();
         });
 

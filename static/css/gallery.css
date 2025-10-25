@@ -344,8 +344,7 @@ p.warning {
 
 
 /* #grid-narratif {
-    max-width: 10rem;
-    max-width: calc(100vw - 50rem);
+    max-height: 15rem;
 } */
 
 /* .sub-container-gallery-narratives {
