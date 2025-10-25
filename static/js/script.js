@@ -2089,15 +2089,15 @@ function redrawPoint(svgElement, data_back, projectionMap) {
                     d3.select(this).attr("stroke", "#060508").raise();
                 }
 
-                document.getElementById("panel-hover_description").style.display = "block";
-                document.getElementById("panel-hover-content_description").innerHTML =
-                    "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-                    d.name + "</span>";
+                // document.getElementById("panel-hover_description").style.display = "block";
+                // document.getElementById("panel-hover-content_description").innerHTML =
+                //     "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
+                //     d.name + "</span>";
 
                 document.getElementById("panel-hover_code").style.display = "block";
                 document.getElementById("panel-hover-content_code").innerHTML =
                     "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-                    d.code + " [" + d.value.toFixed(0) + "%]"  + "</span>";
+                    d.code + " [" + d.value.toFixed(0) + "%] <br>"+ d.name + "</span>";
                 // const value = d.value.toFixed(2);
                 // document.getElementById("panel-hover-content_value").innerHTML =
                 // "<span style='color:" + d.fill_text + ";'>" +
