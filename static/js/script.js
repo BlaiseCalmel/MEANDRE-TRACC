@@ -28,8 +28,8 @@ if (is_production) {
     api_base_url = "https://meandre-tracc.explore2.inrae.fr";
     default_n = 4;
 } else {
-    // api_base_url = "http://127.0.0.1:5000";
-    api_base_url = "http://10.69.66.253:5000";
+    api_base_url = "http://127.0.0.1:5000";
+    // api_base_url = "http://10.69.66.253:5000";
     default_n = 4;
 }
 
@@ -437,9 +437,25 @@ function getStorylines() {
         //     storylines[i] = data[i];
         // }
 
-        let storylines = data.sort((a, b) => 
-            a.narratif_id.localeCompare(b.narratif_id)
-            );
+        // let storylines = data.sort((a, b) => 
+        //     a.narratif_id.localeCompare(b.narratif_id)
+        //     );
+
+        let order = { X: 1, E: 2, C: 3, M: 4 };
+
+        let storylines = data.sort((a, b) => {
+        // Extraire la lettre et le chiffre
+        const [letterA, numA] = [a.narratif_id[0], parseInt(a.narratif_id.slice(1))];
+        const [letterB, numB] = [b.narratif_id[0], parseInt(b.narratif_id.slice(1))];
+
+        // Comparer selon l’ordre de la lettre
+        if (order[letterA] !== order[letterB]) {
+            return order[letterA] - order[letterB];
+        }
+
+        // Si les lettres sont identiques, comparer par le nombre
+        return numA - numB;
+        });
         
         storyline1 = storylines[0];
         storyline2 = storylines[1];
@@ -1035,7 +1051,7 @@ function draw_colorbar(data_back) {
     const grid_colorbar = document.getElementById("grid-colorbar");
     svgNode.setAttribute("viewBox", `${bbox.x - 2} ${bbox.y - 2} ${bbox.width + 2} ${bbox.height + 2}`);  // Set viewBox
     svgNode.setAttribute("width", 0.9*grid_colorbar.clientWidth);  // Set width
-    svgNode.setAttribute("height", 0.9*grid_colorbar.clientHeight);  // Set height
+    svgNode.setAttribute("height", 0.85*grid_colorbar.clientHeight);  // Set height
     svgNode.setAttribute("preserveAspectRatio", "xMidYMid meet");  // Preserve aspect ratio
 }
 

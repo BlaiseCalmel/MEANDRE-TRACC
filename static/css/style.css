@@ -383,7 +383,7 @@ h3 {
 
 #container-gallery-map {
     margin-top: 1rem;
-    height: calc(100vh - 3rem - 1rem);
+    height: calc(100vh - 1rem);
     width: 100vw;
     /* display: flex; */
     /* flex-direction: column; */
@@ -414,11 +414,13 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 
 .map {
     position: relative;
-    min-width: calc(100vw / 3 - 1rem);
+    /* min-width: calc(100vw / 3 - 1rem); */
+    min-width: calc((100vw) / 3 - 2rem); 
     aspect-ratio: 1;
 }
 
@@ -575,7 +577,7 @@ h3 {
 
 #action-bar {
     position: absolute;
-    bottom: 0.5rem;
+    bottom: 2.5rem;
     left: 1rem;
     z-index: 1;
 }
