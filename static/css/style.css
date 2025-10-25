@@ -241,17 +241,18 @@ button.chain_block_button:hover {
     visibility: visible;
 }
 
-.row-button .col-left {
-    width: 5%;
+.row-button .col-left-container {
+    width: 15%;
     display: inline-flex;
     justify-content: center; /* centre horizontalement */
     align-items: center;     /* centre verticalement */
-    text-align: center;      /* sécurité */
+}
+.row-button .col-left {
+    text-align: center;      
 }
 
 .row-button .col-right {
-    width: 90%;
-    display: flex;
+    width: 80%;
     display: inline-block;
     text-align: justify;        
     align-items: center;

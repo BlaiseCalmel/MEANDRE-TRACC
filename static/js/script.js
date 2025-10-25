@@ -491,6 +491,12 @@ function updateStorylineButton(reset=false){
         buttons.forEach(btn => btn.classList.remove("selected"));
     } else {
         var init_storyline_button = true
+        let families = {
+            X: "Extrêmes",
+            E: "Étiages",
+            C: "Crues",
+            M: "Modérés"
+            };
         getStorylines()
         .then((allStorylines) => {Object.entries(allStorylines).forEach(([key, val]) => {
             const button = document.getElementById(`button-${key}`);
@@ -527,7 +533,8 @@ function updateStorylineButton(reset=false){
                     cell_arrow.style.color = val.narratif_couleur;
                     // cell_arrow.classList.add("hide-cell_arrow")
                     cell_name.style.color = val.narratif_couleur;
-                    cell_name.textContent = val.narratif_id;
+                    cell_name.innerHTML = `<span>${val.narratif_id}</span><br>
+                                                <span class="italique">${families[val.famille_id]}</span>`;
                     // let span = cell_description.querySelector("span");
                     // span.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
                     cell_description.innerHTML = `
