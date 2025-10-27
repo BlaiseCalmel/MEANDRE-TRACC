@@ -28,8 +28,8 @@ if (is_production) {
     api_base_url = "https://meandre-tracc.explore2.inrae.fr";
     default_n = 4;
 } else {
-    api_base_url = "http://127.0.0.1:5000";
-    // api_base_url = "http://10.69.66.253:5000";
+    // api_base_url = "http://127.0.0.1:5000";
+    api_base_url = "http://10.69.66.253:5000";
     default_n = 4;
 }
 

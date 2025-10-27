@@ -1,36 +1,44 @@
                             _           
  _ __   ___  __ _  _ _   __| | _ _  ___ 
 | '  \ / -_)/ _` || ' \ / _` || '_|/ -_)
-|_|_|_|\___|\__,_||_||_|\__,_||_|  \___|
-Généré le [DATE] par MEANDRE
-https://meandre.explore2.inrae.fr/
+|_|_|_|\___|\__,_||_||_|\__,_||_|  \___|                      
+| |_  _ _  __ _  __  __ 
+|  _|| '_|/ _` |/ _|/ _|
+ \__||_|  \__,_|\__|\__|
+                                                          
+Généré le [DATE] par MEANDRE-TRACC
+https://meandre-tracc.explore2.inrae.fr/
 contact.meandre@listes.inrae.fr
 
 
 INFORMATIONS GENERALES _______________________________________________
-MEANDRE présente de manière guidée un regard d'expert sur les
-résultats des projections hydrologiques réalisées sur la France.
-La mise à jour de ces projections a été réalisé entre 2022 et 2024
-dans le cadre du projet national Explore2.
+MEANDRE-TRACC présente de manière guidée les résultats des projections
+hydrologiques réalisées sur la France suivant les niveaux de 
+réchauffement dans le cadre de la TRACC (Trajectoire de 
+Réchauffement de référence pour l'Adaptation au Changement Climatique).
 
-Ces résultats sont un aperçu de quelques futures possibles pour la
-ressource en eau.
+Les résultats sont présentés sous forme de narratifs qui correspondent
+à une sélection de projections permettant de couvrir au mieux les 
+futurs possibles pour la ressource en eau. Les narratifs sont 
+sélectionnés à l'échelle d'un territoire et pour un niveau de 
+réchauffement donné.
+
+Retrouvez la méthode de sélection des narratifs :
+https://doi.org/10.57745/FE356V
+
+Retrouvez les fiches résultats par secteur hydrographique :
+https://doi.org/10.57745/QDCSBZ
 
 Retrouvez les messages et enseignements du projet Explore2 :
 https://doi.org/10.57745/J3XIPW
 
 
 INFORMATIONS COMPLÉMENTAIRES _________________________________________
-Soutien fiancier : Le projet LIFE Eau&Climat (LIFE19 GIC/FR/001259)
-a reçu un financement du programme LIFE de l’Union européenne.
+Soutien fiancier : Le projet EHCLO est financé par l'Agence de l'Eau
+Loire-Bretagne
 
 Partenaires :
 - AELB https://agence.eau-loire-bretagne.fr/home.html
-- AEAG https://eau-grandsudouest.fr/
-- AERMC https://www.eaurmc.fr/
-- AERM https://www.eau-rhin-meuse.fr/
-- ADEME https://www.ademe.fr/
-- ARA" https://www.auvergnerhonealpes.fr/
 
 Entrepôt de donnée du projet Explore2 :
 
@@ -45,55 +53,17 @@ Entrepôt de donnée du projet Explore2 :
    graphiques ou numériques.
    DRIAS Eau https://drias-eau.fr
 
-Développement : Louis Héraut, RiverLy, INRAE, France
+Développement : Blaise Calmel et Louis Héraut, RiverLy, INRAE, France
 Référent scientifique : Jean-Philippe Vidal, RiverLy, INRAE, France
 Contact : contact.meandre@listes.inrae.fr
 
-Code source : https://github.com/super-lou/MEANDRE
+Code source : https://github.com/BlaiseCalmel/MEANDRE-TRACC
 Hébergement web : Data Center de INRAE, Île-de-France
 
 
 INFORMATIONS METHODOLOGIQUES _________________________________________
 Les séries annuelles de variables hydrologiques qui sont à la base de
 ces résultats sont disponibles sur DRIAS Eau https://drias-eau.fr.
-
-Sur ces séries temporelles, les changements (relatifs) pour
-une variable sont calculés par RCP et par horizon en réalisant
-successivement :
- - une moyenne temporelle sur la période de référence et sur
-   l'horizon sélectionné pour l'ensemble des chaînes de projection,
- - une différence (relative) de la moyenne sur l'horizon par
-   la moyenne sur la période de référence,
- - une moyenne de ces différences sur l'ensemble des modèles
-   hydrologiques,
- - une moyenne de ces moyennes de différences sur l'ensemble
-   des corrections de biais,
- - une moyenne de ces moyennes de différences sur l'ensemble
-   des couples GCM / RCM.
-
-
-ATTENTION ____________________________________________________________
-L'approche multi-modèle doit être privilégiée :
-
- - Les événements temporels isolés ne sont pas des indicateurs
-   robustes du changement hydro-climatique.
-
- - Isoler une trajectoire ne permet pas de conclure quant à la
-   plausibilité de la réalisation de ce futur.
-
- - La dispersion des résultats est inhérent aux dynamiques
-   hydro-climatologiques et est un message en soit.
-
- - Rien n'indique que le futur qui va se réaliser n'est pas en
-   dehors de l'ensemble simulé.
-   
- - Isoler un modèle hydrologique c'est se concentrer sur un panel
-   restreint des futurs possibles. Plus d'informations sur
-   le diagnostic des modèles hydrologiques :
-   https://doi.org/10.57745/S6PQXD
-
-Dans le doute, retrouvez les messages et enseignements
-du projet Explore2 : https://doi.org/10.57745/J3XIPW
 
 
 PARAMÈTRES D'ANALYSE _________________________________________________
@@ -106,7 +76,9 @@ Arborescence :
 ├── data.csv
 ├── ETALAB-Licence-Ouverte-v2.0.pdf
 ├── ETALAB-Open-Licence-v2.0.pdf
-├── map.png
+├── map_QA.png
+├── map_QJXA.png
+├── map_VCN10.png
 ├── meta_point.csv
 ├── meta_projection.csv
 ├── meta_variable.csv
@@ -139,7 +111,7 @@ code
                    la variable code de meta_point.csv 
   -- valeurs autorisées : 10 caratères
 
-*variable*
+value *variable*
   -- nom : *variable*
   -- description : Acronyme de la variable disponible dans
                    meta_variable.csv avec variable_en
@@ -147,7 +119,7 @@ code
              avec unit_en
   -- valeurs autorisées : numérique
 
-fill
+fill *variable*
   -- nom : couleur
   -- description : Couleur hexadécimale associée à la valeur
                    de changement selon la palette de couleur
