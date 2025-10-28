@@ -1795,8 +1795,108 @@ function redrawPoint(svgElement, data_back, projectionMap) {
     return svgElement
 }
 
+const pdfjsLib = window['pdfjs-dist/build/pdf'];
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 
+// Fonction pour extraire les régions à partir du selectedRegionId
+function parseRegionIds(selectedRegionId) {
+  if (!selectedRegionId) return [];
+  
+  // Gère les régions séparées par des tirets (ex: "X-Y")
+  const regions = selectedRegionId.split('-').map(r => r.trim());
+    //   return regions.filter(r => r.length > 0);
+  // Récupère la première lettre de chaque région
+  const firstLetters = regions
+    .filter(r => r.length > 0)
+    .map(r => r.charAt(0));
+  
+  // Supprime les doublons avec Set
+  return [...new Set(firstLetters)];
+}
+
+// Fonction pour récupérer le nom du fichier basé sur la région
+function getFileNameForRegion(regionId) {
+  // Mapping des régions hydrographiques vers leurs noms
+  const regionMapping ={'P': 'P_LA-DORDOGNE_TRACC-datasheet_Explore2.pdf', 'R': 'R_LA-CHARENTE_TRACC-datasheet_Explore2.pdf', 'H': 'H_LA-SEINE-DE-L-OISE-A-L-EMBOUCHURE_TRACC-datasheet_Explore2.pdf', 'U': 'U_LA-SAONE_TRACC-datasheet_Explore2.pdf', 'D': 'D_AFFLUENTS-DU-RHIN_TRACC-datasheet_Explore2.pdf', 'S': 'S_FLEUVES-COTIERS-FACADE-ATLANTIQUE_TRACC-datasheet_Explore2.pdf', 'F': 'F_LA-SEINE-DE-SA-SOURCE-A-L-OISE_TRACC-datasheet_Explore2.pdf', 'K': 'K_LA-LOIRE-DE-SA-SOURCE-A-LA-VIENNE_TRACC-datasheet_Explore2.pdf', 'X': 'X_LA-DURANCE_TRACC-datasheet_Explore2.pdf', 'L': 'L_LA-LOIRE-DE-LA-VIENNE-A-LA-MAINE_TRACC-datasheet_Explore2.pdf', 'Y': 'Y_FLEUVES-COTIERS-MEDITERRANEENS-ET-CORSE_TRACC-datasheet_Explore2.pdf', 'B': 'B_LA-MEUSE_TRACC-datasheet_Explore2.pdf', 'W': 'W_L-ISERE_TRACC-datasheet_Explore2.pdf', 'N': 'N_FLEUVES-COTIERS-DU-SUD-DE-LA-LOIRE_TRACC-datasheet_Explore2.pdf', 'E': 'E_L-ESCAUT-ET-FLEUVES-DE-LA-FRONTIERE-A-LA-BRESLE_TRACC-datasheet_Explore2.pdf', 'I': 'I_FLEUVES-COTIERS-A-L-OUEST-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf', 'G': 'G_FLEUVES-COTIERS-AU-NORD-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf', 'A': 'A_LE-RHIN_TRACC-datasheet_Explore2.pdf', 'J': 'J_FLEUVES-COTIERS-DE-BRETAGNE_TRACC-datasheet_Explore2.pdf', 'M': 'M_LA-LOIRE-DE-LA-MAINE-A-LA-MER_TRACC-datasheet_Explore2.pdf', 'V': 'V_LE-RHONE_TRACC-datasheet_Explore2.pdf', 'O': 'O_LA-GARONNE_TRACC-datasheet_Explore2.pdf', 'Q': 'Q_L-ADOUR_TRACC-datasheet_Explore2.pdf'};
+  
+  const regionName = regionMapping[regionId];
+  if (!regionName) {
+    console.warn(`Région non trouvée: ${regionId}`);
+    return null;
+  }
+  
+  return `${regionName}`;
+}
+
+// Fonction principale pour télécharger les fichiers
+async function downloadPdfsByRegion() {
+    var horizon = get_horizon();
+    var current_gwl = horizon.H;
+
+    const regions = parseRegionIds(selectedRegionId);
+
+    if (regions.length === 0) {
+    console.error('Aucune région sélectionnée');
+    return;
+    }
+    const zip = new JSZip();
+    const basePath = '/resources/dataverse_files';
+    const { PDFDocument } = PDFLib;
+    
+    // Télécharger chaque fichier correspondant
+    for (const region of regions) {
+        const fileName = getFileNameForRegion(region);
+
+        if (!fileName) continue;
+        
+        const filePath = `${basePath}/${fileName}`;
+        try {
+            // Charger le PDF original
+            const existingPdfBytes = await fetch(filePath).then(res => res.arrayBuffer());
+            const pdfDoc = await PDFDocument.load(existingPdfBytes);
+            const totalPages = pdfDoc.getPageCount();
+            let pagesToCopy = [];
+            
+            if (current_gwl === 'gwl30') {
+                for (let i = 0; i < totalPages; i += 2) {
+                    pagesToCopy.push(i);
+                }
+            } else if (current_gwl === 'gwl20') {
+            pagesToCopy.push(0);
+                for (let i = 1; i < totalPages; i += 2) {
+                    pagesToCopy.push(i); 
+                }
+            } else {
+                return;
+            }
+
+            // Créer un nouveau PDF avec les pages sélectionnées
+            const newPdfDoc = await PDFDocument.create();
+            const copiedPages = await newPdfDoc.copyPages(pdfDoc, pagesToCopy);
+            
+            copiedPages.forEach(page => {
+            newPdfDoc.addPage(page);
+            });
+
+            // Générer le PDF
+            const pdfBytes = await newPdfDoc.save();
+            // Ajouter au ZIP
+            zip.file(`${fileName}.pdf`, pdfBytes);
+        } catch (error) {
+            console.error('Erreur:', error);
+        }
+
+    }
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+    const url = URL.createObjectURL(zipBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${current_gwl}-fiches.zip`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
 
 
 function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narratif_color="") {
