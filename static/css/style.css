@@ -268,6 +268,26 @@ button.chain_block_button:hover {
     opacity: 0.5;
 }
 
+.text-dark_gray {
+    color: #89898a;
+}
+
+.text-extreme {
+    color: #57445d;
+}
+
+.text-etiage {
+    color: #D04435;
+}
+
+.text-crue {
+    color: #3A5BA0;
+}
+
+.text-modere {
+    color: #37765c;
+}
+
 
 .reduce-space {
     margin-left: -0.15rem; /* Adjust the margin as needed to reduce the space */

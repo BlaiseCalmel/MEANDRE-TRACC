@@ -84,7 +84,7 @@ $(window).on('popstate', function(event) {
 function change_url(url, start=false, actualise=true) {
     var current_url = window.location.pathname;
     // console.log(current_url);
-    if (current_url === url && url === "/exploration-avancee") {
+    if (current_url === url && url === "/tracc-context") {
 	actualise = false;
     }
     history.pushState({}, "", url);
@@ -282,11 +282,12 @@ function update_data_point() {
 
     var url = window.location.pathname;
     let check_cache;
-    if (url === "/exploration-avancee") {
+    if (url === "/tracc-context") {
 	check_cache = false; 
     } else {
 	check_cache = true;
     }
+    
     
 	$('#map-QA-loading').css('display', 'flex');
 	$('#map-QJXA-loading').css('display', 'flex');
