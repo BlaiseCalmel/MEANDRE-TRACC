@@ -130,14 +130,14 @@ function loadGeoJSON(fileURL) {
 	});
 }
 
-function updateMaps(){
-    console.log(selectedRegionId)
+// function updateMaps(){
+    // console.log(selectedRegionId)
     // zoomToRegion(selectedRegionId, "#svg-france-QA");
     // svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
     // svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
     // svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
     // update_data_point_debounce()
-}
+// }
 
 
 function updateContent(start=false, actualise=true) {
@@ -170,12 +170,18 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_basinHydro = geoJSONdata[1];
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
-        geoJSONdata_secteurHydro= geoJSONdata[3]; 
-        // geoJSONdata_cities= geoJSONdata[4];
+		geoJSONdata_secteurHydro= geoJSONdata[3]; 
+		// geoJSONdata_cities= geoJSONdata[4];
 
-        // initTitleOverlay()
-        update_data_point_debounce();
-        
+		// initTitleOverlay()
+		// update_data_point_debounce();
+		svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
+		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
+		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
+		// update_data_point_debounce()
+		updateBasinPanelById(selectedRegionId);
+		updateStorylineButton();
 	    });
     }
 
@@ -194,7 +200,7 @@ function updateContent(start=false, actualise=true) {
 	}
 	
     // } else {
-	// $("#container-gallery-map").load("/html" + url + ".html");
+	// $("#container-gallery-map").load("/html" + url + ".html");	
     // }
 }
 
@@ -222,12 +228,12 @@ function check_url_after_data() {
 function fetch_components(url) {
     // console.log("fetch");
     
-    $.get('/html/menu.html', function(html) {
-        if ($('#menu-element').length) {
-            $('#menu-element').html(html);
-            load_slider();
-        }
-    });
+    // $.get('/html/menu.html', function(html) {
+        // if ($('#menu-element').length) {
+            // $('#menu-element').html(html);
+            // load_slider();
+        // }
+    // });
     $.get('/html/bar.html', function(html) {
 	if ($('#bar-element').length) {
             $('#bar-element').html(html);
@@ -278,6 +284,7 @@ let svgFrance_VCN10;
 
 let data_indicator = ["QA", "QJXA", "VCN10_summer"]
 
+
 function update_data_point() {
 
     var url = window.location.pathname;
@@ -299,11 +306,11 @@ function update_data_point() {
     var horizon = get_horizon();
     
     // // Initialize top left for region selection
-    if (start) {
-        start = false
-        svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-            $('#map-region-loading').css('display', 'none');
-    }
+    // if (start) {
+        // start = false
+        // svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+            // $('#map-region-loading').css('display', 'none');
+    // }
     if (projection) {
         let data_all = {};
 
@@ -378,8 +385,8 @@ function update_data_point() {
         
     } else {
         // Empty maps
-        svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
-        $('#map-region-loading').css('display', 'none');
+        // svgFrance_region = update_map_region("#svg-france-region", svgFrance_region);
+        // $('#map-region-loading').css('display', 'none');
         svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
         $('#map-QA-loading').css('display', 'none');
         svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
@@ -403,7 +410,7 @@ function selectTraccButton(selectedButton) {
 	});
 	selectedButton.classList.add('selected');
 	// update_data_point_debounce();
-    updateStorylineButton()
+	updateStorylineButton();
     }
 }
 
@@ -491,7 +498,7 @@ function updateStorylineButton(reset=false){
             const button = document.getElementById(`button-${key}`);
             button.classList.remove("selected")
             button.innerHTML = `<i>Narratif ${compteur}</i>`;
-            button.disabled = true;
+            // button.disabled = true;
             compteur++;
         })
         const buttons = document.querySelectorAll("[id^='button-storyline']");
@@ -503,25 +510,24 @@ function updateStorylineButton(reset=false){
         .then((allStorylines) => {Object.entries(allStorylines).forEach(([key, val]) => {
             const button = document.getElementById(`button-${key}`);
             // const button_name = document.getElementById(`button-${key}-name`);
-            const cell_name = document.getElementById(`cell-${key}-name`)
+            const cell_line = document.getElementById(`${key}-cell-line`)
+	    const cell_name = document.getElementById(`cell-${key}-name`)
             const cell_description = document.getElementById(`cell-${key}`)
-            const cell_arrow = document.getElementById(`cell-${key}-arrow`);
+            // const cell_arrow = document.getElementById(`cell-${key}-arrow`);
             if (button) {
                 if (val) {
-                    button.disabled = false;
+                    // button.disabled = false;
                     button.classList.remove("selected");
-                    button.style.color = "black";
+                    // button.style.color = "black";
                     button.style.display = ""
                     button.value = key;
 
-                    cell_arrow.style.color = val.narratif_couleur;
+                    // cell_arrow.style.color = val.narratif_couleur;
+		    cell_line.style.backgroundColor = val.narratif_couleur;
                     cell_name.style.color = val.narratif_couleur;
-                    cell_name.innerHTML = `<span>${val.narratif_id}</span><br>
-                                            <span class="italic">${families[val.famille_id]}</span>`;
-                    cell_description.innerHTML = `
-                                                <span>${val.narratif_description}<br></span>
-                                                <span>GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}</span>
-                                                `;
+                    cell_name.innerHTML = `<div><span class="narratif-name-id">${val.narratif_id}</span> &#8211; ${families[val.famille_id]}</div>
+                                           <span class="narratif-description-chain"><i>GCM</i> ${val.gcm} | <i>RCM</i> ${val.rcm} | <i>HM</i> ${val.hm}</span>`;
+                    cell_description.innerHTML = `<span>${val.narratif_description}</span>`;
                     
                     // cell_description.textContent = `${val.narratif_description}<br> GCM: ${val.gcm}, RCM: ${val.rcm}, HM: ${val.hm}`;
                     
@@ -541,7 +547,7 @@ function updateStorylineButton(reset=false){
                 } else {
                     // button.textContent = " ";
                     button.value = null;
-                    button.disabled = true;
+                    // button.disabled = true;
                     button.style.display = "none";
                     // button.style.visibility = "hidden";
                 }
@@ -552,7 +558,7 @@ function updateStorylineButton(reset=false){
     buttons.forEach(btn => btn.classList.remove("selected"));
     if (buttons.length > 0) buttons[0].classList.add("selected");
 
-    // updateTable();²
+    // updateTable();
     update_data_point_debounce();
     });    
        
@@ -604,8 +610,8 @@ function updateTable() {
         if (selected_storyline [key] !== undefined) {
             const cell = table.rows[i].cells[1];
             cell.textContent = selected_storyline[key]; 
-            cell.classList.remove("text-gray");
-            cell.style.color = "black";
+            // cell.classList.remove("text-gray");
+            // cell.style.color = "black";
             // table.rows[i].cells[1].textContent = selected_storyline[key]; // maj 2ᵉ colonne
       }
     }
@@ -915,6 +921,8 @@ function make_list(from, to) {
 }
 
 
+
+
 function draw_colorbar(data_back) {
     // Get the bins and palette
     var unit = data_back.unit_fr;
@@ -931,8 +939,7 @@ function draw_colorbar(data_back) {
     svg.selectAll("*").remove();
 
     // Calculate and set initial SVG dimensions
-    // svg.attr("height", (Palette.length - 1) * step + shift * 2);
-    svg.attr("height", "100%");
+    svg.attr("height", (Palette.length - 1) * step + shift * 2);
     svg.attr("width", "100%");
 
     // Update tick lines
@@ -1032,16 +1039,28 @@ function draw_colorbar(data_back) {
                     }
                 });
         });
-    // circles.exit().remove();
+    circles.exit().remove();
 
     // Ensure width and height are set to prevent distortion
     const bbox = svgNode.getBBox();  // Get bounding box of the content
-    const grid_colorbar = document.getElementById("grid-colorbar");
     svgNode.setAttribute("viewBox", `${bbox.x - 2} ${bbox.y - 2} ${bbox.width + 2} ${bbox.height + 2}`);  // Set viewBox
-    svgNode.setAttribute("width", 0.9*grid_colorbar.clientWidth);  // Set width
-    svgNode.setAttribute("height", 0.85*grid_colorbar.clientHeight);  // Set height
+    svgNode.setAttribute("width", bbox.width);  // Set width
+    svgNode.setAttribute("height", bbox.height);  // Set height
     svgNode.setAttribute("preserveAspectRatio", "xMidYMid meet");  // Preserve aspect ratio
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1057,7 +1076,7 @@ const fill_basinHydro = "transparent";
 const stroke_basinHydro = "#ACACAD";
 const stroke_secteurHydro = "#bcbcbeff";
 const stroke_basin_selected = "#7BBFBA80";
-let selectedRegionId = null;
+let selectedRegionId = "K";
 const stroke_river = "#B0D9D6";
 const stroke_river_selected = "#7BBFBA";
 const stroke_secteur_selected = "#636363ff"
@@ -1089,6 +1108,23 @@ let height = window.innerHeight;
 let projectionMap;
 
 let currentZoomLevel = 1;
+
+
+function updateBasinPanelById(selectedRegionId) {
+    const panel = document.getElementById("panel-hover_basin");
+    const panelContent = document.getElementById("panel-hover-content_basin");
+    if (!selectedRegionId) {
+        panel.style.display = "none";
+        panelContent.innerHTML = "<span>Aucun bassin sélectionné</span>";
+        return;
+    }
+    const feature = geoJSONdata_basinHydro.features.find(
+        f => f.properties.name === selectedRegionId
+    );
+    panel.style.display = "block";
+    panelContent.innerHTML = `<span>${feature.properties.description}</span>`;
+}
+
 
 
 function update_map_region(id_svg, svgElement) {
@@ -1148,12 +1184,15 @@ function update_map_region(id_svg, svgElement) {
                 //     updateStorylineButton(reset=true)
                 // } else {
                 if (selectedRegionId !== d.properties.name) {
-                    selectedRegionId = d.properties.name;  // sélection
-                    document.getElementById("panel-hover_basin").style.display = "block";
-                    document.getElementById("panel-hover-content_basin").innerHTML =
-                        "<span style='font-weight: 900; color:" + selectedRegionId ? `${ d.properties.description}` : "Aucun bassin sélectionné" + "'>" +
-                        d.properties.TopoOH + "</span>"; 
+                    selectedRegionId = d.properties.name;
 
+                    // document.getElementById("panel-hover_basin").style.display = "block";
+                    // document.getElementById("panel-hover-content_basin").innerHTML =
+                        // "<span style='font-weight: 900; color:" + selectedRegionId ? `${ d.properties.description}` : "Aucun bassin sélectionné" + "'>" +
+                        // d.properties.TopoOH + "</span>"; 
+
+		    updateBasinPanelById(selectedRegionId);
+		    
                     // Met à jour le fill des polygones
                     layer_basin.selectAll("path.basinHydro")
                         .attr("fill", d => d.properties.name === selectedRegionId ? stroke_basin_selected : fill_basinHydro);
@@ -1239,6 +1278,10 @@ function update_map_region(id_svg, svgElement) {
     
     return svgElement
 }
+
+
+
+
 
 const mapIds = ["#svg-france-QA", "#svg-france-QJXA", "#svg-france-VCN10"];
 
@@ -2638,7 +2681,7 @@ async function exportData() {
     README = await README.text();
     var time = getFormattedDateTime();
     var horizon = get_horizon();
-    var n = get_n()
+    var n = default_n;
     var subtitle = "Changements relatifs " + horizon.text + " par rapport à la période de référence 1991-2020";
     let param =
         "Titre : " + subtitle + "\n" +
