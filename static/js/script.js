@@ -2041,7 +2041,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     var colorbar_right;
     
     if (isMapZoomed()) {
-	colorbar_right = 400;
+	colorbar_right = 340;
 	combinedSVG.append("rect")
             .attr("x", 0)
             .attr("y", 0)
@@ -2063,12 +2063,12 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
             .attr("height", 2000)
             .attr("fill", "#F5F5F5");
 
-	// combinedSVG.append("rect")
-    //         .attr("x", 1620)
-    //         .attr("y", 0)
-    //         .attr("width", 380)
-    //         .attr("height", 2000)
-    //         .attr("fill", "#F5F5F5");
+	combinedSVG.append("rect")
+            .attr("x", 1620)
+            .attr("y", 0)
+            .attr("width", 380)
+            .attr("height", 2000)
+            .attr("fill", "#F5F5F5");
     } else {
 	colorbar_right = 440;
     }
@@ -2077,7 +2077,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     const colorbar_scale = colorbar_height/colorbarHeight;
     
     const colorbar_top = 670;
-    const colorbar_width_shift = 14;
+    const colorbar_width_shift = 12;
     const colorbar_height_shift = 0;
 
     clonedSvgColorbar.setAttribute("viewBox", `0 0 ${colorbarWidth + colorbar_width_shift} ${colorbarHeight + colorbar_height_shift}`);
@@ -2121,9 +2121,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     
     var subtitle_storyline = "Narratif " + selected_storyline.narratif_id + " ("+ families[selected_storyline.famille_id] + ") : " + selected_storyline.narratif_description
     let subtitle_storyline_wrap = wrapTextByCharacterLimit(subtitle_storyline, width_max_subtitle-5);
-    if (subtitle_wrap.length == 1) {
-	subtitle_storyline_shift_top = 25;
-	subtitle_storyline_add_top = 0;
+    if (subtitle_storyline_wrap.length == 1) {
+	subtitle_storyline_shift_top = 20;
+	subtitle_storyline_add_top = 15;
     } else {
 	subtitle_storyline_shift_top = 0;
 	subtitle_storyline_add_top = 50;
@@ -2180,7 +2180,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     // Selected storyline information
     const subtitle_storyline_text_left = 50;
-    const subtitle_storyline_text_top = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top;
+    const subtitle_storyline_text_top = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top + subtitle_storyline_shift_top;
 
     const bar_width = 80;
     const bar_height = 12; 
@@ -2197,7 +2197,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     combinedSVG.append("text")
         .attr("x", subtitle_storyline_text_left)
-        .attr("y", subtitle_storyline_text_top)
+        .attr("y", subtitle_storyline_text_top )
         .attr("text-anchor", "start")
         .attr("font-size", "50px")
         .attr("font-family", "Lato, sans-serif")
@@ -2216,7 +2216,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     
     let subtitle_chain_wrap = wrapTextByCharacterLimit(subtitle_chain, width_max_subtitle);
     const subtitle_chain_text_left = 50;
-    const subtitle_chain_text_top = 300 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top + subtitle_storyline_shift_top + subtitle_storyline_add_top;
+    const subtitle_chain_text_top = 300 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top +  subtitle_storyline_add_top;
     combinedSVG.append("text")
         .attr("x", subtitle_chain_text_left)
         .attr("y", subtitle_chain_text_top)
@@ -2310,7 +2310,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     // Grey commentary on data
     const chain_text_wrap = wrapTextByCharacterLimit(chain_text, width_max_chain_text);
     const chain_text_left = 120;
-    const chain_text_bottom = 150;
+    const chain_text_bottom = 165;
     combinedSVG.append("text")
         .attr("x", chain_text_left)
         .attr("y", Height - chain_text_bottom)
@@ -2357,7 +2357,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     const footer_line_left1 = 880;
     const footer_line_bottom1 = 100;
     const footer_line_left2 = 880;
-    const footer_line_bottom2 = 20;
+    const footer_line_bottom2 = 10;
     combinedSVG.append("line")
 	.attr("x1", footer_line_left1)
 	.attr("y1", Height - footer_line_bottom1) 
@@ -2378,9 +2378,10 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .attr("fill", "#060508")
         .selectAll("tspan")
         .data([
-	    "Ces résultats sont issus de projections hydrologiques réalisées sur la France. La mise à jour",
-	    "de ces projections a été réalisé entre 2022 et 2025 dans le cadre du projet national Explore2.",
-	    "Ces résultats sont un aperçu de quelques futurs possibles pour la ressource en eau."
+	    "MEANDRE-TRACC propose un ensemble de futurs hydrologiques possibles à l'échelle régionale", 
+        "selon la TRACC. Celle-ci définit des niveaux de réchauffement en France par rapport à la ",
+        "période pré-industrielle qui doivent guider les trajectoires d'adaptation au changement",
+        "climatique : +2,0°C, +2,7°C, et +4°C."
         ])
         .enter().append("tspan")
         .attr("x", footer_text_left)
