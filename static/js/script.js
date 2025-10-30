@@ -1873,8 +1873,8 @@ function parseRegionIds(selectedRegionId) {
 // Fonction pour récupérer le nom du fichier basé sur la région
 function getFileNameForRegion(regionId) {
   // Mapping des régions hydrographiques vers leurs noms
-  const regionMapping ={'P': 'P_LA-DORDOGNE_TRACC-datasheet_Explore2.pdf', 'R': 'R_LA-CHARENTE_TRACC-datasheet_Explore2.pdf', 'H': 'H_LA-SEINE-DE-L-OISE-A-L-EMBOUCHURE_TRACC-datasheet_Explore2.pdf', 'U': 'U_LA-SAONE_TRACC-datasheet_Explore2.pdf', 'D': 'D_AFFLUENTS-DU-RHIN_TRACC-datasheet_Explore2.pdf', 'S': 'S_FLEUVES-COTIERS-FACADE-ATLANTIQUE_TRACC-datasheet_Explore2.pdf', 'F': 'F_LA-SEINE-DE-SA-SOURCE-A-L-OISE_TRACC-datasheet_Explore2.pdf', 'K': 'K_LA-LOIRE-DE-SA-SOURCE-A-LA-VIENNE_TRACC-datasheet_Explore2.pdf', 'X': 'X_LA-DURANCE_TRACC-datasheet_Explore2.pdf', 'L': 'L_LA-LOIRE-DE-LA-VIENNE-A-LA-MAINE_TRACC-datasheet_Explore2.pdf', 'Y': 'Y_FLEUVES-COTIERS-MEDITERRANEENS-ET-CORSE_TRACC-datasheet_Explore2.pdf', 'B': 'B_LA-MEUSE_TRACC-datasheet_Explore2.pdf', 'W': 'W_L-ISERE_TRACC-datasheet_Explore2.pdf', 'N': 'N_FLEUVES-COTIERS-DU-SUD-DE-LA-LOIRE_TRACC-datasheet_Explore2.pdf', 'E': 'E_L-ESCAUT-ET-FLEUVES-DE-LA-FRONTIERE-A-LA-BRESLE_TRACC-datasheet_Explore2.pdf', 'I': 'I_FLEUVES-COTIERS-A-L-OUEST-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf', 'G': 'G_FLEUVES-COTIERS-AU-NORD-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf', 'A': 'A_LE-RHIN_TRACC-datasheet_Explore2.pdf', 'J': 'J_FLEUVES-COTIERS-DE-BRETAGNE_TRACC-datasheet_Explore2.pdf', 'M': 'M_LA-LOIRE-DE-LA-MAINE-A-LA-MER_TRACC-datasheet_Explore2.pdf', 'V': 'V_LE-RHONE_TRACC-datasheet_Explore2.pdf', 'O': 'O_LA-GARONNE_TRACC-datasheet_Explore2.pdf', 'Q': 'Q_L-ADOUR_TRACC-datasheet_Explore2.pdf'};
-  
+  const regionMapping = {'P': 'P_LA-DORDOGNE_TRACC-datasheet_Explore2.pdf', 'R': 'R_LA-CHARENTE_TRACC-datasheet_Explore2.pdf', 'H': 'H_LA-SEINE-DE-L-OISE-A-L-EMBOUCHURE_TRACC-datasheet_Explore2.pdf', 'U': 'U_LA-SAONE_TRACC-datasheet_Explore2.pdf', 'D': 'D_AFFLUENTS-DU-RHIN_TRACC-datasheet_Explore2.pdf', 'S': 'S_FLEUVES-COTIERS-FACADE-ATLANTIQUE_TRACC-datasheet_Explore2.pdf', 'F': 'F_LA-SEINE-DE-SA-SOURCE-A-L-OISE_TRACC-datasheet_Explore2.pdf', 'K': 'K_LA-LOIRE-DE-SA-SOURCE-A-LA-VIENNE_TRACC-datasheet_Explore2.pdf', 'X': 'X_LA-DURANCE_TRACC-datasheet_Explore2.pdf', 'L': 'L_LA-LOIRE-DE-LA-VIENNE-A-LA-MAINE_TRACC-datasheet_Explore2.pdf', 'Y': 'Y_FLEUVES-COTIERS-MEDITERRANEENS-ET-CORSE_TRACC-datasheet_Explore2.pdf', 'B': 'B_LA-MEUSE_TRACC-datasheet_Explore2.pdf', 'W': 'W_L-ISERE_TRACC-datasheet_Explore2.pdf', 'N': 'N_FLEUVES-COTIERS-DU-SUD-DE-LA-LOIRE_TRACC-datasheet_Explore2.pdf', 'E': 'E_L-ESCAUT-ET-FLEUVES-DE-LA-FRONTIERE-A-LA-BRESLE_TRACC-datasheet_Explore2.pdf', 'I': 'I_FLEUVES-COTIERS-A-L-OUEST-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf', 'G': 'G_FLEUVES-COTIERS-AU-NORD-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf', 'A': 'A_LE-RHIN_TRACC-datasheet_Explore2.pdf', 'J': 'J_FLEUVES-COTIERS-DE-BRETAGNE_TRACC-datasheet_Explore2.pdf', 'M': 'M_LA-LOIRE-DE-LA-MAINE-A-LA-MER_TRACC-datasheet_Explore2.pdf', 'V': 'V_LE-RHONE_TRACC-datasheet_Explore2.pdf', 'O': 'O_LA-GARONNE_TRACC-datasheet_Explore2.pdf', 'Q': 'Q_L-ADOUR_TRACC-datasheet_Explore2.pdf'};
+
   const regionName = regionMapping[regionId];
   if (!regionName) {
     console.warn(`Région non trouvée: ${regionId}`);
@@ -1884,12 +1884,38 @@ function getFileNameForRegion(regionId) {
   return `${regionName}`;
 }
 
+
+const gwl2rwl = {'gwl15': 'RWL20', 'gwl20': 'RWL27', 'gwl30': 'RWL40'}
 // Fonction principale pour télécharger les fichiers
-async function downloadFichesByRegion() {
+async function exportFiche() {
     var horizon = get_horizon();
     var current_gwl = horizon.H;
 
     const regions = parseRegionIds(selectedRegionId);
+    const apiFiches = {
+    'A_LE-RHIN_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/K3F8AM', 
+    'B_LA-MEUSE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/IDZRRM', 
+    'D_AFFLUENTS-DU-RHIN_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/KUZOLZ', 
+    'E_L-ESCAUT-ET-FLEUVES-DE-LA-FRONTIERE-A-LA-BRESLE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/HEVGOF', 
+    'F_LA-SEINE-DE-SA-SOURCE-A-L-OISE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/HE9ZKK', 
+    'G_FLEUVES-COTIERS-AU-NORD-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/5SDZX7', 
+    'H_LA-SEINE-DE-L-OISE-A-L-EMBOUCHURE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/CGNASW', 
+    'I_FLEUVES-COTIERS-A-L-OUEST-DE-LA-SEINE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/VVOCNI', 
+    'J_FLEUVES-COTIERS-DE-BRETAGNE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/PBFEOC', 
+    'K_LA-LOIRE-DE-SA-SOURCE-A-LA-VIENNE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/QHRAYB', 
+    'L_LA-LOIRE-DE-LA-VIENNE-A-LA-MAINE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/G6BPE1', 
+    'M_LA-LOIRE-DE-LA-MAINE-A-LA-MER_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/Y1UH5C', 
+    'N_FLEUVES-COTIERS-DU-SUD-DE-LA-LOIRE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/F5HFLC', 
+    'O_LA-GARONNE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/HKT0TP', 
+    'P_LA-DORDOGNE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/DB64I1', 
+    'Q_L-ADOUR_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/TYEPQA', 
+    'R_LA-CHARENTE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/WYDUNR', 
+    'S_FLEUVES-COTIERS-FACADE-ATLANTIQUE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/SJJYL1', 
+    'U_LA-SAONE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/3Z7ZZ3', 
+    'V_LE-RHONE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/2GF2ID', 
+    'W_L-ISERE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/ZTW0LP', 
+    'X_LA-DURANCE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/ITMGBF', 
+    'Y_FLEUVES-COTIERS-MEDITERRANEENS-ET-CORSE_TRACC-datasheet_Explore2.pdf': 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId/?persistentId=doi:10.57745/VGMWT8', }
 
     if (regions.length === 0) {
     console.error('Aucune région sélectionnée');
@@ -1906,9 +1932,17 @@ async function downloadFichesByRegion() {
         if (!fileName) continue;
         
         const filePath = `${basePath}/${fileName}`;
+        // const response = await fetch(apiFiches[fileName]);
         try {
-            // Charger le PDF original
-            const existingPdfBytes = await fetch(filePath).then(res => res.arrayBuffer());
+            // Charger le PDF depuis l'API
+            const response = await fetch(apiFiches[fileName], {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/pdf"
+                }
+            });
+            const existingPdfBytes = await response.arrayBuffer();
+            // const existingPdfBytes = await fetch(filePath).then(res => res.arrayBuffer());
             const pdfDoc = await PDFDocument.load(existingPdfBytes);
             const totalPages = pdfDoc.getPageCount();
             let pagesToCopy = [];
@@ -1947,8 +1981,9 @@ async function downloadFichesByRegion() {
 
     const url = URL.createObjectURL(zipBlob);
     const link = document.createElement('a');
+    const extended_name = gwl2rwl[selected_storyline.gwl]+"+n-4+region-"+selected_storyline.region_id;
     link.href = url;
-    link.download = `${current_gwl}-fiches.zip`;
+    link.download = "MEANDRE-TRACC-fiche+"+extended_name+".zip";
     link.click();
     URL.revokeObjectURL(url);
 }
@@ -2656,7 +2691,7 @@ function getFormattedDateTime() {
 }
 
 async function exportData() {
-    const extended_name = selected_storyline.gwl+"+n-4+region-"+selected_storyline.region_id+"+"+selected_storyline.narratif_id
+    const extended_name = gwl2rwl[selected_storyline.gwl]+"+n-4+region-"+selected_storyline.region_id+"+narraTRACC-"+selected_storyline.narratif_id
     let zip;  
     zip = new JSZip();
     
