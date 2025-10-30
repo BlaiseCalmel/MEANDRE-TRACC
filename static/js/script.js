@@ -1885,7 +1885,7 @@ function getFileNameForRegion(regionId) {
 }
 
 // Fonction principale pour télécharger les fichiers
-async function downloadPdfsByRegion() {
+async function downloadFichesByRegion() {
     var horizon = get_horizon();
     var current_gwl = horizon.H;
 
