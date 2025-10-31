@@ -316,7 +316,6 @@ function get_horizon() {
     var bunchHorizon = $('#bunch-gwl');
     var buttonHorizon = bunchHorizon.find('.selected')[0];
     var H = buttonHorizon.getAttribute('value');
-	console.log(H)
 
     if (H === "H1") {
 	var horizon_period = "2021 - 2050";

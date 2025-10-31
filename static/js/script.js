@@ -542,7 +542,7 @@ function updateStorylineButton(reset=false){
 
                         // const cell = document.getElementById("cell_name");
                         // cell.style.backgroundColor = selected_storyline;
-                        console.log("Selected storyline:", selected_storyline);
+                        // console.log("Selected storyline:", selected_storyline);
                     }
                 } else {
                     // button.textContent = " ";
@@ -1011,18 +1011,25 @@ function draw_colorbar(data_back) {
                     var clicked_Colors = clicked_ID.map(id => Palette[id]);
 
                     if (selected_color === clicked_color) {
-                        d3.select("#svg-france").selectAll(".point")
+                        mapIds.forEach(mapId => {
+                        d3.select(mapId).selectAll(".point")
                             .attr("opacity", 1);
                         selected_color = null;
                         svg.selectAll(".color-circle, .tick-line, .bin-text")
                             .attr("opacity", 1)
                             .attr("r", 6);
+                        })
+
                     } else {
                         selected_color = clicked_color;
-                        d3.select("#svg-france").selectAll(".point")
+                        mapIds.forEach(mapId => {
+                            d3.select(mapId).selectAll(".point")
                             .attr("opacity", function(d) {
                                 return clicked_Colors.includes(d.fill) ? 1 : 0.1;
                             });
+
+                        })
+                        
 
                         svg.selectAll(".color-circle")
                             .attr("opacity", function() {
