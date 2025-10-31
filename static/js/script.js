@@ -2112,7 +2112,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     let title_text_shift_top;
     let title_text_add_top;
     if (title_wrap.length == 1) {
-	title_text_shift_top = 20;
+	title_text_shift_top = 15;
 	title_text_add_top = 0;
     } else {
 	title_text_shift_top = 0;
@@ -2136,7 +2136,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     // Storyline subtitle
     
-    var subtitle_storyline = "Narratif " + selected_storyline.narratif_id + " ("+ families[selected_storyline.famille_id] + ") : " + selected_storyline.narratif_description
+    var subtitle_storyline = "NarraTRACC " + selected_storyline.narratif_id + " ("+ families[selected_storyline.famille_id] + ") : " + selected_storyline.narratif_description
     let subtitle_storyline_wrap = wrapTextByCharacterLimit(subtitle_storyline, width_max_subtitle-5);
     if (subtitle_storyline_wrap.length == 1) {
 	subtitle_storyline_shift_top = 20;
@@ -2756,7 +2756,7 @@ async function exportData() {
         "Horizon : " + horizon.H + "\n" +
         "Nombre de point : Il y a au moins " + n + " modèles hydrologiques par point\n" +
         "Scénario d'émission : rcp" + RCP_value + "\n" +
-        "Narratif : " + selected_storyline.narratif_id + "\n" +
+        "NarraTRACC : " + selected_storyline.narratif_id + "\n" +
         "Description : " + selected_storyline.narratif + "\n" +
         "Chaîne de modélisation : " + selected_storyline.chain + "\n\n";
 
