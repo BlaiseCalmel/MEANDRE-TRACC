@@ -994,7 +994,7 @@ function draw_colorbar(data_back) {
                     var clicked_Colors = clicked_ID.map(id => Palette[id]);
 
                     if (selected_color === clicked_color) {
-                        mapIds.forEach(mapId => {
+                        id_svg_ALL.forEach(mapId => {
                         d3.select(mapId).selectAll(".point")
                             .attr("opacity", 1);
                         selected_color = null;
@@ -1005,7 +1005,7 @@ function draw_colorbar(data_back) {
 
                     } else {
                         selected_color = clicked_color;
-                        mapIds.forEach(mapId => {
+                        id_svg_ALL.forEach(mapId => {
                             d3.select(mapId).selectAll(".point")
                             .attr("opacity", function(d) {
                                 return clicked_Colors.includes(d.fill) ? 1 : 0.1;
@@ -1851,6 +1851,12 @@ async function exportFiche() {
     const zip = new JSZip();
     const basePath = '/resources/dataverse_files';
     const { PDFDocument } = PDFLib;
+
+    // Always create a folder for the files
+    const extended_name = "n-4+region-"+selected_storyline.region_id;
+    const folderName = "MEANDRE-TRACC-fiche+"+extended_name;
+    const folder = zip.folder(folderName);
+
     
     // Télécharger chaque fichier correspondant
     for (const region of regions) {
@@ -1868,37 +1874,42 @@ async function exportFiche() {
                     "Content-Type": "application/pdf"
                 }
             });
-            const existingPdfBytes = await response.arrayBuffer();
-            // const existingPdfBytes = await fetch(filePath).then(res => res.arrayBuffer());
-            const pdfDoc = await PDFDocument.load(existingPdfBytes);
-            const totalPages = pdfDoc.getPageCount();
-            let pagesToCopy = [];
+	    
+	    // const existingPdfBytes = await response.arrayBuffer();
+            // // const existingPdfBytes = await fetch(filePath).then(res => res.arrayBuffer());
+	    // const pdfDoc = await PDFDocument.load(existingPdfBytes);
+            // const totalPages = pdfDoc.getPageCount();
+            // let pagesToCopy = [];
             
-            if (current_gwl === 'gwl30') {
-                for (let i = 0; i < totalPages; i += 2) {
-                    pagesToCopy.push(i);
-                }
-            } else if (current_gwl === 'gwl20') {
-            pagesToCopy.push(0);
-                for (let i = 1; i < totalPages; i += 2) {
-                    pagesToCopy.push(i); 
-                }
-            } else {
-                return;
-            }
+            // if (current_gwl === 'gwl30') {
+            //     for (let i = 0; i < totalPages; i += 2) {
+            //         pagesToCopy.push(i);
+            //     }
+            // } else if (current_gwl === 'gwl20') {
+            // pagesToCopy.push(0);
+            //     for (let i = 1; i < totalPages; i += 2) {
+            //         pagesToCopy.push(i); 
+            //     }
+            // } else {
+            //     return;
+            // }
 
-            // Créer un nouveau PDF avec les pages sélectionnées
-            const newPdfDoc = await PDFDocument.create();
-            const copiedPages = await newPdfDoc.copyPages(pdfDoc, pagesToCopy);
+            // // Créer un nouveau PDF avec les pages sélectionnées
+            // const newPdfDoc = await PDFDocument.create();
+            // const copiedPages = await newPdfDoc.copyPages(pdfDoc, pagesToCopy);
             
-            copiedPages.forEach(page => {
-            newPdfDoc.addPage(page);
-            });
+            // copiedPages.forEach(page => {
+            // newPdfDoc.addPage(page);
+            // });
 
-            // Générer le PDF
-            const pdfBytes = await newPdfDoc.save();
+            // // Générer le PDF
+            // const pdfBytes = await newPdfDoc.save();
+
+	    
+	    const pdfBytes = await response.arrayBuffer();
             // Ajouter au ZIP
-            zip.file(`${fileName}.pdf`, pdfBytes);
+            // zip.file(`${fileName}.pdf`, pdfBytes);
+	    folder.file(`${fileName}.pdf`, pdfBytes);
         } catch (error) {
             console.error('Erreur:', error);
         }
@@ -1908,9 +1919,8 @@ async function exportFiche() {
 
     const url = URL.createObjectURL(zipBlob);
     const link = document.createElement('a');
-    const extended_name = gwl2rwl[selected_storyline.gwl]+"+n-4+region-"+selected_storyline.region_id;
     link.href = url;
-    link.download = "MEANDRE-TRACC-fiche+"+extended_name+".zip";
+    link.download = folderName+".zip";
     link.click();
     URL.revokeObjectURL(url);
 }
