@@ -157,8 +157,8 @@
 #home-by_AELB,
 #home-by_phone_AELB {
     height: 7rem;
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
 }
 
 @media (max-width: 1200px) {

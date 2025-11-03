@@ -77,6 +77,11 @@
 }
 
 
+.rapport_thumbnail {
+    height: 10rem;
+}
+
+
 .grid-cross {
     cursor: pointer;
     position: absolute;
@@ -617,7 +622,7 @@ p.warning {
 
 .gallery-item.small-text {
     display: inline;
-    /* max-width: 20rem; */
+    max-width: 20rem;
 }
 .gallery-item.screenshot {
     width: 15rem;
