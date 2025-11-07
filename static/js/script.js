@@ -46,10 +46,10 @@ const geoJSONfiles = [
 ];
 
 
-let URL_QA = ["/","/tracc-context", "/tracc-explore"];
+let URL_QA = ["/","/informations", "/explorer-la-tracc"];
 
 let URL_narratifs = ["/", 
-		     "/tracc-explore",]; 
+		     "/explorer-la-tracc",]; 
 
 let drawer_mode = 'drawer-narratif';
 
@@ -84,7 +84,7 @@ $(window).on('popstate', function(event) {
 function change_url(url, start=false, actualise=true) {
     var current_url = window.location.pathname;
     // console.log(current_url);
-    if (current_url === url && url === "/tracc-context") {
+    if (current_url === url && url === "/informations") {
 	actualise = false;
     }
     history.pushState({}, "", url);
@@ -187,7 +187,7 @@ function updateContent(start=false, actualise=true) {
 
     // if (url !== "/a-propos") {
 	if (start && url == "/") {
-	    $("#container-gallery-map").load("/html" + "/tracc-context" + ".html", function() {
+	    $("#container-gallery-map").load("/html" + "/informations" + ".html", function() {
 		check_url();
 	    });
 	    // update_data_point_debounce();
@@ -289,7 +289,7 @@ function update_data_point() {
 
     var url = window.location.pathname;
     let check_cache;
-    if (url === "/tracc-context") {
+    if (url === "/informations") {
 	check_cache = false; 
     } else {
 	check_cache = true;
