@@ -1,0 +1,202 @@
+<!--
+     Copyright 2024
+     Louis Héraut (louis.heraut@inrae.fr)*1,
+     Éric Sauquet (eric.sauquet@inrae.fr)*1
+     
+     *1   INRAE, France
+
+     This file is part of MEANDRE.
+
+     MEANDRE is free software: you can redistribute it and/or
+     modify it under the terms of the GNU General Public License as
+     published by the Free Software Foundation, either version 3 of the
+     License, or (at your option) any later version.
+
+     MEANDRE is distributed in the hope that it will be useful, but
+     WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+     General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with MEANDRE.
+     If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<!-- <div id="gallery-map"> -->
+
+<div id="container-gallery">
+
+    <div id="grid-mini-map" class="gallery-item bunch column">
+	<span class="grid-element_title">Sélectionnez un territoire</span>
+	
+	<div id="grid-mini-map_map">
+	    <div id="map-region-loading" class="container-loading">
+		<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+	    </div>
+	    
+	    <svg id="svg-france-region"></svg>
+
+	    <div id="panel-hover_basin" class="panel-hover">
+		<div class="bunch row column-small-gap center cross-center">
+		    <div id="panel-hover-content_basin" class="panel-hover-content"></div>
+		</div>
+	    </div>		    
+	</div>
+    </div>
+
+    <div id="container-gwl-fiche" class="bunch column column-small-gap row-small-gap">
+	<div id="grid-gwl" class="gallery-item bunch column">
+	    <span class="grid-element_title">Sélectionnez un niveau de<br>réchauffement</span>
+	    <span class="grid-gwl_text"><i>Vivre à...</i></span>
+	    
+	    <div id="bunch-gwl" class="bunch row column-small-gap row-small-gap">
+		<button id="button-tracc40" value="gwl30" class="button-gwl gwl30 selected"
+			    onclick="selectTraccButton(this);">
+		    <span>+<span class="button-gwl_text-deg">4</span>°C</span>
+		</button>
+		<button id="button-tracc27" value="gwl20" class="button-gwl gwl20"
+			    onclick="selectTraccButton(this);">
+		    <span>+<span class="button-gwl_text-deg">2.7</span>°C</span>
+		</button>
+		<button id="button-tracc20" value="gwl15" class="button-gwl gwl15"
+			    onclick="selectTraccButton(this);">
+		    <span>+<span class="button-gwl_text-deg">2</span>°C</span>
+		</button>
+	    </div>
+	</div>
+
+	<div id="grid-fiche" class="gallery-item">
+	    <button id="export-fiche" onclick="exportFiche()">
+		<div id="export-spinner" class="lds-ring small" style="display: none;"><div></div><div></div><div></div><div></div></div>
+		<span id="export-icon" class="material-icons-outlined">file_open</span>
+		<span>Fiche de synthèse</span>
+	    </button>
+	</div>
+	
+    </div>
+
+
+    <div id="grid-colorbar" class="gallery-item">
+	<svg id="svg-colorbar"></svg>
+    </div>
+
+    
+    <div id="grid-narratif" class="gallery-item bunch column">
+	<span class="grid-element_title">Chaînes de modélisation pour chaque narraTRACC</span>
+
+	<div id="grid-narratif_bunch">
+	    <button id="button-storyline1" class="button-narratif" onclick="selectStorylineButton(this)">
+		<div id="storyline1-cell-line" class="cell-line"></div>
+		<div class="bunch column">
+		    <span id="cell-storyline1-name" class="narratif-name"></span>
+		    <span id="cell-storyline1" class="narratif-description"></span>
+		</div>			
+	    </button>
+
+	    <button id="button-storyline2" class="button-narratif" onclick="selectStorylineButton(this)">
+		<div id="storyline2-cell-line" class="cell-line"></div>
+		<div class="bunch column">
+		    <span id="cell-storyline2-name" class="narratif-name"></span>
+		    <span id="cell-storyline2" class="narratif-description"></span>
+		</div>
+	    </button>
+
+	    <button id="button-storyline3" class="button-narratif" onclick="selectStorylineButton(this)">
+		<div id="storyline3-cell-line" class="cell-line"></div>
+		<div class="bunch column">
+		    <span id="cell-storyline3-name" class="narratif-name"></span>
+		    <span id="cell-storyline3" class="narratif-description"></span>
+		</div>
+	    </button>
+
+	    <button id="button-storyline4" class="button-narratif" onclick="selectStorylineButton(this)">
+		<div id="storyline4-cell-line" class="cell-line"></div>
+		<div class="bunch column">
+		    <span id="cell-storyline4-name" class="narratif-name"></span>
+		    <span id="cell-storyline4" class="narratif-description"></span>
+		</div>
+	    </button>
+	</div>
+    </div>
+    
+</div>
+
+<div id="container-map">
+
+    <div class="map-title-overlay phone">
+	<span>Étiages</span>
+	<span class="map-title-overlay_subtitle">Changements relatifs du VCN10</span>
+    </div>
+    
+    <div id="map-VCN10" class="map">
+	<div class="map-title-overlay pc">
+	    <span class="map-title-overlay_content">Étiages</span>
+	    <span class="map-title-overlay_expanded-content">Changements relatifs du VCN10</span>
+	</div>
+	<div id="map-VCN10-loading" class="container-loading">
+	    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+	</div>
+	<svg id="svg-france-VCN10"></svg>
+    </div>
+    
+    <div class="separator"></div>
+    <div class="map-title-overlay phone">
+	<span>Moyennes Eaux</span>
+	<span class="map-title-overlay_subtitle">Changements relatifs du QA</span>
+    </div>
+    
+    <div id="map-QA" class="map">
+	<div class="map-title-overlay pc">
+	    <span class="map-title-overlay_content">Moyennes Eaux</span>
+	    <span class="map-title-overlay_expanded-content">Changements relatifs du QA</span>
+	</div>
+	<div id="map-QA-loading" class="container-loading">
+	    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+	</div>
+	<svg id="svg-france-QA"></svg>		
+    </div>
+
+    <div class="separator"></div>
+    <div class="map-title-overlay phone">
+	<span>Crues</span>
+	<span class="map-title-overlay_subtitle">Changements relatifs du QJXA</span>
+    </div>
+    
+    <div id="map-QJXA" class="map">
+	<div class="map-title-overlay pc">
+	    <span class="map-title-overlay_content">Crues</span>
+	    <span class="map-title-overlay_expanded-content">Changements relatifs du QJXA</span>
+	</div>
+	<div id="map-QJXA-loading" class="container-loading">
+	    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+	</div>
+	<svg id="svg-france-QJXA"></svg>
+    </div>
+
+
+    <div id="panel-hover_code" class="panel-hover">
+	<div class="bunch row column-small-gap center cross-center">
+	    <div id="panel-hover-content_code" class="panel-hover-content"></div>
+	</div>
+    </div>
+
+    <div id="panel-hover_description" class="panel-hover">
+	<div class="bunch row column-small-gap center cross-center">
+	    <div id="panel-hover-content_description" class="panel-hover-content"></div>
+	</div>
+    </div>
+    
+    <div id="panel-hover_secteur" class="panel-hover">
+	<div class="bunch row column-small-gap center cross-center">
+	    <div id="panel-hover-content_secteur" class="panel-hover-content"></div>
+	</div>
+    </div>
+    
+
+    <div id="action-bar" class="bunch row">
+	<button id="export" class="material-icons-outlined"
+		    onclick="exportData()">file_download</button>
+    </div>
+    
+</div>
+<!-- </div> -->
