@@ -26,8 +26,9 @@
     width: 19rem;
     height: 3rem;
     color: #16171f;
-    box-shadow: 0 1px 2px rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);
-    z-index: 1;
+    background: #ffffff;
+    box-shadow: 0 6px 10px -4px rgba(60, 64, 67, 0.25);
+    z-index: 2;
 }
 
 .logo {
@@ -85,7 +86,7 @@
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: none;
-    box-shadow: 0 1px 2px rgba(60,64,67,0.3),0 2px 6px 2px rgba(60,64,67,0.15);
+    box-shadow: 0 6px 10px -4px rgba(60, 64, 67, 0.25);
     z-index: 1;
 }
 #bar.expanded {
@@ -229,7 +230,7 @@
     height: 1.5rem;
     border-radius: 50%;
     background-color: #ffffff;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 5px rgba(60, 64, 67, 0.5);
     display: none;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -361,6 +362,7 @@
     #logo {
 	position: relative;
 	width: 100vw;
+	box-shadow: none;
     }
     
     #first_sep {
@@ -368,6 +370,7 @@
     }
     
     #bar {
+	border-top: 3px solid #EDEDED;
 	width: 100vw;
 	height: 3rem;
     }

@@ -357,10 +357,7 @@ p.warning {
 
 
 #grid-narratif {
-    /* flex-grow: 1; */
-    /* max-width: 55rem; */
-    /* height: auto; */
-    min-width: 48rem;
+    min-width: 46rem;
 }
 #grid-narratif_bunch {
     display: flex;
@@ -658,4 +655,15 @@ p.warning {
     .gallery h2 {
 	font-size: 1.8rem;
     }
+
+
+    #grid-narratif {
+	min-width: unset;
+    }
+
+    .button-narratif .narratif-name {
+	flex-direction: column;
+    }
+
 }
+

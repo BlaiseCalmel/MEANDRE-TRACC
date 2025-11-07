@@ -21,6 +21,10 @@
 /* If not, see <https://www.gnu.org/licenses/>.                       */
 
 
+#a-propos-gallery {
+    padding: 1rem;
+}
+
 #grid-finance {
     max-width: 24rem;
 }
@@ -50,6 +54,9 @@
 
 
 #propos_AELB {
+    align-items: center;
+    justify-content: center;
+    height: auto;
     padding: 0.5rem;
 }
 #propos_AELB img {

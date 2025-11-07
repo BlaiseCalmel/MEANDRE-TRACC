@@ -22,93 +22,78 @@
      If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div id="container-upper">
-    <div id="panel-hover">
-	<div class="bunch row column-small-gap center cross-center">
-	    <div id="panel-hover_code"></div>
+
+
+<div id="a-propos-gallery" class="gallery bunch center">
+
+    <div class="bunch column column-big-gap row-big-gap cross-start">
+	<div class="bunch column column-small-gap row-small-gap">
+	    <h1 class="gallery-item">
+		À PROPOS
+	    </h1>
+	    <div class="bunch row column-small-gap row-small-gap nowrap">
+		<div class="bunch column column-small-gap row-small-gap">
+		    <div class="gallery-arrow material-icons-outlined"
+			 onclick="change_url('/tracc-explore')">arrow_back</div>
+		</div>
+	    </div>
 	</div>
-    </div>
-
-    <div id="map-loading" class="container-loading">
-	<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-    </div>
-    <svg id="svg-france"></svg>
-</div>
 
 
-<div class="container-lower">
-    <div class="gallery">
+	<div class="bunch column column-small-gap row-small-gap">
+	    <div id="grid-finance" class="gallery-item no-fit">
+		<div class="bunch column center">
+		    <h3>Soutien fiancier</h3>
+		    <span>Le projet EHCLO est financé par l'Agence de l'Eau Loire-Bretagne</span>
+		</div>
+	    </div>
 
-	<div class="bunch column column-big-gap row-big-gap">
+
 	    <div class="bunch column column-small-gap row-small-gap">
-		<h1 class="gallery-item">
-		    À PROPOS
-		</h1>
-		<div class="bunch row column-small-gap row-small-gap nowrap">
+		<div class="bunch row column-small-gap row-small-gap">
+		    <div id="propos_AELB" class="gallery-item">
+			<a href="https://agence.eau-loire-bretagne.fr/home.html" target="_blank">
+			    <img src="/resources/logo/financeur/logo_agence-de-l-eau-loire-bretagne.jpg" alt="AELB">
+			</a>
+		    </div>
+		    
+		    <div id="propos_INRAE" class="gallery-item">
+			<a href="https://www.inrae.fr/" target="_blank">
+			    <img src="/resources/logo/INRAE/Republique_Francaise_INRAE.png" alt="INRAE">
+			</a>
+		    </div>
+		</div>
+	    </div>
+	</div>
+
+
+	<div class="bunch column column-small-gap row-small-gap">
+	    <div class="bunch row column-small-gap row-small-gap">
+		<div class="gallery-item">
+		    <a href="https://professionnels.ofb.fr/fr/node/1244" target="_blank">
+			<img id="propos_Explore2"  src="/resources/logo/Explore2/LogoExplore2.png" alt="Explore2">
+		    </a>
+		</div>
+
+		<div class="gallery-item no-fit">
+		    <a class="bunch column center" href="https://entrepot.recherche.data.gouv.fr/dataverse/explore2" target="_blank">
+			<h3>Entrepôt de données du projet Explore2</h3>
+			<span>Recherche Data Gouv, Data INRAE</span>
+		    </a>
+		</div>
+	    </div>
+
+	    <div class="bunch column column-small-gap row-small-gap">
+		<div class="gallery-item bunch row column-gap center cross-center">
+		    <img class="rapport_thumbnail" src="/resources/rapport/A_LE-RHIN_TRACC-datasheet_Explore2.png">
 		    <div class="bunch column column-small-gap row-small-gap">
-			<div class="gallery-arrow material-icons-outlined"
-			     onclick="change_url('/tracc-context')">arrow_back</div>
-		    </div>
-		</div>
-	    </div>
-
-
-	    <div class="bunch column column-small-gap row-small-gap">
-		<div id="grid-finance" class="gallery-item no-fit">
-		    <div class="bunch column center">
-			<h3>Soutien fiancier</h3>
-			<span>Le projet EHCLO est financé par l'Agence de l'Eau Loire-Bretagne</span>
-		    </div>
-		</div>
-
-
-		<div class="bunch column column-small-gap row-small-gap">
-		    <div class="bunch row column-small-gap row-small-gap">
-				<div id="propos_AELB" class="gallery-item">
-					<a href="https://agence.eau-loire-bretagne.fr/home.html" target="_blank">
-					<img src="/resources/logo/financeur/logo_agence-de-l-eau-loire-bretagne.jpg" alt="AELB">
-					</a>
-				</div>
-
-
-
-
-			</div>
-		
-			<div id="propos_INRAE" class="gallery-item">
-				<a href="https://www.inrae.fr/" target="_blank">
-				<img src="/resources/logo/INRAE/Republique_Francaise_INRAE.png" alt="INRAE">
-				</a>
-			</div>
-	    </div>
-
-
-
-	    <div class="bunch column column-small-gap row-small-gap">
-		<div class="bunch row column-small-gap row-small-gap">
-		    <div class="gallery-item">
-			<a href="https://professionnels.ofb.fr/fr/node/1244" target="_blank">
-			    <img id="propos_Explore2"  src="/resources/logo/Explore2/LogoExplore2.png" alt="Explore2">
+			<a class="bunch column center" href="https://doi.org/10.57745/QDCSBZ" target="_blank">	
+			    <h3>Fiche de synthèse des changements hydrologiques - TRACC</h3>
+			    <span>Présentent, par région hydrographique et pour deux niveaux de réchauffement de<br>
+				la TRACC (+2.7 °C et +4 °C), des fiches synthétiques graphiques des changements<br>
+				hydrologiques pour des scénarios hydrologiques contrastés.</span>
 			</a>
-		    </div>
-
-		    <div class="gallery-item no-fit">
-			<a class="bunch column center" href="https://entrepot.recherche.data.gouv.fr/dataverse/explore2" target="_blank">
-			    <h3>Entrepôt de données du projet Explore2</h3>
-			    <span>Recherche Data Gouv, Data INRAE</span>
-			</a>
-		    </div>
-		</div>
-
-		<div class="bunch column column-small-gap row-small-gap">
-		<div class="bunch row column-small-gap row-small-gap">
-
-		    <div class="gallery-item no-fit">
-			<img id="propos_Fiches"  src="/resources/Fiches_tracc_secteur.png" alt="Fiches_tracc">
-			<a class="bunch column center" href="https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi:10.57745/QDCSBZ" target="_blank">
-			    <h3>Fiches des changements hydrologiques <br>par secteur hydrographique</h3>
-			    <span>Recherche Data Gouv, Data INRAE</span>
-			</a>
+			<i>INRAE, Recherche Data Gouv</i>
 		    </div>
 		</div>
 
@@ -119,59 +104,60 @@
 		    </a>
 		</div>
 	    </div>
-	    
+	</div>
+	
 
-	    <div class="bunch column column-small-gap row-small-gap">		
-		<div class="bunch row column-small-gap row-small-gap">
-		    <div class="gallery-item">
-			<a class="bunch column" href="mailto:contact.meandre@listes.inrae.fr">
-			    <h3>Développement</h3>
-				<span>Blaise Calmel &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France<br>
-			    Louis Héraut &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France</span>
-			</a>
-		    </div>
-
-		    <div class="gallery-item">
-			<a class="bunch column" href="mailto:contact.meandre@listes.inrae.fr">
-			    <h3>Référent scientifique</h3>
-			    <span>Jean-Philippe Vidal &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France</span>
-			</a>
-		    </div>
-
-		    <div class="gallery-item">
-			<a class="bunch column" href="mailto:contact.meandre@listes.inrae.fr">
-			    <h3>Contact</h3>
-			    <span>contact.meandre@listes.inrae.fr</span>
-			</a>
-		    </div>
-		</div>
-	    </div>
-
-
-	    <div class="bunch row column-big-gap row-big-gap">
+	<div class="bunch column column-small-gap row-small-gap">		
+	    <div class="bunch row column-small-gap row-small-gap">
 		<div class="gallery-item">
-		    <a class="bunch column" href="https://github.com/BlaiseCalmel/MEANDRE-TRACC" target="_blank">
-			<h3>Code source</h3>
-			<span>GitHub</span>
+		    <a class="bunch column" href="mailto:contact.meandre@listes.inrae.fr">
+			<h3>Développement</h3>
+			<span>Blaise Calmel &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France<br>
+			    Louis Héraut &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France</span>
 		    </a>
 		</div>
 
 		<div class="gallery-item">
-		    <div class="bunch column">
-			<h3>Hébergement web</h3>
-			<span>Data Center de INRAE, Île-de-France</span>
-		    </div>
+		    <a class="bunch column" href="mailto:contact.meandre@listes.inrae.fr">
+			<h3>Référent scientifique</h3>
+			<span>Jean-Philippe Vidal &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France</span>
+			<span>Éric Sauquet &nbsp;&nbsp; INRAE, UR RiverLy, Villeurbanne, France</span>
+		    </a>
 		</div>
-		
+
 		<div class="gallery-item">
-		    <div class="bunch column">
-			<h3>Dernière mise à jour</h3>
-			<span>Octobre 2025</span>
-		    </div>
+		    <a class="bunch column" href="mailto:contact.meandre@listes.inrae.fr">
+			<h3>Contact</h3>
+			<span>contact.meandre@listes.inrae.fr</span>
+		    </a>
 		</div>
 	    </div>
-
 	</div>
-	
+
+
+	<div class="bunch row column-big-gap row-big-gap">
+	    <div class="gallery-item">
+		<a class="bunch column" href="https://github.com/BlaiseCalmel/MEANDRE-TRACC" target="_blank">
+		    <h3>Code source</h3>
+		    <span>GitHub</span>
+		</a>
+	    </div>
+
+	    <div class="gallery-item">
+		<div class="bunch column">
+		    <h3>Hébergement web</h3>
+		    <span>Data Center de INRAE, Île-de-France</span>
+		</div>
+	    </div>
+	    
+	    <div class="gallery-item">
+		<div class="bunch column">
+		    <h3>Dernière mise à jour</h3>
+		    <span>Octobre 2025</span>
+		</div>
+	    </div>
+	</div>
+
     </div>
+    
 </div>

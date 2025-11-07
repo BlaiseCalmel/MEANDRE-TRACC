@@ -21,6 +21,46 @@
 // If not, see <https://www.gnu.org/licenses/>.
 
 
+function getCurrentH1(element) {
+  // go up until we find a container that also contains an <h1>
+  let container = element.parentElement;
+  while (container && !container.querySelector('h1')) {
+    container = container.parentElement;
+  }
+  return container ? container.querySelector('h1') : null;
+}
+
+function scrollToNextH1(element) {
+  const h1s = Array.from(document.querySelectorAll('h1'));
+  const currentH1 = getCurrentH1(element);
+
+  if (!currentH1) {
+    console.warn('No H1 found near arrow', element);
+    return;
+  }
+
+  const index = h1s.indexOf(currentH1);
+  if (index >= 0 && index < h1s.length - 1) {
+    h1s[index + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function scrollToPrevH1(element) {
+  const h1s = Array.from(document.querySelectorAll('h1'));
+  const currentH1 = getCurrentH1(element);
+
+  if (!currentH1) {
+    console.warn('No H1 found near arrow', element);
+    return;
+  }
+
+  const index = h1s.indexOf(currentH1);
+  if (index > 0) {
+    h1s[index - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+
 function toggle_subtab(tab_button) {
 
     console.log(tab_button);
@@ -70,12 +110,12 @@ function check_bar() {
 	arrows.each(function() {
 	    $(this).addClass("show");
 	});
-	sep.style.display = "none";
+	// sep.style.display = "none";
     } else {
 	arrows.each(function() {
 	    $(this).removeClass("show");
 	});
-	sep.style.display = "inline-flex";
+	// sep.style.display = "inline-flex";
     }
 }
 window.addEventListener('resize', function() {

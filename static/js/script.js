@@ -28,8 +28,8 @@ if (is_production) {
     api_base_url = "https://meandre-tracc.explore2.inrae.fr";
     default_n = 4;
 } else {
-    // api_base_url = "http://127.0.0.1:5000";
-    api_base_url = "http://10.69.66.253:5000";
+    api_base_url = "http://127.0.0.1:5000";
+    // api_base_url = "http://10.69.66.253:5000";
     default_n = 4;
 }
 
@@ -1815,6 +1815,16 @@ function getFileNameForRegion(regionId) {
 const gwl2rwl = {'gwl15': 'RWL20', 'gwl20': 'RWL27', 'gwl30': 'RWL40'}
 // Fonction principale pour télécharger les fichiers
 async function exportFiche() {
+
+    const icon = document.getElementById("export-icon");
+    const spinner = document.getElementById("export-spinner");
+    const button = document.getElementById("export-fiche");
+
+    // Show spinner, hide icon, disable button
+    icon.style.display = "none";
+    spinner.style.display = "inline-block";
+    button.disabled = true;
+    
     var horizon = get_horizon();
     var current_gwl = horizon.H;
 
@@ -1923,7 +1933,13 @@ async function exportFiche() {
     link.download = folderName+".zip";
     link.click();
     URL.revokeObjectURL(url);
+    
+    spinner.style.display = "none";
+    icon.style.display = "inline-block";
+    button.disabled = false;
 }
+
+// const exportFiche_debounce = debounce(exportFiche, 1000);
 
 
 function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narratif_color="") {
@@ -1965,7 +1981,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 
     
     // Append France to combined SVG
-    const france_scale = 1450/franceHeight;
+    const france_scale = 1500/franceHeight;
     const france_left = 2;
     const france_top = 430;
 
@@ -1983,12 +1999,12 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", 2000)
-            .attr("height", 470)
+            .attr("height", 490)
             .attr("fill", "#F5F5F5");
 
 	combinedSVG.append("rect")
             .attr("x", 0)
-            .attr("y", 1790)
+            .attr("y", 1860)
             .attr("width", 2000)
             .attr("height", 290)
             .attr("fill", "#F5F5F5");
@@ -2026,7 +2042,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     
     // Main title text
     var title = data.name_fr;
-    const width_max_title = 42;
+    const width_max_title = 43;
     let title_wrap = wrapTextByCharacterLimit(title, width_max_title);
 
     let title_text_shift_top;
@@ -2043,7 +2059,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     var horizon = get_horizon();
     var relatif = data.to_normalise ? "relatifs " : ""; 
     var subtitle = "Changements " + relatif + horizon.text + " par rapport à la période de référence 1991-2020";
-    const width_max_subtitle = 85;
+    const width_max_subtitle = 55;
+    const width_max_subtitle_storyline = 65;
+    const width_max_subtitle_chain = 85;
     let subtitle_wrap = wrapTextByCharacterLimit(subtitle, width_max_subtitle);
 
     if (subtitle_wrap.length == 1) {
@@ -2055,9 +2073,8 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     }
 
     // Storyline subtitle
-    
     var subtitle_storyline = "NarraTRACC " + selected_storyline.narratif_id + " ("+ families[selected_storyline.famille_id] + ") : " + selected_storyline.narratif_description
-    let subtitle_storyline_wrap = wrapTextByCharacterLimit(subtitle_storyline, width_max_subtitle-5);
+    let subtitle_storyline_wrap = wrapTextByCharacterLimit(subtitle_storyline, width_max_subtitle_storyline);
     if (subtitle_storyline_wrap.length == 1) {
 	subtitle_storyline_shift_top = 20;
 	subtitle_storyline_add_top = 15;
@@ -2116,21 +2133,21 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .text(d => d);
 
     // Selected storyline information
-    const subtitle_storyline_text_left = 50;
-    const subtitle_storyline_text_top = 230 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top + subtitle_storyline_shift_top;
+    const subtitle_storyline_text_left = 45;
+    const subtitle_storyline_text_top = 240 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top + subtitle_storyline_shift_top;
 
-    const bar_width = 80;
-    const bar_height = 12; 
-    const bar_radius = 4;
+    // const bar_width = 80;
+    // const bar_height = 12; 
+    // const bar_radius = 4;
 
-    combinedSVG.append("rect")
-        .attr("x", subtitle_storyline_text_left)
-        .attr("y", subtitle_storyline_text_top - 22)
-        .attr("width", bar_width)
-        .attr("height", bar_height)
-        .attr("rx", bar_radius)  // Rayon horizontal pour coins arrondis
-        .attr("ry", bar_radius)  // Rayon vertical pour coins arrondis
-        .attr("fill", selected_storyline.narratif_couleur); // Couleur (à adapter)
+    // combinedSVG.append("rect")
+    //     .attr("x", subtitle_storyline_text_left)
+    //     .attr("y", subtitle_storyline_text_top - 22)
+    //     .attr("width", bar_width)
+    //     .attr("height", bar_height)
+    //     .attr("rx", bar_radius)  // Rayon horizontal pour coins arrondis
+    //     .attr("ry", bar_radius)  // Rayon vertical pour coins arrondis
+    //     .attr("fill", selected_storyline.narratif_couleur); // Couleur (à adapter)
 
     combinedSVG.append("text")
         .attr("x", subtitle_storyline_text_left)
@@ -2143,16 +2160,16 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .selectAll("tspan")
         .data(subtitle_storyline_wrap)
         .enter().append("tspan")
-        // .attr("x", subtitle_storyline_text_left)
-        .attr("x", (d, i) => i === 0 ? subtitle_storyline_text_left+100 : subtitle_storyline_text_left)
+        .attr("x", subtitle_storyline_text_left)
+        // .attr("x", (d, i) => i === 0 ? subtitle_storyline_text_left+100 : subtitle_storyline_text_left)
         .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
         .text(d => d);
 
     // Selected chain information
-    var subtitle_chain = "GCM : " + selected_storyline.gcm + ", RCM : " + selected_storyline.rcm + ", BC : " + selected_storyline.bc + ", HM : " + selected_storyline.hm
+    var subtitle_chain = "GCM : " + selected_storyline.gcm + " | RCM : " + selected_storyline.rcm + " | BC : " + selected_storyline.bc + " | HM : " + selected_storyline.hm
     
-    let subtitle_chain_wrap = wrapTextByCharacterLimit(subtitle_chain, width_max_subtitle);
-    const subtitle_chain_text_left = 50;
+    let subtitle_chain_wrap = wrapTextByCharacterLimit(subtitle_chain, width_max_subtitle_chain);
+    const subtitle_chain_text_left = 45;
     const subtitle_chain_text_top = 300 + title_text_shift_top + title_text_add_top + subtitle_text_shift_top + subtitle_text_add_top +  subtitle_storyline_add_top;
     combinedSVG.append("text")
         .attr("x", subtitle_chain_text_left)
@@ -2174,7 +2191,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
     let top_text_color = "transparent";
 
     let width_max_chain_text = 90;
-    let chain_text_shift = 80;
+    let chain_text_shift = 43;
     let chain_text;
     var projection = get_projection();
     var n = default_n;
@@ -2183,9 +2200,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 	top_text = narratif_text;
 	top_text_color = narratif_color;
 
-    const RCP_text = projection.RCP;
+    const RCP_text = "Scénario d'émission " + projection.RCP;
     const model_text = "avec au moins " + n + " modèles hydrologiques par point";
-    chain_text = chain_text + " " + RCP_text + " " + model_text;
+    chain_text = RCP_text + " " + model_text;
 
     const width_max_top_text = 100;
     const top_text_wrap = wrapTextByCharacterLimit(top_text, width_max_top_text);
@@ -2219,49 +2236,49 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 	.attr("stroke", top_text_color)
 	.attr("stroke-width", "6px");
     
-    // Grey i for information
-    const i_text_left = 140 - chain_text_shift;
-    const i_text_bottom = 150;
-    combinedSVG.append("text")
-        .attr("x", i_text_left)
-        .attr("y", Height - i_text_bottom)
-        .attr("text-anchor", "middle")
-        .attr("font-size", "40px")
-	.attr("font-family", "Georgia, serif")
-        .attr("font-weight", "600")
-	.attr("fill", "#89898A")
-        .text("i");
+    // // Grey i for information
+    // const i_text_left = 150 - chain_text_shift;
+    // const i_text_bottom = 150;
+    // combinedSVG.append("text")
+    //     .attr("x", i_text_left)
+    //     .attr("y", Height - i_text_bottom)
+    //     .attr("text-anchor", "middle")
+    //     .attr("font-size", "40px")
+    // 	.attr("font-family", "Georgia, serif")
+    //     .attr("font-weight", "600")
+    // 	.attr("fill", "#89898A")
+    //     .text("i");
 
-    // Grey circle around i
-    const circle_left = 140 - chain_text_shift;
-    const circle_bottom = 165;
-    const circle_radius = 22;
-    combinedSVG.append("circle")
-	.attr("cx", circle_left)
-	.attr("cy", Height - circle_bottom)
-	.attr("r", circle_radius)
-	.attr("fill", "transparent")
-	.attr("stroke", "#89898A")
-	.attr("stroke-width", "5px");
+    // // Grey circle around i
+    // const circle_left = 150 - chain_text_shift;
+    // const circle_bottom = 165;
+    // const circle_radius = 22;
+    // combinedSVG.append("circle")
+    // 	.attr("cx", circle_left)
+    // 	.attr("cy", Height - circle_bottom)
+    // 	.attr("r", circle_radius)
+    // 	.attr("fill", "transparent")
+    // 	.attr("stroke", "#89898A")
+    // 	.attr("stroke-width", "5px");
     
-    // Grey commentary on data
-    const chain_text_wrap = wrapTextByCharacterLimit(chain_text, width_max_chain_text);
-    const chain_text_left = 120;
-    const chain_text_bottom = 165;
-    combinedSVG.append("text")
-        .attr("x", chain_text_left)
-        .attr("y", Height - chain_text_bottom)
-        .attr("text-anchor", "start")
-        .attr("font-size", "35px")
-	.attr("font-family", "Raleway, sans-serif")
-	.attr("font-weight", "500")
-        .attr("fill", "#89898A")
-        .selectAll("tspan")
-        .data(chain_text_wrap)
-        .enter().append("tspan")
-        .attr("x", chain_text_left)
-        .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
-        .text(d => d);
+    // // Grey commentary on data
+    // const chain_text_wrap = wrapTextByCharacterLimit(chain_text, width_max_chain_text);
+    // const chain_text_left = 150;
+    // const chain_text_bottom = 150;
+    // combinedSVG.append("text")
+    //     .attr("x", chain_text_left)
+    //     .attr("y", Height - chain_text_bottom)
+    //     .attr("text-anchor", "start")
+    //     .attr("font-size", "35px")
+    // 	.attr("font-family", "Raleway, sans-serif")
+    // 	.attr("font-weight", "500")
+    //     .attr("fill", "#89898A")
+    //     .selectAll("tspan")
+    //     .data(chain_text_wrap)
+    //     .enter().append("tspan")
+    //     .attr("x", chain_text_left)
+    //     .attr("dy", (d, i) => i === 0 ? 0 : "1.1em")
+    //     .text(d => d);
     
 
     // Meandre-Tracc name on bottom left
@@ -2291,9 +2308,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .text("meandre-tracc.explore2.inrae.fr");
 
     // Separator 
-    const footer_line_left1 = 880;
+    const footer_line_left1 = 860;
     const footer_line_bottom1 = 100;
-    const footer_line_left2 = 880;
+    const footer_line_left2 = 860;
     const footer_line_bottom2 = 10;
     combinedSVG.append("line")
 	.attr("x1", footer_line_left1)
@@ -2315,10 +2332,10 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .attr("fill", "#060508")
         .selectAll("tspan")
         .data([
-	    "MEANDRE-TRACC propose un ensemble de futurs hydrologiques possibles à l'échelle régionale", 
-        "selon la TRACC. Celle-ci définit des niveaux de réchauffement en France par rapport à la ",
-        "période pré-industrielle qui doivent guider les trajectoires d'adaptation au changement",
-        "climatique : +2,0°C, +2,7°C, et +4°C."
+	    "MEANDRE-TRACC propose un ensemble de futurs hydrologiques possibles à l'échelle", 
+        "régionale selon la TRACC. Celle-ci définit des niveaux de réchauffement en France par",
+        "rapport à la période pré-industrielle qui doivent guider les trajectoires d'adaptation",
+        "au changement climatique : +2,0°C, +2,7°C, et +4°C."
         ])
         .enter().append("tspan")
         .attr("x", footer_text_left)
