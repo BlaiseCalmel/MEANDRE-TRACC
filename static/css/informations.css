@@ -42,7 +42,7 @@
 }
 
 
-@media (max-width: 1200px) {
+@media (max-width: 90rem) {
 
     .title-arrow-bunch {
 	flex-direction: column;

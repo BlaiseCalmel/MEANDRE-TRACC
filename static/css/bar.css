@@ -349,8 +349,7 @@
 }
 
 
-@media (max-width: 1200px) {
-
+@media (max-width: 90rem) {
 
     #container-logo-bar-sep {
 	width: 100vw;

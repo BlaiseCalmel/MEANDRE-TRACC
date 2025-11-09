@@ -367,7 +367,7 @@ h3 {
 /*     gap: 1rem; */
 /* } */
 
-#container-map {
+#container-map {    
     position: relative;
     width: 100vw;
     overflow: hidden;
@@ -376,21 +376,20 @@ h3 {
     align-items: center;
     gap: 1rem;
     
-    /* flex-grow: 1; */
-    height: 100%;
+    /* height: 100%; */
+
+    max-width: 100vw;
+    max-height: 100%;
 }
 
 .map {
     position: relative;
     aspect-ratio: 1;
-    /* flex-grow: 1; */
-    
 
-    /* min-width: calc((100vw) / 3 - 2rem);  */
-    /* flex-grow: 1; */
-
+    /* height: 100%; */
+	
     height: 100%;
-    /* width: 100%; */
+    width: 100%;
 }
 
 .separator {
@@ -702,7 +701,7 @@ h3 {
 
 
 
-@media (max-width: 1200px) {
+@media (max-width: 90rem) {
     /* #back { */
     /* flex-direction: column; */
     /* align-items: stretch; */
@@ -740,6 +739,8 @@ h3 {
     .map {
 	/* min-width: calc((100vw) / 3 - 2rem); */
 	flex-grow: 1;
+	/* width: unset; */
+	max-width: 70vh;
 	/* height: 100vh; */
 	/* height: unset; */
 	/* width: 100vh; */

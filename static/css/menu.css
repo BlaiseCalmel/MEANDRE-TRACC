@@ -129,7 +129,7 @@ x/* Copyright 2024                                                     */
 
 
 
-@media (max-width: 1200px) {
+@media (max-width: 90rem) {
     
     #container-menu.expanded {
 	width: 100vw;

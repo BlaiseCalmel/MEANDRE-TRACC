@@ -645,7 +645,7 @@ p.warning {
 
 
 
-@media (max-width: 1200px) {
+@media (max-width: 90rem) {
     .gallery h1 {
 	font-size: 2.2rem;
     }

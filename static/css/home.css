@@ -161,7 +161,7 @@
     padding-right: 0rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 90rem) {
 
     #home {
         position: absolute;
