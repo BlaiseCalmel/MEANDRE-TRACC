@@ -394,8 +394,8 @@ h3 {
 
 .separator {
     display: block;
-    width: 2px;
-
+    width: 4px;
+    z-index: 10;
     /* height: calc(100vw / 3 - 2rem); */
     height: 90%;
     
@@ -561,6 +561,7 @@ h3 {
     z-index: unset;
     align-items: start;
     justify-content: center;
+    box-shadow: none;
 }
 .map-title-overlay_subtitle {
     font-size: 1rem;
