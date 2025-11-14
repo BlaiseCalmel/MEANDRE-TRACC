@@ -95,6 +95,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    column-gap: 0.5rem;
 }
 
 #home-logo_pc {
@@ -168,13 +169,18 @@
     padding-right: 0rem;
 }
 
+@media (max-width: 768px) {
+    #home {
+	max-width: unset;
+    }
+}
+
 @media (max-width: 90rem) {
 
     #home {
         position: absolute;
 	top: 1rem;
 	width: 100vw;
-	max-width: unset;
     }
 
     #home-logo img {

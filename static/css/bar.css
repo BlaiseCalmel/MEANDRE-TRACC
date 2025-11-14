@@ -359,6 +359,7 @@
     }
 
     #logo {
+	border-bottom: 3px solid #EDEDED;
 	position: relative;
 	width: 100vw;
 	box-shadow: none;
@@ -369,7 +370,6 @@
     }
     
     #bar {
-	border-top: 3px solid #EDEDED;
 	width: 100vw;
 	height: 3rem;
     }
