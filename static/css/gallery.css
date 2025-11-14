@@ -337,7 +337,8 @@ p.warning {
 }
 
 #grid-gwl {
-    max-width: 9rem;
+    width: 9rem;
+    height: 13.5rem;
 }
 
 
@@ -347,6 +348,7 @@ p.warning {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
 }
 #export-fiche {
     display: flex;
@@ -513,7 +515,7 @@ p.warning {
   justify-content: center;
   align-items: center;
   /* gap: 10px; */
-  margin-top: 1rem;
+  margin-top: 0.7rem;
   /* height: 60%;    */
 }
 

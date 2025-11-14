@@ -170,18 +170,16 @@ function updateContent(start=false, actualise=true) {
 		geoJSONdata_basinHydro = geoJSONdata[1];
 		geoJSONdata_river = geoJSONdata[2];
 		// geoJSONdata_entiteHydro = geoJSONdata[2];
-		geoJSONdata_secteurHydro= geoJSONdata[3]; 
+		geoJSONdata_secteurHydro=geoJSONdata[3]; 
 		// geoJSONdata_cities= geoJSONdata[4];
-
-		// initTitleOverlay()
-		// update_data_point_debounce();
-		svgFrance_region = update_mini_map("#svg-france-region", svgFrance_region);
-		svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
-		svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
-		svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
-		// update_data_point_debounce()
-		updateBasinPanelById(selectedRegionId);
-		updateStorylineButton();
+		if (document.querySelector("#svg-france-region")) {
+		    svgFrance_region = update_mini_map("#svg-france-region", svgFrance_region);
+		    svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, null);
+		    svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, null);
+		    svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, null);
+		    updateBasinPanelById(selectedRegionId);
+		    updateStorylineButton();
+		}
 	    });
     }
 
@@ -1072,17 +1070,19 @@ const strokeWith_secteurHydro = 0.7
 
 function updateBasinPanelById(selectedRegionId) {
     const panel = document.getElementById("panel-hover_basin");
-    const panelContent = document.getElementById("panel-hover-content_basin");
-    if (!selectedRegionId) {
-        panel.style.display = "none";
-        panelContent.innerHTML = "<span>Aucun bassin sélectionné</span>";
-        return;
+    if (panel) {
+	const panelContent = document.getElementById("panel-hover-content_basin");
+	if (!selectedRegionId) {
+            panel.style.display = "none";
+            panelContent.innerHTML = "<span>Aucun bassin sélectionné</span>";
+            return;
+	}
+	const feature = geoJSONdata_basinHydro.features.find(
+            f => f.properties.name === selectedRegionId
+	);
+	panel.style.display = "block";
+	panelContent.innerHTML = `<span>${feature.properties.name} &#8211; ${feature.properties.description}</span>`;
     }
-    const feature = geoJSONdata_basinHydro.features.find(
-        f => f.properties.name === selectedRegionId
-    );
-    panel.style.display = "block";
-    panelContent.innerHTML = `<span>${feature.properties.name} &#8211; ${feature.properties.description}</span>`;
 }
 
 
@@ -1521,7 +1521,6 @@ function update_map(id_svg, svgElement, data_back) {
 
 // Fonction pour zoomer sur une région spécifique (sans redessiner la carte)
 function zoomToRegion(selectedRegionId, svgId) {
-    if (!selectedRegionId) return;
     
     // Récupérer l'indicateur et le conteneur
     const indicator = svgId.replace("#", "").split("-").pop();
@@ -1966,7 +1965,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
           .attr("xmlns", "http://www.w3.org/2000/svg");
 
     const fontStyle = `
-    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&family=Raleway:wght@500;600;800;900&display=swap');    
+    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;600&family=Raleway:wght@500;600;800;900&display=swap');    
 `;
     combinedSVG.append("style")
 	.attr("type", "text/css")
@@ -2403,7 +2402,17 @@ function convertSVGToPNG(svgSelector, data, filename, zip, Height, Width, narrat
                 const img = new Image();
                 const svgUrl = URL.createObjectURL(svgBlob);
 
-                img.onload = function () {
+                img.onload = async function () {
+                    await document.fonts.ready;
+		    // // Raleway
+		    await document.fonts.load("500 20px Raleway");
+		    await document.fonts.load("600 20px Raleway");
+		    await document.fonts.load("800 20px Raleway");
+		    await document.fonts.load("900 20px Raleway");
+		    // // Lato
+		    await document.fonts.load("400 20px Lato");
+		    await document.fonts.load("600 20px Lato");
+		    
                     const canvas = document.createElement("canvas");
                     canvas.width = Width;
                     canvas.height = Height;
