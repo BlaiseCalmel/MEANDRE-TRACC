@@ -44,8 +44,15 @@
     font-size: 1.4rem;
     font-family: "Raleway", sans-serif;
     font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+#home p {
+    padding-bottom: 1rem;
+}
 
 #maintenance {
     display: flex;
@@ -173,9 +180,9 @@
     #home {
 	max-width: unset;
     }
-}
+/* } */
 
-@media (max-width: 90rem) {
+/* @media (max-width: 90rem) { */
 
     #home {
         position: absolute;
@@ -183,6 +190,9 @@
 	width: 100vw;
     }
 
+    #home-logo {
+	flex-direction: column;
+    }
     #home-logo img {
 	padding-right: 0rem;
     }
@@ -195,10 +205,13 @@
     }
 	
     #home p {
-	padding-bottom: 3rem;
 	padding-left: 2rem;
 	padding-right: 2rem;
     }
+    #home p.last-p {
+	padding-bottom: 3rem;
+    }
+    
     #maintenance {
 	margin-left: 2rem;
 	margin-right: 2rem;
