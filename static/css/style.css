@@ -736,6 +736,12 @@ h3 {
 
 
 
+@media (max-width: 768px) {
+    #container-gallery-map {
+	height: calc(100vh - 6rem);
+    }
+}
+
 
 @media (max-width: 90rem) {
     /* #back { */
@@ -743,9 +749,7 @@ h3 {
     /* align-items: stretch; */
     /* }  */
 
-    #container-gallery-map {
-	height: calc(100vh - 6rem);
-    }
+
     
     #container-gallery {
 	position: relative;
