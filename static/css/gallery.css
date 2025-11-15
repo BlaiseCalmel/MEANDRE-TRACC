@@ -646,8 +646,7 @@ p.warning {
 
 
 
-
-@media (max-width: 90rem) {
+@media (max-width: 768px) {
     .gallery h1 {
 	font-size: 2.2rem;
     }
@@ -658,7 +657,9 @@ p.warning {
 	font-size: 1.8rem;
     }
 
+}
 
+@media (max-width: 90rem) {
     #grid-narratif {
 	min-width: unset;
     }
@@ -666,6 +667,5 @@ p.warning {
     .button-narratif .narratif-name {
 	flex-direction: column;
     }
-
 }
 
