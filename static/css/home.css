@@ -47,7 +47,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: start;
 }
 
 #home p {
@@ -179,6 +179,7 @@
 @media (max-width: 768px) {
     #home {
 	max-width: unset;
+	align-items: center;
     }
 /* } */
 
