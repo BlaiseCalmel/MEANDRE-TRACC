@@ -1,24 +1,25 @@
-// Copyright 2024
-// Louis Héraut (louis.heraut@inrae.fr)*1,
-// Jean-Philippe Vidal (jean-philippe.vidal@inrae.fr)*1
+// Copyright (C) 2025
+// Calmel, Blaise (1)
+// Héraut, Louis (1) <louis.heraut@inrae.fr>
+// Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
 
-//     *1   INRAE, France
+// (1) INRAE, UR RiverLy, Villeurbanne, France.
 
-// This file is part of MEANDRE.
+// This file is part of MEANDRE-TRACC.
 
-// MEANDRE is free software: you can redistribute it and/or
-// modify it under the terms of the GNU General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
+// MEANDRE-TRACC is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 
-// MEANDRE is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MEANDRE-TRACC is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with MEANDRE.
-// If not, see <https://www.gnu.org/licenses/>.
+// along with MEANDRE-TRACC.
+// If not, see https://www.gnu.org/licenses/.
 
 
 function getCurrentH1(element) {
@@ -61,44 +62,44 @@ function scrollToPrevH1(element) {
 }
 
 
-function toggle_subtab(tab_button) {
+// function toggle_subtab(tab_button) {
 
-    console.log(tab_button);
-    var tab = tab_button.parentNode;
+//     console.log(tab_button);
+//     var tab = tab_button.parentNode;
     
-    var subbars = $('.subbar');
-    subbars.each(function() {
-	var subbar = $(this);
-	var subtabs = $("[id^='" + subbar.attr("id") + "'][class^='subbar-tab']");
+//     var subbars = $('.subbar');
+//     subbars.each(function() {
+// 	var subbar = $(this);
+// 	var subtabs = $("[id^='" + subbar.attr("id") + "'][class^='subbar-tab']");
 	
-	if (subbar.hasClass("expanded")) {
-	    subtabs.each(function() {
-		$(this).removeClass("expanded");
-	    });
-	    setTimeout(() => {
-		subbar.removeClass("expanded");
-		subtabs.each(function() {
-		    $(this).css("display", "none");
-		});
-	    }, 300);
+// 	if (subbar.hasClass("expanded")) {
+// 	    subtabs.each(function() {
+// 		$(this).removeClass("expanded");
+// 	    });
+// 	    setTimeout(() => {
+// 		subbar.removeClass("expanded");
+// 		subtabs.each(function() {
+// 		    $(this).css("display", "none");
+// 		});
+// 	    }, 300);
 	    
-	} else if (subbar.attr("id").startsWith(tab.id)) {
-	    subbar.addClass("expanded");
-	    subtabs.each(function() {
-		$(this).css("display", "flex");
-	    });
-	    setTimeout(() => {
-		subtabs.each(function() {
-		    $(this).addClass("expanded");
-		});
-	    }, 300);
-	}
-    });
+// 	} else if (subbar.attr("id").startsWith(tab.id)) {
+// 	    subbar.addClass("expanded");
+// 	    subtabs.each(function() {
+// 		$(this).css("display", "flex");
+// 	    });
+// 	    setTimeout(() => {
+// 		subtabs.each(function() {
+// 		    $(this).addClass("expanded");
+// 		});
+// 	    }, 300);
+// 	}
+//     });
 
-    setTimeout(() => {
-	check_bar();
-    }, 300);
-}
+//     setTimeout(() => {
+// 	check_bar();
+//     }, 300);
+// }
 
 
 function check_bar() {

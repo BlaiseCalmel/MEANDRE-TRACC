@@ -1,24 +1,25 @@
-// Copyright 2024
-// Louis Héraut (louis.heraut@inrae.fr)*1,
-// Jean-Philippe Vidal (jean-philippe.vidal@inrae.fr)*1
+// Copyright (C) 2025
+// Calmel, Blaise (1)
+// Héraut, Louis (1) <louis.heraut@inrae.fr>
+// Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
 
-//     *1   INRAE, France
+// (1) INRAE, UR RiverLy, Villeurbanne, France.
 
-// This file is part of MEANDRE.
+// This file is part of MEANDRE-TRACC.
 
-// MEANDRE is free software: you can redistribute it and/or
-// modify it under the terms of the GNU General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
+// MEANDRE-TRACC is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 
-// MEANDRE is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MEANDRE-TRACC is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with MEANDRE.
-// If not, see <https://www.gnu.org/licenses/>.
+// along with MEANDRE-TRACC.
+// If not, see https://www.gnu.org/licenses/.
 
 
 function selectAllButton(selectedButton) {
@@ -43,61 +44,6 @@ function selectButton(selectedButton) {
     update_data_point_debounce();
 }
 
-
-// function load_slider() {
-//     var slider = document.getElementById('slider-n');
-    
-//     noUiSlider.create(slider, {
-// 	start: [default_n],
-// 	behaviour: 'drag-smooth-steps-tap',
-// 	step: 1,
-// 	connect: true,
-// 	keyboardDefaultStep: 1,
-// 	keyboardPageMultiplier: 2,
-// 	keyboardMultiplier: 1,
-// 	range: {
-// 	    'min': 1,
-// 	    'max': 9
-// 	},
-// 	pips: {
-// 	    mode: 'values',
-// 	    values: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-// 	    density: 100,
-// 	}
-//     });
-
-//     var startValue = slider.noUiSlider.get();
-//     var maxPos = Math.max(startValue) - 1;
-//     $(slider).find('.noUi-value:visible').removeClass('highlight').eq(maxPos).addClass('highlight');
-    
-//     slider.noUiSlider.on('change', function(values) {
-//     	var maxPos = Math.max(values) -1;
-//         $(slider).find('.noUi-value:visible').removeClass('highlight').eq(maxPos).addClass('highlight');
-// 	update_data_point_debounce();
-//     });
-// }
-
-
-// function selectVariableButton(selectedButton) {
-//     if (selectedButton) {
-// 	var buttons = selectedButton.parentNode.querySelectorAll('button');
-// 	buttons.forEach(function (button) {
-// 	    button.classList.remove('selected');
-// 	});
-// 	selectedButton.classList.add('selected');
-// 	update_data_point_debounce();
-//     }
-// }
-
-
-// function selectHorizonButton(selectedButton) {
-//     var buttons = selectedButton.parentNode.querySelectorAll('button');
-//     buttons.forEach(function (button) {
-// 	button.classList.remove('selected');
-//     });
-//     selectedButton.classList.add('selected');
-//     update_data_point_debounce();
-// }
 
 
 

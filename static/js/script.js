@@ -1,24 +1,26 @@
-// Copyright 2024
-// Louis Héraut (louis.heraut@inrae.fr)*1,
-// Jean-Philippe Vidal (jean-philippe.vidal@inrae.fr)*1
+// Copyright (C) 2025
+// Calmel, Blaise (1)
+// Héraut, Louis (1) <louis.heraut@inrae.fr>
+// Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
 
-//     *1   INRAE, France
+// (1) INRAE, UR RiverLy, Villeurbanne, France.
 
-// This file is part of MEANDRE.
+// This file is part of MEANDRE-TRACC.
 
-// MEANDRE is free software: you can redistribute it and/or
-// modify it under the terms of the GNU General Public License as
-// published by the Free Software Foundation, either version 3 of the
-// License, or (at your option) any later version.
+// MEANDRE-TRACC is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 
-// MEANDRE is distributed in the hope that it will be useful, but
-// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MEANDRE-TRACC is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with MEANDRE.
-// If not, see <https://www.gnu.org/licenses/>.
+// along with MEANDRE-TRACC.
+// If not, see https://www.gnu.org/licenses/.
+
 
 const is_production = false;
 let api_base_url;
@@ -91,36 +93,6 @@ function change_url(url, start=false, actualise=true) {
     updateContent(start=start, actualise=actualise);
 }
 
-// function initTitleOverlay() {
-//     document.querySelectorAll('.map-title-overlay').forEach(element => {
-//         const fullText = element.getAttribute('data-full');
-//         const shortText = element.textContent;
-//         let isExpanded = false;
-
-//         element.addEventListener('mouseenter', function() {
-//             if (!isExpanded) {
-//                 element.classList.add('expanded');
-//                 element.textContent = fullText;
-//                 element.style.zIndex = '9999'
-//                 const newWidth = element.scrollWidth;
-//                 element.style.width = newWidth + 'px';
-//                 isExpanded = true;
-//             }
-//         });
-
-//         element.addEventListener('mouseleave', function() {
-//             if (isExpanded) {
-//                 element.classList.remove('expanded');
-//                 element.style.width = '';
-//                 element.textContent = shortText;
-//                 element.style.zIndex = ''
-//                 isExpanded = false;
-//             }
-//         });
-//     });
-// }
-
-
 function loadGeoJSON(fileURL) {
     return d3.json(fileURL)
 	.then(data => data)
@@ -129,15 +101,6 @@ function loadGeoJSON(fileURL) {
 	    throw error;
 	});
 }
-
-// function updateMaps(){
-    // console.log(selectedRegionId)
-    // zoomToRegion(selectedRegionId, "#svg-france-QA");
-    // svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point=null);
-    // svgFrance_QJXA = update_map("#svg-france-QJXA", svgFrance_QJXA, data_point=null);
-    // svgFrance_VCN10 = update_map("#svg-france-VCN10", svgFrance_VCN10, data_point=null);
-    // update_data_point_debounce()
-// }
 
 
 function updateContent(start=false, actualise=true) {
@@ -225,13 +188,7 @@ function check_url_after_data() {
 
 function fetch_components(url) {
     // console.log("fetch");
-    
-    // $.get('/html/menu.html', function(html) {
-        // if ($('#menu-element').length) {
-            // $('#menu-element').html(html);
-            // load_slider();
-        // }
-    // });
+
     $.get('/html/bar.html', function(html) {
 	if ($('#bar-element').length) {
             $('#bar-element').html(html);
@@ -299,16 +256,10 @@ function update_data_point() {
 	$('#map-VCN10-loading').css('display', 'flex');
 
     var n = default_n;
-    // var variable = get_variable();
     var projection = get_projection();
     var horizon = get_horizon();
     
     // // Initialize top left for region selection
-    // if (start) {
-        // start = false
-        // svgFrance_region = update_mini_map("#svg-france-region", svgFrance_region);
-            // $('#map-region-loading').css('display', 'none');
-    // }
     if (projection) {
         let data_all = {};
 
@@ -354,7 +305,7 @@ function update_data_point() {
             data_point_QJXA = data_back.data_point_QJXA;
             data_point_VCN10 = data_back.data_point_VCN10;
             
-            zoomToRegion(selectedRegionId, "#svg-france-QA"); //##############################
+            zoomToRegion(selectedRegionId, "#svg-france-QA");
 
             svgFrance_QA = update_map("#svg-france-QA", svgFrance_QA, data_point_QA);
             $('#map-QA-loading').css('display', 'none');
@@ -539,7 +490,6 @@ function updateStorylineButton(reset=false){
     buttons.forEach(btn => btn.classList.remove("selected"));
     if (buttons.length > 0) buttons[0].classList.add("selected");
 
-    // updateTable();
     update_data_point_debounce();
     });    
        
@@ -556,28 +506,13 @@ function selectStorylineButton(selectedButton) {
     if (selectedButton) {
         Object.entries(allStorylines).forEach(([key, val]) =>{
             const button = document.getElementById(`button-${key}`);
-            // const button_name = document.getElementById(`button-${key}-name`);
-            // const cell_name = document.getElementById(`cell-${key}-name`);
-            // const cell_description = document.getElementById(`cell-${key}`);
             if (key !== selectedButton.value) {
                 button.classList.remove('selected')
-                // button_name.classList.remove('selected')
-                // cell_name.style.backgroundColor = 'transparent'
-                // cell_description.style.backgroundColor = 'transparent'
             } else {
                 button.classList.add('selected')
-                // button_name.classList.add('selected')
-                // cell_name.style.backgroundColor = fill_basin_selected
-                // cell_description.style.backgroundColor = fill_basin_selected
             }
         });
 
-        // var buttons = selectedButton.parentNode.querySelectorAll('button');
-        // buttons.forEach(function (button) {
-        //     button.classList.remove('selected');
-        // });
-        // selectedButton.classList.add('selected');
-        // updateTable();
         update_data_point_debounce();
     }
 }
@@ -585,28 +520,16 @@ function selectStorylineButton(selectedButton) {
 function updateTable() {
     const table_keys = ['gcm', 'rcm', 'hm']
     const table = document.getElementById("info-table");
-    // on boucle sur les lignes à partir de la 2ᵉ (row[0] = en-têtes)
     for (let i = 0; i < table.rows.length; i++) {
         const key = table_keys[i]
         if (selected_storyline [key] !== undefined) {
             const cell = table.rows[i].cells[1];
             cell.textContent = selected_storyline[key]; 
-            // cell.classList.remove("text-gray");
-            // cell.style.color = "black";
-            // table.rows[i].cells[1].textContent = selected_storyline[key]; // maj 2ᵉ colonne
       }
     }
-
-    // for (let i = 1; i < table.rows.length; i++) {
-    //   const key = table.rows[i].cells[0].textContent.trim(); // clé (GCM, RCM, HM)
-    //   if (data_table[key] !== undefined) {
-    //     table.rows[i].cells[1].textContent = data_table[key]; // maj 2ᵉ colonne
-    //   }
-    // }
   }
 
 const update_data_point_debounce = debounce(update_data_point, 1000);
-// update_data_point_debounce();
 
 function update_data_serie() {
     $('#line-loading').css('display', 'flex');
@@ -638,176 +561,6 @@ function update_data_serie() {
 const update_data_serie_debounce = debounce(update_data_serie, 1000);
 
 
-// window.addEventListener('resize', function() {
-//     plot_data_serie();
-// });
-
-// function plot_data_serie() {
-//     if (data_serie) {
-// 	var url = window.location.pathname;
-// 	if (URL_noSL.includes(url)) {
-// 	    data_serie = data_serie.filter(item => item.order === 0);
-// 	}
-	
-// 	d3.select("#svg-line").selectAll("*").remove();
-// 	var svgContainer = d3.select("#svg-line");
-
-// 	var svgNode = d3.select("#grid-line").node();
-// 	var computedStyle = window.getComputedStyle(svgNode);
-// 	var paddingLeft = parseFloat(computedStyle.paddingLeft);
-// 	var paddingRight = parseFloat(computedStyle.paddingRight);
-// 	var containerPadding = paddingLeft + paddingRight;
-// 	var svgWidth = svgNode.getBoundingClientRect().width - containerPadding;
-	
-// 	var svgHeight_min = 250;
-// 	var svgHeight = Math.max(svgHeight_min,
-// 				 +svgContainer.node().getBoundingClientRect().height);
-	
-// 	var margin = { top: 10, right: 10, bottom: 20, left: 40 };
-// 	var width = svgWidth - margin.left - margin.right;
-// 	var height = svgHeight - margin.top - margin.bottom;
-
-// 	var svg = svgContainer
-// 	    .attr("width", width + margin.left + margin.right)
-// 	    .attr("height", height + margin.top + margin.bottom)
-// 	    .append("g")
-// 	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// 	data_serie.forEach(function(line) {
-// 	    line.values.forEach(function(d) {
-// 		d.x = new Date(d.x);
-// 	    });
-// 	});
-	
-// 	var xScale = d3.scaleTime()
-// 	    .domain(d3.extent(data_serie[0].values, function(d) { return d.x; }))
-// 	    .range([0, width]);
-
-// 	var yScale = d3.scaleLinear()
-// 	    .domain([
-// 		d3.min(data_serie, function(line) {
-// 		    return d3.min(line.values, function(d) { return d.y; });
-// 		}),
-// 		d3.max(data_serie, function(line) {
-// 		    return d3.max(line.values, function(d) { return d.y; });
-// 		})
-// 	    ])
-// 	    .range([height, 0]);
-
-// 	// Define axes
-// 	if (window.innerWidth < 768) {
-//             xAxis = d3.axisBottom(xScale)
-//                 .tickSize(0)
-// 		.tickSizeInner(5)
-//                 .tickFormat(d3.timeFormat("%Y"))
-//                 .ticks(d3.timeYear.every(20)); // Show ticks every 20 years
-//         } else {
-//             xAxis = d3.axisBottom(xScale)
-//                 .tickSize(0)
-// 		.tickSizeInner(5)
-//                 .tickFormat(d3.timeFormat("%Y"))
-//                 .ticks(d3.timeYear.every(10)); // Show ticks every 10 years by default
-//         }
-
-// 	var customTickFormat = function(d) {
-// 	    return d > 0 ? "+" + d : d;
-// 	};
-	
-// 	var yAxis = d3.axisLeft().scale(yScale)
-// 	    .tickSize(0)
-// 	    .tickSizeInner(-width)
-// 	    .ticks(5)
-// 	    .tickPadding(6)
-// 	    .tickFormat(customTickFormat);
-	
-// 	// Append axes
-// 	svg.append("g")
-// 	    .attr("class", "x axis")
-// 	    .attr("transform", "translate(0," + height + ")")
-// 	    .call(xAxis)
-// 	    .selectAll("text")
-//             .style("fill", "grey")
-//             .style("font-size", "12px");
-
-// 	svg.selectAll('.x.axis').selectAll("line")
-// 	    .style("stroke", "#ccc");
-// 	svg.select(".x.axis").select(".domain")
-// 	    .style("stroke", "#aaa");
-	
-// 	svg.append("g")
-//     	    .attr("class", "y axis")
-//     	    .call(yAxis)
-//     	    .selectAll("text")
-//             .style("fill", "grey")
-//             .style("font-size", "12px");
-	
-// 	svg.selectAll('.y.axis').selectAll("line")
-// 	    .style("stroke", "#ccc")
-// 	    .filter(function(d) { return d === 0; })
-// 	    .remove();
-
-// 	svg.select(".y.axis").select(".domain").remove();
-
-// 	var line = d3.line()
-// 	    .x(function(d) { return xScale(d.x); })
-// 	    .y(function(d) { return yScale(d.y); });
-
-// 	var tooltip = d3.select("#grid-line_tooltip");
-
-// 	var lines = svg.selectAll(".line")
-// 	    .data(data_serie)
-// 	    .enter().append("path")
-// 	    .attr("class", "line")
-// 	    .attr("fill", "none")
-// 	    .attr("id", function(d) { return d.chain; })
-// 	    .attr("d", function(d) { return line(d.values); })
-// 	    .attr("opacity", function(d) { return d.opacity; })
-// 	    .attr("stroke", function(d) { return d.color; })
-// 	    .attr("stroke-width", function(d) { return d.stroke_width; });
-	
-// 	lines.on("mouseover", function(event, d) {
-// 	    if (d.order === 2) {
-// 		d3.select(this)
-// 		    .attr("stroke-width", "2px");
-// 		d3.select("#" + d.chain + "_back")
-// 		    .attr("stroke-width", "5px");
-// 		tooltip.style("opacity", 1)
-// 		    .style("color", d.color)
-// 		    .html(d.chain.replace(/_/g, " "));
-		
-// 	    } else if (d.order === 0) {
-// 		d3.select(this)
-// 		    .attr("opacity", "1");
-// 		tooltip.style("opacity", 1)
-// 		    .style("color", d.color)
-// 		    .html(d.chain.replace(/_/g, " "));
-// 	    }
-// 	});
-// 	lines.on("mouseout", function(event, d) {
-//             d3.select(this)
-// 		.attr("opacity", d.opacity)
-// 		.attr("stroke-width", d.stroke_width);
-// 	    if (d.order === 2) {
-// 		d3.select("#" + d.chain + "_back")
-// 		    .attr("stroke-width", "3px");
-// 	    }
-//             tooltip.style("opacity", 0);
-// 	});
-	
-// 	svg.append("line")
-// 	    .attr("class", "zero-line")
-// 	    .attr("x1", 0)
-// 	    .attr("y1", yScale(0))
-// 	    .attr("x2", width)
-// 	    .attr("y2", yScale(0))
-// 	    .style("stroke", "#555")
-// 	    .style("stroke-dasharray", ("3, 3"))
-// 	    .style("stroke-width", 1);
-//     }
-// }
-
-
-
 
 function update_grid(data_back) {
 
@@ -835,49 +588,7 @@ function update_grid(data_back) {
 	sampling_period = "débutant au " + sampling_period.toLowerCase();
     }    
     
-    // document.getElementById("grid-variable_variable").textContent = variable;
-    // document.getElementById("grid-variable_sampling-period").innerHTML = "Année hydrologique " + sampling_period;
-    // document.getElementById("grid-variable_name").innerHTML = data_back.name_fr;
-    
-    // document.getElementById("grid-horizon_name").innerHTML = "Horizon " + horizon.name;
-
-    // horizon_period = horizon.period.replace(/ - /g, "</b> à <b>");
-    // document.getElementById("grid-horizon_period-l1").innerHTML = "Période futur de <b>" + horizon_period + "</b>";
-    // document.getElementById("grid-horizon_period-l2").innerHTML = "Période de référence de <b>1991</b> à <b>2020</b>";
-
-    // $(".grid-n_text").css("display", "flex");
-    // document.getElementById("grid-n_number").innerHTML = n;
-    
-    // var url = window.location.pathname;
-    // if (url === "/exploration-avancee") {
-	// $("#grid-chain_drawer-narratif").css("display", "none");
-	// $("#grid-chain_drawer-RCP").css("display", "none");
-	// $("#grid-chain_drawer-chain").css("display", "none");
-	
-	// if (drawer_mode === "drawer-narratif") {
-	//     $("#grid-chain_drawer-narratif").css("display", "flex");
-	    
-	// } else if (drawer_mode === "drawer-RCP") {
-    // 	    $("#grid-chain_drawer-RCP").css("display", "flex");
-
-	//     var RCP_value = get_RCP_value();
-	//     $("#grid-chain_RCP26-text").css("display", "none");
-	//     $("#grid-chain_RCP45-text").css("display", "none");
-	//     $("#grid-chain_RCP85-text").css("display", "none");
-	    
-	//     if (RCP_value === "26") {
-	// 	$("#grid-chain_RCP26-text").css("display", "block");
-	//     } else if (RCP_value === "45") {
-	// 	$("#grid-chain_RCP45-text").css("display", "block");
-	//     } else if (RCP_value === "85") {
-	// 	$("#grid-chain_RCP85-text").css("display", "block");
-	//     }
-	    
-	// } else if (drawer_mode === "drawer-chain") {
     $("#grid-chain_drawer-chain").css("display", "flex");
-	// }
-    // }
-    
 }
 
 
@@ -1625,11 +1336,6 @@ function find_code_in_data(data_back, code) {
     return data_back.data.find(item => item.code === code);
 }
 
-// function hide_serie() {
-//     selected_code = null;
-//     document.getElementById("grid-point").style.display = "none";
-//     document.getElementById("grid-line").style.display = "none";
-// }
 
 function show_serie(data_back, code, toggle=true) {
     var point = find_code_in_data(data_back, code);
@@ -1650,12 +1356,6 @@ function show_serie(data_back, code, toggle=true) {
 	"<span style='font-weight: 900; color:" + point.fill_text + ";'>" +
 	point.code + "</span>";
 
-    // const value = point.value.toFixed(2);
-    // document.getElementById("grid-point_value").innerHTML =
-    //     "<span style='color:" + point.fill_text + ";'>" +
-    //     "<span style='font-weight: 900;'>" +
-    //     (value > 0 ? "+" : "") + value + " </span>%</span>";
-    
     document.getElementById("grid-point_name").innerHTML = point.name;
 
     document.getElementById("grid-point_hr").innerHTML =
@@ -1734,20 +1434,10 @@ function redrawPoint(svgElement, data_back, projectionMap) {
                     d3.select(this).attr("stroke", stroke_selectPoint).raise();
                 }
 
-                // document.getElementById("panel-hover_description").style.display = "block";
-                // document.getElementById("panel-hover-content_description").innerHTML =
-                //     "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-                //     d.name + "</span>";
-
                 document.getElementById("panel-hover_code").style.display = "block";
                 document.getElementById("panel-hover-content_code").innerHTML =
                     "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
                     d.code + " [" + d.value.toFixed(0) + "%] <br>"+ d.name + "</span>";
-                // const value = d.value.toFixed(2);
-                // document.getElementById("panel-hover-content_value").innerHTML =
-                // "<span style='color:" + d.fill_text + ";'>" +
-                // "<span style='font-weight: 900;'>" +
-                // (value > 0 ? "+" : "") + value + " </span>%</span>";
             }
 	    })
 	    .on("mouseout", function(event, d) {
@@ -1759,18 +1449,6 @@ function redrawPoint(svgElement, data_back, projectionMap) {
                 document.getElementById("panel-hover_code").style.display = "none";
             }
 	    })
-	    // .on("click", function(d, point) {
-		// // show_serie(data_back, point.code);
-        //     show_point = !show_point
-        //     if (!d3.select(this).classed("clicked")) {
-        //         d3.select(this).attr("stroke", "#060508").raise();
-        //     }
-
-        //     document.getElementById("panel-hover_description").style.display = "block";
-        //     document.getElementById("panel-hover-content_description").innerHTML =
-        //         "<span style='font-weight: 900; color:" + d.fill_text + ";'>" +
-        //         d.name + "</span>";
-	    // });
     }
     
     return svgElement
@@ -2718,137 +2396,4 @@ async function exportData() {
             link.download = "MEANDRE-TRACC-export+"+extended_name+".zip";
             link.click();
         });
-
-    // var n = get_n();
-    // // var variable = get_variable();
-    // var projection = get_projection();
-    // var horizon = get_horizon();
-
-    // var title = data_point.name_fr;
-    // var relatif = data_point.to_normalise ? "relatifs " : "";
-    // var subtitle = "Changements " + relatif + horizon.text +
-    //     "\n             par rapport à la période de référence 1991-2020";
-
-    // var filename =
-    //     "MEANDRE-export+" +
-    //     "var-" + variable + "+" +
-    //     "H-" + horizon.period.replace(/ - /g, '_') + "+" +
-    //     "n-" + n + "+" +
-    //     "chain-" + slugify(projection.type) +
-    //     ".zip";
-    
-    // // let data_point_QA;
-    // // let data_point_QJXA;
-    // // let data_point_VCN10;
-    // // let data_serie;
-
-    // // let svgFrance_region;
-    // // let svgFrance_QA;
-    // // let svgFrance_QJXA;
-    // // let svgFrance_VCN10;
-
-    // let chain_info;
-    // // if (drawer_mode === 'drawer-RCP') {
-    // //     chain_info = "Moyenne multi-modèles par niveau d'émissions.\n";
-    // //     if (projection.RCP === "RCP 2.6") {
-    // //         chain_info = chain_info + "Le RCP 2.6 est un scénario compatible avec les objectifs\ndes accords de Paris.";
-    // //     } else if (projection.RCP === "RCP 4.5") {
-    // //         chain_info = chain_info + "Le RCP 4.5 est un scénario où des efforts modérés sont fait pour\nréduire les émissions.";
-    // //     } else if (projection.RCP === "RCP 8.5") {
-    // //         chain_info = chain_info + "Le RCP 8.5 est un scénario où l'augmentation des émissions\ncontinue selon la tendance actuelle.";
-    // //     }
-    // // } else if (drawer_mode === 'drawer-chain') {
-    // //     chain_info = "Attention : Chaînes de modélisation spécifiques, l'approche\n" +
-    // //         "multi-modèle doit être privilégiée. Le détail des chaînes de\n" +
-    // //         "modélisation sélectionnées est disponible dans le fichier\n" +
-    // //         "meta_projection.csv"
-    // // }
-
-    // // README
-    // let README = await fetch('/resources/README.txt');
-    // README = await README.text();
-    // var time = getFormattedDateTime();
-    // let param =
-    //     "Titre : " + title + "\n" +
-    //     "Sous-titre : " + subtitle + "\n\n" +
-    //     "Variable : " + variable + "\n" +
-    //     "Unité : " + data_point.unit_fr + "\n" +
-    //     "Horizon : " + horizon.period + "\n" +
-    //     "Nombre de point : Il y a au moins " + n + " modèles hydrologiques par point\n" +
-    //     "Scénario d'émission : " + projection.RCP + "\n" +
-    //     "Chaînes de modélisations : " + projection.type + "\n\n";
-
-    // // licence fr
-    // const pdfResponse_LO_fr = await fetch('/resources/licence_ouverte/ETALAB-Licence-Ouverte-v2.0.pdf');
-    // const pdf_LO_fr = await pdfResponse_LO_fr.blob();
-    // // licence en
-    // const pdfResponse_LO_en = await fetch('/resources/licence_ouverte/ETALAB-Open-Licence-v2.0.pdf');
-    // const pdf_LO_en = await pdfResponse_LO_en.blob();
-
-    // // figure
-    // const Height = 2000;
-    // const Width = 2000;
-
-    // let zip;
-
-    // const data_point_storyline = {
-    //     "QA": data_point_QA,
-    //     "QJXA": data_point_QJXA,
-    //     "VCN10": data_point_VCN10,
-    // }
-    
-    // zip = new JSZip();
-    // for (const storyline of Object.keys(data_point_storyline)) {
-    //     const folder = zip.folder(storyline);
-    //     const files = get_files(data_point_storyline[storyline],
-    //         variable,
-    //         projection["chain_" + storyline]);
-    //     for (const [fileName, content] of Object.entries(files)) {
-    //         folder.file(fileName, content);
-    //     }
-
-    //     var param_tmp = param + Storylines_map[storyline].info_readme;
-    //     README_tmp = README
-    //         .replace(/\[DATE\]/g, time)
-    //         .replace(/\[PARAM\]/g, param_tmp);
-    //     folder.file("README.txt", README_tmp);
-
-    //     folder.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
-    //     folder.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
-
-    //     // Await the PNG conversion
-    //     await convertSVGToPNG("#svg-france-" + storyline, "map-" + storyline,
-    //         folder, Height, Width,
-    //         Storylines_map[storyline].info,
-    //         Storylines_map[storyline].color);
-    // }
-
-    // // } else {
-    // //     zip = new JSZip();
-    // //     const files = get_files(data_point, variable,
-    // //         projection.chain);
-    // //     for (const [fileName, content] of Object.entries(files)) {
-    // //         zip.file(fileName, content);
-    // //     }
-
-    // //     var param_tmp = param + chain_info;
-    // //     README_tmp = README
-    // //         .replace(/\[DATE\]/g, time)
-    // //         .replace(/\[PARAM\]/g, param_tmp);
-    // //     zip.file("README.txt", README_tmp);
-
-    // //     zip.file("ETALAB-Licence-Ouverte-v2.0.pdf", pdf_LO_fr);
-    // //     zip.file("ETALAB-Open-Licence-v2.0.pdf", pdf_LO_en);
-
-    // //     // Await the PNG conversion
-    // //     await convertSVGToPNG("#svg-france", "map", zip, Height, Width);
-    // // }
-
-    // zip.generateAsync({ type: "blob" })
-    //     .then(function (content) {
-    //         const link = document.createElement("a");
-    //         link.href = URL.createObjectURL(content);
-    //         link.download = filename;
-    //         link.click();
-    //     });
 }

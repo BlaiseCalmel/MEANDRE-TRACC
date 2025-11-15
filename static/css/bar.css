@@ -1,24 +1,26 @@
-/* Copyright 2024                                                     */
-/* Louis Héraut (louis.heraut@inrae.fr)*1,                            */
-/* Jean-Philippe Vidal (jean-philippe.vidal@inrae.fr)*1                             */
-
-/*     *1   INRAE, France                                             */
-
-/* This file is part of MEANDRE.                                      */
-
-/* MEANDRE is free software: you can redistribute it and/or           */
-/* modify it under the terms of the GNU General Public License as     */
-/* published by the Free Software Foundation, either version 3 of the */
-/* License, or (at your option) any later version.                    */
-
-/* MEANDRE is distributed in the hope that it will be useful, but     */
-/* WITHOUT ANY WARRANTY; without even the implied warranty of         */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  */
-/* General Public License for more details.                           */
-
-/* You should have received a copy of the GNU General Public License  */
-/* along with MEANDRE.                                                */
-/* If not, see <https://www.gnu.org/licenses/>.                       */
+/* Copyright (C) 2025
+ * Calmel, Blaise (1)
+ * Héraut, Louis (1) <louis.heraut@inrae.fr>
+ * Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
+ *
+ * (1) INRAE, UR RiverLy, Villeurbanne, France.
+ *
+ * This file is part of MEANDRE-TRACC.
+ *
+ * MEANDRE-TRACC is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MEANDRE-TRACC is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MEANDRE-TRACC.
+ * If not, see https://www.gnu.org/licenses/.
+ */
 
 
 #logo {
@@ -128,29 +130,6 @@
     color: #70757A;
 }
 
-/* .bar-button {
-    font-family: "Raleway", sans-serif;
-    font-weight: 700;
-    font-size: 0.7rem;
-    cursor: pointer;
-    background-color: transparent;
-    color: #060508;
-    cursor: pointer;
-    height: auto;
-    line-height: 0.8rem;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    white-space: nowrap;
-} */
-/* .bar-button:hover,
-.bar-button:hover .material-icons-outlined{
-    color: #70757A;
-} */
-
-
-
 
 
 #tab_other {
@@ -182,10 +161,6 @@
 .bar-tab:hover #tab_MEANDRE-text {
     border: solid 2px #89898a;
 }
-
-
-
-
 
 
 #button_exploration-avancee {
@@ -350,7 +325,6 @@
 
 
 @media (max-width: 768px) {
-/* @media (max-width: 90rem) { */
 
     #container-logo-bar-sep {
 	width: 100vw;

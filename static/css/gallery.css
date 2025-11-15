@@ -1,37 +1,26 @@
-/* Copyright 2024                                                     */
-/* Louis Héraut (louis.heraut@inrae.fr)*1,                            */
-/* Jean-Philippe Vidal (jean-philippe.vidal@inrae.fr)*1               */
-
-/*     *1   INRAE, France                                             */
-
-/* This file is part of MEANDRE.                                      */
-
-/* MEANDRE is free software: you can redistribute it and/or           */
-/* modify it under the terms of the GNU General Public License as     */
-/* published by the Free Software Foundation, either version 3 of the */
-/* License, or (at your option) any later version.                    */
-
-/* MEANDRE is distributed in the hope that it will be useful, but     */
-/* WITHOUT ANY WARRANTY; without even the implied warranty of         */
-/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU  */
-/* General Public License for more details.                           */
-
-/* You should have received a copy of the GNU General Public License  */
-/* along with MEANDRE.                                                */
-/* If not, see <https://www.gnu.org/licenses/>.                       */
-
-
-/* .gallery { */
-/*     display: flex; */
-/*     height: auto; */
-/*     transition: all 0.3s ease; */
-/*     /\* overflow-y: auto; *\/ */
-/*     display: flex; */
-/*     flex-direction: row; */
-/*     flex-wrap: wrap; */
-/*     gap: 1rem; */
-/*     align-items: flex-end; */
-/* } */
+/* Copyright (C) 2025
+ * Calmel, Blaise (1)
+ * Héraut, Louis (1) <louis.heraut@inrae.fr>
+ * Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
+ *
+ * (1) INRAE, UR RiverLy, Villeurbanne, France.
+ *
+ * This file is part of MEANDRE-TRACC.
+ *
+ * MEANDRE-TRACC is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MEANDRE-TRACC is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MEANDRE-TRACC.
+ * If not, see https://www.gnu.org/licenses/.
+ */
 
 
 .gallery-item,
@@ -243,17 +232,7 @@ p.warning {
     font-size: 0.7rem;
     fill: #70757A;
     
-    /* writing-mode: sideways-lr; */
 }
-/* .tick-line { */
-    /* stroke: #060508; */
-    /* stroke-width: 1px; */
-/* } */
-/* .bin-text { */
-    /* color: #3d3e3e; */
-    /* font-family: "Lato", sans-serif; */
-    /* font-weight: 600; */
-/* } */
 
 
 #grid-point {
@@ -304,15 +283,6 @@ p.warning {
     max-width: 27rem;
 }
 
-/* #grid-mini-map { */
-/*     /\* aspect-ratio: 1; *\/ */
-/*     /\* height: calc(100% - 4rem); *\/ */
-/*     /\* width: calc(100% - 3rem); *\/ */
-/*     /\* height: 21.5rem; *\/ */
-/*     /\* width: 20rem; *\/ */
-/*     /\* top: 0.5rem; *\/ */
-/*     /\* bottom: 0.5rem; *\/ */
-/* } */
 
 .grid-element_title {
     font-family: "Raleway", sans-serif;
@@ -451,31 +421,6 @@ p.warning {
 
 
 
-
-/* #grid-narratif {
-    max-height: 15rem;
-} */
-
-/* .sub-container-gallery-narratives {
-/*     display: flex; */
-/*     width: calc(45%); */
-/*     height: calc(100%); */
-/*     padding: 0.5rem; */
-/*     flex: 1; /\* Utilise tout l'espace disponible restant *\/ */
-/*     min-width: 0; /\* Permet la réduction si nécessaire *\/ */
-/* } */
-
-/* #grid-chain_drawer-narratif-container { */
-/*     height: calc(100%); */
-/*     width: calc(100% - 1rem); */
-/*     top: 0.5rem; */
-/*     bottom: 0.5rem; */
-/*     /\* max-width: 27rem; *\/ */
-/*     /\* width: calc(100%) *\/ */
-/* } */
-
-
-
 .info-table {
   width: 100%;
   table-layout: fixed;  /* force le respect des largeurs */
@@ -491,9 +436,6 @@ p.warning {
 }
 
 
-/* #grid-chain_drawer-chain { */
-    /* max-width: 27rem; */
-/* } */
 
 .grid-gwl_drawer {
     font-family: "Raleway", sans-serif;
