@@ -1985,9 +1985,9 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .text("meandre-tracc.explore2.inrae.fr");
 
     // Separator 
-    const footer_line_left1 = 860;
+    const footer_line_left1 = 890;
     const footer_line_bottom1 = 100;
-    const footer_line_left2 = 860;
+    const footer_line_left2 = footer_line_left1;
     const footer_line_bottom2 = 10;
     combinedSVG.append("line")
 	.attr("x1", footer_line_left1)
@@ -1997,7 +1997,7 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
 	.attr("stroke", "#C5E7E7")
 	.attr("stroke-width", "10px");
 
-    const footer_text_left = 900;
+    const footer_text_left = footer_line_left1 + 40;
     const footer_text_bottom = 80;
     combinedSVG.append("text")
         .attr("x", footer_text_left)
@@ -2009,10 +2009,10 @@ function drawSVG_for_export(id_svg, data, Height, Width, narratif_text="", narra
         .attr("fill", "#060508")
         .selectAll("tspan")
         .data([
-	    "MEANDRE-TRACC propose un ensemble de futurs hydrologiques possibles à l'échelle", 
-        "régionale selon la TRACC. Celle-ci définit des niveaux de réchauffement en France par",
-        "rapport à la période pré-industrielle qui doivent guider les trajectoires d'adaptation",
-        "au changement climatique : +2,0°C, +2,7°C, et +4°C."
+	    "MEANDRE-TRACC propose un ensemble de futurs hydrologiques possibles à", 
+        "l'échelle régionale selon la TRACC. Celle-ci définit des niveaux de réchauffement",
+        "en France par rapport à la période pré-industrielle qui doivent guider les",
+        "trajectoires d'adaptation au changement climatique : +2,0°C, +2,7°C, et +4°C."
         ])
         .enter().append("tspan")
         .attr("x", footer_text_left)
