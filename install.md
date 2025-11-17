@@ -1,6 +1,6 @@
-## INSTALL MEANDRE-TRACC
+# INSTALL MEANDRE-TRACC
 
-### 1. Prepare your server
+## 1. Prepare your server
 #### Connection
 Connect to you VM with below command and register with you password
 ``` sh
@@ -41,15 +41,20 @@ sudo resize2fs /dev/vg1/var
 ```
 
 
-### 2. Download MEANDRE-TRACC
+## 2. Download MEANDRE-TRACC
 Clone MEANDRE-TRACC git
 ``` sh
-git clone https://github.com/BlaiseCalmel/MEANDRE-TRACC.git
+git clone https://github.com/super-lou/MEANDRE-TRACC.git
+```
+
+Copy the Makefile to your home directory to update the production server later
+```sh
+cp MEANDRE-TRACC/Makefile ~/
 ```
 
 Copy the env file from the default one and secure it
 ``` sh
-cp MEANDRE-TRACC/env.dist MEANDRE-TRACC/.env
+cp MEANDRE-TRACC/install.env MEANDRE-TRACC/.env
 ```
 Edit this env file with your info.\\
 **WARNING : KEEP THE .ENV FILE FOR YOU. DO NOT EXPOSE IT.**
@@ -60,23 +65,8 @@ source MEANDRE-TRACC/.env
 sudo mv -rv MEANDRE-TRACC/ $SERVER_DIR
 ```
 
-Secure this dir
-``` sh
-sudo chown -R root:root $SERVER_DIR/MEANDRE-TRACC
-sudo chmod -R 755 $SERVER_DIR/MEANDRE-TRACC
 
-sudo chown root:www-data $SERVER_DIR/MEANDRE-TRACC/app.py
-sudo chmod 750 $SERVER_DIR/MEANDRE-TRACC/app.py
-
-sudo chown root:www-data $SERVER_DIR/MEANDRE-TRACC/app.wsgi
-sudo chmod 750 $SERVER_DIR/MEANDRE-TRACC/app.wsgi
-
-sudo chown root:www-data $SERVER_DIR/MEANDRE-TRACC/.env
-sudo chmod 440 $SERVER_DIR/MEANDRE-TRACC/.env
-```
-
-
-### 2. Install Apache
+## 3. Install Apache
 ``` sh
 sudo apt install apache2 python3-certbot-apache -y
 sudo systemctl enable apache2
@@ -84,7 +74,7 @@ sudo systemctl start apache2
 ```
 
 
-### 3. Install postgresql
+## 4. Install postgresql
 #### On local computer
 Save the database from MEANDRE-TRACC local dir and export it to server
 ``` sh
@@ -115,14 +105,14 @@ sudo -u postgres pg_restore -U postgres -d $DB_NAME -v ~/$DB_NAME.backup
 ```
 
 
-### 4. Install python
+## 5. Install python
 ``` sh
 sudo apt install python3 python3-pip -y
 sudo apt install python3-flask python3-sqlalchemy python3-flask-cors python3-psycopg2 python3-numpy python3-pandas python3-dotenv python3-scipy -y
 ```
 
 
-### 5. Configure flask app
+## 6. Configure flask app
 Source info and install dependency
 ``` sh
 sudo apt install libapache2-mod-wsgi-py3
@@ -171,4 +161,28 @@ Restart Apache and certbot for HTTPS
 ``` sh
 sudo systemctl restart apache2
 sudo certbot --apache
+```
+
+
+## 7. Configure Log Statistics
+Create a directory for storing log information
+```sh
+sudo mkdir -p /var/www/MEANDRE-TRACC/access_log/hash_access_log
+```
+
+Add a cron job
+```sh
+sudo crontab -e
+```
+
+Then add the following line
+```sh
+00 7 * * * root /usr/bin/Rscript $SERVER_DIR/MEANDRE-TRACC/access_log/script_hash_access_log.R >> /var/log/script_hash.log 2>&1
+```
+
+
+## 8. Finalize Installation
+Run the Makefile
+```sh
+make MEANDRE-TRACC
 ```
