@@ -1,23 +1,25 @@
-# Copyright 2024
-# Louis Héraut (louis.heraut@inrae.fr)*1
+# Copyright (C) 2025
+# Calmel, Blaise (1)
+# Héraut, Louis (1) <louis.heraut@inrae.fr>
+# Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
 
-# *1   INRAE, France
+# (1) INRAE, UR RiverLy, Villeurbanne, France.
 
-# This file is part of MEANDRE.
+# This file is part of MEANDRE-TRACC.
 
-# MEANDRE is free software: you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
+# MEANDRE-TRACC is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
-# MEANDRE is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MEANDRE-TRACC is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with MEANDRE.
-# If not, see <https://www.gnu.org/licenses/>.
+# along with MEANDRE-TRACC.
+# If not, see https://www.gnu.org/licenses/.
 
 
 ## LIBRARY AND TOOLS _________________________________________________
@@ -39,7 +41,8 @@ apply_hash = function (x) {
 
 
 ## CONFIG ____________________________________________________________
-load_dot_env("../.env")
+APP_PATH = "/var/www/MEANDRE-TRACC"
+dotenv::load_dot_env(file.path(APP_PATH, "/.env"))
 APP_NAME = Sys.getenv("APP_NAME")
 SERVER_NAME = Sys.getenv("SERVER_NAME")
 HASH_SALT = Sys.getenv("HASH_SALT")
@@ -48,14 +51,14 @@ today = Sys.Date()
 Paths_log = list.files("/var/log/apache2/", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
 # Paths_log = list.files("log", pattern=paste0(APP_NAME, "_access"), full.names=TRUE)
 
-outdir = "hash_access_log"
-if (!dir.exists(outdir)) {
-    dir.create(outdir)
+out_dirpath = file.path(APP_PATH, "access_log", "hash_access_log")
+if (!dir.exists(out_dirpath)) {
+    dir.create(out_dirpath)
 }
 
 
 ## DATA RETENTION ____________________________________________________
-Paths_hash = list.files(outdir, full.names=TRUE)
+Paths_hash = list.files(out_dirpath, full.names=TRUE)
 Date = as.Date(gsub("(.*[_])|([.].*)", "",
                     basename(Paths_hash)))
 
@@ -92,7 +95,7 @@ for (i in 1:nPaths_log) {
     IPhash = sapply(IP, apply_hash, USE.NAMES=FALSE)
 
     if (length(IPhash) > 0) {
-        filepath = file.path(outdir,
+        filepath = file.path(out_dirpath,
                              paste0(APP_NAME, "_access_log_",
                                     date, ".txt"))
         writeLines(IPhash, filepath)

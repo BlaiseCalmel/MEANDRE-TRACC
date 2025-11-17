@@ -1,3 +1,26 @@
+# Copyright (C) 2025
+# Calmel, Blaise (1)
+# Héraut, Louis (1) <louis.heraut@inrae.fr>
+# Vidal, Jean-Philippe (1) <jean-philippe.vidal@inrae.fr>
+
+# (1) INRAE, UR RiverLy, Villeurbanne, France.
+
+# This file is part of MEANDRE-TRACC.
+
+# MEANDRE-TRACC is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# MEANDRE-TRACC is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with MEANDRE-TRACC.
+# If not, see https://www.gnu.org/licenses/.
+
 from flask import Flask, request, jsonify, render_template, send_file
 from sqlalchemy import create_engine, text
 from sqlalchemy.pool import QueuePool
