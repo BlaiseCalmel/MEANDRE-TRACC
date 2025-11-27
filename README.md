@@ -1,4 +1,4 @@
-# MEANDRE [<img src="https://github.com/louis-heraut/MEANDRE/blob/3ddb682aa3fa38a18fdd36292dd8aa51e6a9d565/static/resources/logo/MEANDRE-TRACC_logo.svg" align="right" width=100 height=100 alt=""/>](https://meandre.explore2.inrae.fr/)
+# MEANDRE [<img src="https://meandre-tracc.explore2.inrae.fr/resources/logo/MEANDRE/MEANDRE-TRACC_logo.svg" align="right" width=100 height=100 alt=""/>](https://meandre-tracc.explore2.inrae.fr/)
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html)
@@ -7,14 +7,16 @@
 <!-- badges: end -->
 
 
-[MEANDRE-TRACC](https://meandre.explore2.inrae.fr/) présente de manière guidée un regard d'expert sur les résultats des projections hydrologiques réalisées sur la France. La mise à jour de ces projections a été réalisé entre 2022 et 2024 dans le cadre du projet national [Explore2](https://professionnels.ofb.fr/fr/node/1244).<br>
+[MEANDRE-TRACC](https://meandre.explore2.inrae.fr/) propose un ensemble de futurs hydrologiques possibles à l'échelle régionale selon la trajectoire de réchauffement de référence pour l'adaptation au changement climatique (TRACC).<br>
+
+La TRACC définit des niveaux de réchauffement en France par rapport à la période pré-industrielle qui doivent guider les trajectoires d'adaptation au changement climatique : +2°C, +2.7°C, et +4°C.
 Ces résultats sont un aperçu de quelques futurs possibles pour la ressource en eau.
 
 [<img src="https://github.com/louis-heraut/MEANDRE/blob/3ddb682aa3fa38a18fdd36292dd8aa51e6a9d565/static/resources/thumbnail.png">](https://meandre.explore2.inrae.fr/)
 
 Les données produites dans le cadre du projet [Explore2](https://professionnels.ofb.fr/fr/node/1244) sont disponibles sur [DRIAS-Eau](https://drias-eau.fr/) et les rapports et messages du projet sur l'entrepôt [Recherche Data Gouv](https://entrepot.recherche.data.gouv.fr/dataverse/explore2).
 
-Ce projet a été rendu possible grâce aux financements du projet [LIFE Eau&Climat](https://www.gesteau.fr/life-eau-climat) (LIFE19 GIC/FR/001259) qui a reçu un financement du programme [LIFE](https://aides-territoires.beta.gouv.fr/programmes/life/) de l’Union européenne dans le cadre d'un développement réalisé par l'Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement, [INRAE](https://agriculture.gouv.fr/inrae-linstitut-national-de-recherche-pour-lagriculture-lalimentation-et-lenvironnement).
+Ce projet a été rendu possible grâce aux financements de l'[Agence de l'Eau Loire-Bretagne](https://agence.eau-loire-bretagne.fr/home.html)  dans le cadre d'un développement réalisé par l'Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement, [INRAE](https://agriculture.gouv.fr/inrae-linstitut-national-de-recherche-pour-lagriculture-lalimentation-et-lenvironnement). 
 
 
 ## FAQ
