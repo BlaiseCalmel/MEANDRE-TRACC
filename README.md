@@ -12,7 +12,7 @@
 La TRACC définit des niveaux de réchauffement en France par rapport à la période pré-industrielle qui doivent guider les trajectoires d'adaptation au changement climatique : +2°C, +2.7°C, et +4°C.
 Ces résultats sont un aperçu de quelques futurs possibles pour la ressource en eau.
 
-[<img src="https://github.com/louis-heraut/MEANDRE/blob/3ddb682aa3fa38a18fdd36292dd8aa51e6a9d565/static/resources/thumbnail.png">](https://meandre.explore2.inrae.fr/)
+[<img src="https://github.com/BlaiseCalmel/MEANDRE-TRACC/blob/main/static/resources/thumbnail-tracc.png">](https://meandre-tracc.explore2.inrae.fr/)
 
 Les données produites dans le cadre du projet [Explore2](https://professionnels.ofb.fr/fr/node/1244) sont disponibles sur [DRIAS-Eau](https://drias-eau.fr/) et les rapports et messages du projet sur l'entrepôt [Recherche Data Gouv](https://entrepot.recherche.data.gouv.fr/dataverse/explore2).
 
