@@ -1,4 +1,4 @@
-# MEANDRE [<img src="https://meandre-tracc.explore2.inrae.fr/resources/logo/MEANDRE/MEANDRE-TRACC_logo.svg" align="right" width=100 height=100 alt=""/>](https://meandre-tracc.explore2.inrae.fr/)
+# MEANDRE-TRACC [<img src="https://meandre-tracc.explore2.inrae.fr/resources/logo/MEANDRE/MEANDRE-TRACC_logo.svg" align="right" width=100 height=100 alt=""/>](https://meandre-tracc.explore2.inrae.fr/)
 
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green)](https://lifecycle.r-lib.org/articles/stages.html)
