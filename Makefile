@@ -3,11 +3,10 @@
 # Les statistiques d'accès sont calculées par MEANDRE (access_log/stats.py).
 
 APP = MEANDRE-TRACC
-PYTHON ?= python3
+VENV = .python_env
+PYTHON = $(VENV)/bin/python
 PACKAGES = apache2 libapache2-mod-wsgi-py3 python3-certbot-apache \
-	postgresql postgresql-contrib libpq-dev python3 python3-pip \
-	python3-flask python3-sqlalchemy python3-flask-cors python3-psycopg2 \
-	python3-numpy python3-pandas python3-dotenv python3-scipy
+	postgresql postgresql-contrib python3 python3-venv curl
 
 WSGI_INIT = wsgi_init_$(shell echo $(APP) | tr 'A-Z-' 'a-z_')
 CHECK_ENV = test -f .env || { echo "pas de .env : make env"; exit 1; }
@@ -23,13 +22,16 @@ endef
 
 .ONESHELL:
 .SHELLFLAGS = -ec
-.PHONY: help run db-dump deps env db apache https update status logs
+.PHONY: help venv-dev run db-dump deps venv env db apache https update status logs
 
 help:  ## liste des cibles
 	@awk -F':.*## ' '/^## /{print "\n" substr($$0, 4)} /^[a-z-]+:.*## /{printf "  make %-13s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 
 ## Développement (local)
+venv-dev: venv  ## venv de l'appli et outils de développement
+	$(VENV)/bin/pip install -q -r requirements-dev.txt
+
 run:  ## lance l'appli sur http://127.0.0.1:5000
 	$(PYTHON) app.py
 
@@ -41,10 +43,15 @@ db-dump:  ## exporte la base locale dans <DB_NAME>.backup, à copier sur le serv
 
 
 ## Installation du serveur (une fois, dans le dossier cloné)
-deps:  ## installe les paquets (Apache, mod_wsgi, Python, PostgreSQL, certbot)
+deps:  ## installe les paquets système (Apache, mod_wsgi, PostgreSQL, certbot)
 	sudo apt update
 	sudo apt install -y $(PACKAGES)
 	sudo a2enmod -q wsgi
+
+venv:  ## crée .python_env avec les dépendances de l'appli (requirements.txt)
+	test -d $(VENV) || python3 -m venv $(VENV)
+	$(VENV)/bin/pip install -q --upgrade pip
+	$(VENV)/bin/pip install -q -r requirements.txt
 
 env:  ## crée .env depuis .env.example, mot de passe de la base généré
 	@test ! -f .env || { echo ".env existe déjà"; exit 0; }
@@ -74,7 +81,7 @@ apache:  ## génère et active le vhost Apache (SERVER_NAME lu dans .env)
 		"    ServerName $$server" \
 		"" \
 		"    <IfDefine !$(WSGI_INIT)>" \
-		"        WSGIDaemonProcess $(APP) processes=4 threads=5 python-path=/usr/lib/python3/dist-packages" \
+		"        WSGIDaemonProcess $(APP) processes=4 threads=5 python-home=$(CURDIR)/$(VENV)" \
 		"        WSGIProcessGroup $(APP)" \
 		"        Define $(WSGI_INIT) 1" \
 		"    </IfDefine>" \
@@ -102,8 +109,9 @@ https:  ## active HTTPS avec certbot pour SERVER_NAME
 
 
 ## Exploitation (serveur)
-update:  ## met à jour le code (git pull) et recharge l'appli
+update:  ## met à jour le code (git pull) et les dépendances, recharge l'appli
 	git pull --ff-only --no-rebase
+	test ! -d $(VENV) || $(VENV)/bin/pip install -q -r requirements.txt
 	touch app.wsgi
 	$(STATUS)
 

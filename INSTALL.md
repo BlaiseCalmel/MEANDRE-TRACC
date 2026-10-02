@@ -53,9 +53,10 @@ All the following commands are run from this directory: `make help` lists them.
 
 
 ## 3. Install the server
-Install the packages (Apache, mod_wsgi, Python, PostgreSQL, certbot)
+Install the system packages (Apache, mod_wsgi, PostgreSQL, certbot), then the Python environment of the app in `.python_env` (from `requirements.txt`)
 ``` sh
 make deps
+make venv
 ```
 
 Create the `.env` file (the database password is generated) and fill in `SERVER_NAME` and `DB_NAME`
@@ -90,7 +91,7 @@ make https
 
 
 ## 6. Update and monitor
-Deploy the last version of the code (`git pull`, then the app is reloaded)
+Deploy the last version of the code (`git pull`, Python dependencies, then the app is reloaded)
 ``` sh
 make update
 ```
