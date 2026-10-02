@@ -4,6 +4,21 @@
     "applicationCategory": "Hydrology",
     "author": [
         {
+            "id": "https://orcid.org/0009-0003-1182-8284",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "RiverLy, INRAE, France"
+            },
+            "familyName": "Calmel",
+            "givenName": "Blaise"
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0009-0003-1182-8284",
+            "roleName": "Developer"
+        },
+        {
             "id": "https://orcid.org/0009-0006-4372-0923",
             "type": "Person",
             "affiliation": {
@@ -22,7 +37,7 @@
         {
             "type": "Role",
             "schema:author": "https://orcid.org/0009-0006-4372-0923",
-            "roleName": "Developper"
+            "roleName": "Developer"
         },
         {
             "id": "https://orcid.org/0000-0002-3748-6150",
@@ -42,13 +57,12 @@
         }
     ],
     "codeRepository": "https://github.com/BlaiseCalmel/MEANDRE-TRACC/",
-    "dateCreated": "2024-05-30",
-    "datePublished": "2024-06-27",
-    "description": "MEANDRE https://meandre.explore2.inrae.fr/ présente de manière guidée un regard d'expert sur les résultats des projections hydrologiques réalisées sur la France. La mise à jour de ces projections a été réalisé entre 2022 et 2024 dans le cadre du projet national Explore2. \nCes résultats sont un aperçu de quelques futurs possibles pour la ressource en eau.\n\nMEANDRE https://meandre.explore2.inrae.fr/ provides a guided expert perspective on the results of hydrological projections conducted for France. These projections were updated between 2022 and 2024 as part of the national Explore2 project. \nThe results offer a glimpse into some possible futures for water resources.",
+    "dateCreated": "2025-06-20",
+    "description": "MEANDRE-TRACC https://meandre-tracc.explore2.inrae.fr/ propose un ensemble de futurs hydrologiques possibles à l'échelle régionale selon la trajectoire de réchauffement de référence pour l'adaptation au changement climatique (TRACC). La TRACC définit des niveaux de réchauffement en France par rapport à la période pré-industrielle qui doivent guider les trajectoires d'adaptation au changement climatique : +2°C, +2.7°C et +4°C.\nCes résultats sont un aperçu de quelques futurs possibles pour la ressource en eau.\n\nMEANDRE-TRACC https://meandre-tracc.explore2.inrae.fr/ provides a set of possible hydrological futures at the regional scale under the French reference warming trajectory for climate change adaptation (TRACC). The TRACC defines warming levels in France, relative to the pre-industrial period, that should guide adaptation pathways: +2°C, +2.7°C and +4°C.\nThe results offer a glimpse into some possible futures for water resources.",
     "downloadUrl": "https://meandre-tracc.explore2.inrae.fr/",
     "funder": {
         "type": "Organization",
-        "name": "LIFE Eau&Climat (LIFE19 GIC/FR 001259),French Ministry of Ecological Transition,OFB "
+        "name": "Agence de l'Eau Loire-Bretagne"
     },
     "keywords": [
         "hydrological projection",
@@ -56,7 +70,9 @@
         "climat projection",
         "climate change",
         "climate change adaptation",
-        "climate change mitigation"
+        "climate change mitigation",
+        "TRACC",
+        "global warming levels"
     ],
     "license": "https://spdx.org/licenses/AGPL-3.0-or-later",
     "name": "MEANDRE-TRACC",
