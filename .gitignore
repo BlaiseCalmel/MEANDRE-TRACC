@@ -1,5 +1,6 @@
 .env*
-*~ 
+!.env.example
+*~
 *#
 .Rhistory
 *.emacs*
@@ -9,8 +10,8 @@ tmp
 results
 figures
 *.Rdata
-access_log/access_log.csv
-access_log/hash_access_log/
-access_log/figures/
+__pycache__/
+*.backup
+*.dump
 python_env
 sql.py
