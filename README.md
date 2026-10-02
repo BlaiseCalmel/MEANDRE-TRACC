@@ -19,6 +19,10 @@ Les données produites dans le cadre du projet [Explore2](https://professionnels
 Ce projet a été rendu possible grâce aux financements de l'[Agence de l'Eau Loire-Bretagne](https://agence.eau-loire-bretagne.fr/home.html)  dans le cadre d'un développement réalisé par l'Institut National de Recherche pour l’Agriculture, l’Alimentation et l’Environnement, [INRAE](https://agriculture.gouv.fr/inrae-linstitut-national-de-recherche-pour-lagriculture-lalimentation-et-lenvironnement). 
 
 
+## Lancer le projet
+Toutes les commandes passent par le Makefile, depuis le dossier du code : `make help` les liste. En local, `make venv-dev` crée l'environnement Python `.python_env` (versions figées dans `requirements.txt`), puis `make run` lance l'appli sur http://127.0.0.1:5000, avec la base PostgreSQL décrite dans `.env` (voir `.env.example`). L'installation et la mise à jour du serveur sont décrites dans [INSTALL.md](INSTALL.md). Les statistiques d'accès de MEANDRE-TRACC sont calculées par [MEANDRE](https://github.com/lou-heraut/MEANDRE).
+
+
 ## FAQ
 📬 — **I would like an upgrade / I have a question / Need to reach me**  
 Feel free to [open an issue](https://github.com/lou-heraut/MEANDRE/issues) ! I’m actively maintaining this project, so I’ll do my best to respond quickly.  
