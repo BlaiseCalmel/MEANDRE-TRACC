@@ -22,7 +22,8 @@ endef
 
 .ONESHELL:
 .SHELLFLAGS = -ec
-.PHONY: help venv-dev run db-dump deps venv env db apache https update status logs
+.PHONY: help venv-dev run db-dump deps venv env db apache https \
+	update status check logs
 
 help:  ## liste des cibles
 	@awk -F':.*## ' '/^## /{print "\n" substr($$0, 4)} /^[a-z-]+:.*## /{printf "  make %-13s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -117,6 +118,9 @@ update:  ## met à jour le code (git pull) et les dépendances, recharge l'appli
 
 status:  ## commit déployé, état d'Apache et code HTTP du site
 	@$(STATUS)
+
+check:  ## vérifie l'API de la carte sur la vraie base, sans passer par Apache
+	$(PYTHON) check_api.py
 
 logs:  ## suit le log d'erreur Apache de l'appli
 	sudo tail -f /var/log/apache2/$(APP)_error.log

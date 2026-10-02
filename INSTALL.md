@@ -96,9 +96,10 @@ Deploy the last version of the code (`git pull`, Python dependencies, then the a
 make update
 ```
 
-Check the deployed commit, Apache and the site, follow the errors
+Check the deployed commit, Apache and the site, check the API of the map on the database, follow the errors
 ``` sh
 make status
+make check
 make logs
 ```
 
